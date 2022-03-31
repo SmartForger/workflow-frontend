@@ -46,6 +46,7 @@
       side="left"
       bordered
     >
+      <workflow-explorer></workflow-explorer>
     </q-drawer>
 
     <q-drawer
@@ -68,12 +69,14 @@
 import { defineComponent, ref } from 'vue';
 import { useDrawer } from 'src/common/composables/useDrawer';
 import IconToggle from 'src/components/IconToggle.vue';
+import WorkflowExplorer from './WorkflowExplorer.vue';
 
 export default defineComponent({
   name: 'DesignerComponent',
 
   components: {
     IconToggle,
+    WorkflowExplorer,
   },
 
   setup() {
