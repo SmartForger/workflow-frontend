@@ -10,7 +10,7 @@
     </q-toolbar>
 
     <div class="q-pa-xs">
-      Workflow Details
+      <workflow-info></workflow-info>
     </div>
   </div>
 </template>
@@ -18,8 +18,10 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue';
 import { Workflow } from 'src/common/types/Workflow';
+import WorkflowInfo from './WorkflowInfo.vue';
 
 export default defineComponent({
+  components: { WorkflowInfo },
   name: 'WorkflowDetails',
   props: {
     workflow: {

@@ -71,6 +71,24 @@ import { useDrawer } from 'src/common/composables/useDrawer';
 import IconToggle from 'src/components/IconToggle.vue';
 import WorkflowExplorer from './WorkflowExplorer.vue';
 
+const screenWidthOptions = [
+  { value: 'mobile', tooltip: 'Mobile', icon: 'smartphone' },
+  { value: 'tablet', tooltip: 'Tablet', icon: 'tablet' },
+  { value: 'desktop', tooltip: 'Desktop', icon: 'monitor' },
+];
+const formLayoutOptions = [
+  {
+    value: 'stepper',
+    tooltip: 'Stepper',
+    icon: 'img:src/assets/images/steps_slider.svg',
+  },
+  {
+    value: 'singleStep',
+    tooltip: 'Single Step',
+    icon: 'img:src/assets/images/single_step.svg',
+  },
+];
+
 export default defineComponent({
   name: 'DesignerComponent',
 
@@ -85,25 +103,7 @@ export default defineComponent({
       useDrawer();
 
     const screenWidth = ref('desktop');
-    const screenWidthOptions = [
-      { value: 'mobile', tooltip: 'Mobile', icon: 'smartphone' },
-      { value: 'tablet', tooltip: 'Tablet', icon: 'tablet' },
-      { value: 'desktop', tooltip: 'Desktop', icon: 'monitor' },
-    ];
-
     const formLayout = ref('stepper');
-    const formLayoutOptions = [
-      {
-        value: 'stepper',
-        tooltip: 'Stepper',
-        icon: 'img:src/assets/images/steps_slider.svg',
-      },
-      {
-        value: 'singleStep',
-        tooltip: 'Single Step',
-        icon: 'img:src/assets/images/single_step.svg',
-      },
-    ];
 
     return {
       leftDrawerOpen,
