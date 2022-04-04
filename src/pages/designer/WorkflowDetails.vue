@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-toolbar class="bg-primary text-white">
+    <q-toolbar class="bg-secondary text-white">
       <q-btn round flat icon="arrow_back" @click="goBack()"></q-btn>
       <q-toolbar-title class="col">
         {{ hasWorkflow ? 'Edit workflow' : 'Add workflow' }}

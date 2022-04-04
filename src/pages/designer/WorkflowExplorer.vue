@@ -1,6 +1,6 @@
 <template>
   <div v-if="state.matches('list')">
-    <q-toolbar class="bg-primary text-white">
+    <q-toolbar class="bg-secondary text-white">
       <q-toolbar-title>
         <q-icon size="35px" name="img:src/assets/images/workflow.svg"></q-icon>
         Workflows

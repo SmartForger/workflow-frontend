@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, defineExpose } from 'vue';
+import { defineComponent } from 'vue';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
 
 export default defineComponent({

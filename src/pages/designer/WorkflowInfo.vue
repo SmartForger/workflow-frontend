@@ -87,17 +87,14 @@
   </q-card-section>
 
   <q-card-section class="q-pa-md">
-    <q-toolbar class="q-pb-xs">
+    <q-toolbar class="q-pb-xs" v-if="!selectedStep">
       <q-toolbar-title> Workflow Steps </q-toolbar-title>
       <q-space></q-space>
-      <q-btn
-        flat
-        round
-        icon="expand_less"
-        @click="showList()"
-        v-if="selectedStep"
-      />
       <q-btn flat round icon="add" @click="addStep()" />
+    </q-toolbar>
+    <q-toolbar class="q-pb-xs" v-if="selectedStep">
+      <q-btn flat round icon="arrow_back" @click="showList()" />
+      <q-toolbar-title> Add Workflow Step </q-toolbar-title>
     </q-toolbar>
     <q-list bordered class="rounded-borders" v-if="!selectedStep">
       <workflow-step-item
