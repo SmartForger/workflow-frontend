@@ -1,5 +1,5 @@
 <template>
-  <q-item class="q-my-sm" clickable v-ripple>
+  <q-item clickable v-ripple>
     <q-item-section side>
       <q-icon name="drag_indicator"></q-icon>
     </q-item-section>

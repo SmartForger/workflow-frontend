@@ -6,7 +6,7 @@
       outlined
       label="Step Name"
       placeholder="Enter step name"
-      v-model="name"
+      v-model="step.displayName"
     >
       <template v-slot:prepend>
         <q-icon name="img:src/assets/images/input_text.svg" />
@@ -19,7 +19,7 @@
       rows="2"
       dense
       outlined
-      v-model="description"
+      v-model="step.description"
       label="Step Description"
       placeholder="Enter step description"
     >
@@ -34,17 +34,25 @@
       outlined
       dense
       label="Select Step Icon"
-      v-model="icon"
+      v-model="step.icon"
     >
       <template v-slot:prepend>
         <q-icon name="image" />
       </template>
       <template v-slot:append>
         <q-avatar>
-          <q-icon :name="icon"></q-icon>
+          <q-icon :name="step.icon"></q-icon>
         </q-avatar>
       </template>
     </q-file>
+    <q-btn
+      class="q-mt-md"
+      label="Save"
+      icon="save"
+      color="primary"
+      outline
+      @click="save"
+    ></q-btn>
   </div>
 </template>
 
@@ -59,15 +67,27 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
-    const name = ref(props.details.name);
-    const description = ref(props.details.description);
-    const icon = ref(props.details.icon);
+  setup(props, { emit }) {
+    const step = ref<WorkflowStep>(
+      props.details || {
+        id: new Date().getTime(),
+        name: '',
+        displayName: '',
+        description: '',
+        icon: '',
+        widgets: [],
+        events: [],
+        layouts: [],
+      }
+    );
+
+    const save = () => {
+      emit('save', step.value);
+    };
 
     return {
-      name,
-      description,
-      icon,
+      step,
+      save,
     };
   },
 });

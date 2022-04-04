@@ -6,7 +6,7 @@
         Workflows
       </q-toolbar-title>
 
-      <q-btn @click="send('ADD')" flat outlined round icon="add" />
+      <q-btn @click="send({ type: 'ADD' })" flat outlined round icon="add" />
     </q-toolbar>
 
     <div class="q-pa-xs">
@@ -43,7 +43,14 @@
           </q-item-section>
 
           <q-item-section side>
-            <q-icon name="edit" color="green" />
+            <q-btn
+              flat
+              round
+              dense
+              color="secondary"
+              icon="edit"
+              @click.prevent="send({ type: 'EDIT', item: workflow })"
+            />
           </q-item-section>
         </q-item>
 
@@ -51,10 +58,12 @@
       </q-list>
     </div>
   </div>
-  <div v-if="state.matches('details')">
+  <div v-if="state.matches('add') || state.matches('edit')">
     <workflow-details
+      :workflow="state.context.selected"
+      :editing="state.matches('edit')"
       @back="send({ type: 'BACK' })"
-      @save="send({ type: 'SAVE' })"
+      @save="send({ type: 'SAVE', item: $event })"
     ></workflow-details>
   </div>
 </template>
@@ -62,10 +71,13 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
 import { useMachine } from '@xstate/vue';
+import { createListViewMachine } from 'src/common/machines/list-view.machine';
+import { Workflow } from 'src/common/types/Workflow';
 import SearchInput from 'src/components/SearchInput.vue';
-import { explorerMachine } from './machines/explorer.machine';
 import { sampleWorkflows } from './constants';
 import WorkflowDetails from './WorkflowDetails.vue';
+
+const explorerMachine = createListViewMachine<Workflow>('explorer');
 
 export default defineComponent({
   name: 'WorkflowExplorer',
@@ -78,14 +90,12 @@ export default defineComponent({
 
     const filteredWorkflows = computed(() => {
       const searchVal = state.value.context.search.toLowerCase();
-      return state.value.context.workflows.filter((workflow) =>
+      return state.value.context.list.filter((workflow) =>
         workflow.displayName.toLowerCase().includes(searchVal)
       );
     });
     const filtered = computed(() => {
-      return (
-        filteredWorkflows.value.length < state.value.context.workflows.length
-      );
+      return filteredWorkflows.value.length < state.value.context.list.length;
     });
 
     send({ type: 'SET_LIST', list: sampleWorkflows });

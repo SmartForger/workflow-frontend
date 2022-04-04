@@ -4,7 +4,7 @@
       class="q-pb-xs"
       dense
       outlined
-      v-model="category"
+      v-model="workflow.category"
       :options="workflowCategories"
       label="Category"
     >
@@ -16,7 +16,7 @@
       class="q-pb-xs"
       dense
       outlined
-      v-model="subcategory"
+      v-model="workflow.subCategory"
       :options="workflowVerticals"
       label="Sub Category"
     >
@@ -28,7 +28,7 @@
       class="q-pb-xs"
       dense
       outlined
-      v-model="name"
+      v-model="workflow.displayName"
       label="Workflow Name"
       placeholder="Workflow name"
     >
@@ -42,7 +42,7 @@
       rows="2"
       dense
       outlined
-      v-model="description"
+      v-model="workflow.description"
       label="Description"
       placeholder="Description"
     >
@@ -57,7 +57,7 @@
       use-chips
       outlined
       multiple
-      v-model="mode"
+      v-model="selectedModes"
       :options="workflowModes"
       label="Mode"
     >
@@ -71,7 +71,6 @@
       class="q-pb-xs"
       color="teal"
       outlined
-      v-model="icon"
       label="Select Workflow Icon"
     >
       <template v-slot:prepend>
@@ -80,100 +79,52 @@
 
       <template v-slot:append>
         <q-avatar>
-          <q-icon size="35px" :name="icon"></q-icon>
+          <q-icon size="35px" :name="workflow.icon"></q-icon>
         </q-avatar>
       </template>
     </q-file>
   </q-card-section>
-
-  <q-card-section class="q-pa-md">
-    <q-toolbar class="q-pb-xs" v-if="!selectedStep">
-      <q-toolbar-title> Workflow Steps </q-toolbar-title>
-      <q-space></q-space>
-      <q-btn flat round icon="add" @click="addStep()" />
-    </q-toolbar>
-    <q-toolbar class="q-pb-xs" v-if="selectedStep">
-      <q-btn flat round icon="arrow_back" @click="showList()" />
-      <q-toolbar-title> Add Workflow Step </q-toolbar-title>
-    </q-toolbar>
-    <q-list bordered class="rounded-borders" v-if="!selectedStep">
-      <workflow-step-item
-        :key="step.id"
-        :details="step"
-        @edit="editStep($event)"
-        @delete="deleteStep($event)"
-        v-for="step in steps"
-      ></workflow-step-item>
-    </q-list>
-    <workflow-step-settings :details="selectedStep" v-if="selectedStep">
-    </workflow-step-settings>
-  </q-card-section>
 </template>
 
 <script lang="ts">
-import { WorkflowStep } from 'src/common/types/WorkflowStep';
-import { defineComponent, ref } from 'vue';
+import { Workflow } from 'src/common/types/Workflow';
+import { computed, defineComponent, PropType, ref, watch } from 'vue';
 import {
   workflowCategories,
   workflowVerticals,
   workflowModes,
-  workflowSteps,
 } from './constants';
-import WorkflowStepItem from './WorkflowStepItem.vue';
-import WorkflowStepSettings from './WorkflowStepSettings.vue';
 
 export default defineComponent({
-  components: { WorkflowStepItem, WorkflowStepSettings },
-  setup() {
-    const category = ref('');
-    const subcategory = ref('');
-    const name = ref('');
-    const description = ref('');
-    const mode = ref<string[]>([]);
-    const icon = ref('');
-    const steps = ref(workflowSteps);
+  props: {
+    details: {
+      type: Object as PropType<Workflow>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const workflow = ref<Workflow>(props.details);
 
-    const selectedStep = ref<WorkflowStep>();
+    watch(
+      () => props.details,
+      () => {
+        workflow.value = props.details;
+      }
+    );
 
-    const addStep = () => {
-      selectedStep.value = {
-        id: steps.value[steps.value.length - 1].id + 1,
-        name: '',
-        displayName: '',
-        description: '',
-        icon: '',
-      };
-    };
-
-    const editStep = (details: WorkflowStep) => {
-      console.log(111, details);
-      selectedStep.value = details;
-    };
-
-    const deleteStep = (details: WorkflowStep) => {
-      steps.value = steps.value.filter((step) => step.id !== details.id);
-    };
-
-    const showList = () => {
-      selectedStep.value = undefined;
-    };
+    const selectedModes = computed({
+      get: () => (workflow.value.mode ? workflow.value.mode.split(',') : []),
+      set: (modes) => {
+        workflow.value.mode = modes.join(',');
+      },
+    });
 
     return {
       workflowCategories,
       workflowVerticals,
-      steps,
       workflowModes,
-      category,
-      subcategory,
-      name,
-      description,
-      mode,
-      icon,
-      selectedStep,
-      addStep,
-      editStep,
-      deleteStep,
-      showList,
+      workflow,
+      selectedModes,
     };
   },
 });
