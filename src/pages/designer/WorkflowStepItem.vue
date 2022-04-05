@@ -1,7 +1,7 @@
 <template>
   <q-item clickable v-ripple>
     <q-item-section side>
-      <q-icon name="drag_indicator"></q-icon>
+      <q-icon class="handle" name="drag_indicator"></q-icon>
     </q-item-section>
 
     <q-item-section side>
