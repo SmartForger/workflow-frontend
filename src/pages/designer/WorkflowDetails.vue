@@ -10,7 +10,7 @@
     </q-toolbar>
 
     <div class="q-pa-xs">
-      <workflow-info :details="details"></workflow-info>
+      <workflow-info ref="infoForm" :details="details"></workflow-info>
       <workflow-steps
         :workflow="details"
         @update:steps="updateSteps"
@@ -52,12 +52,19 @@ export default defineComponent({
             steps: [],
           }
     );
+    const infoForm = ref();
 
     const goBack = () => {
       emit('back');
     };
 
-    const save = () => {
+    const save = async () => {
+      const valid = await infoForm.value.form.validate();
+
+      if (!valid) {
+        return;
+      }
+
       if (!props.editing) {
         details.value.name = details.value.displayName
           .replaceAll(' ', '_')
@@ -75,6 +82,7 @@ export default defineComponent({
       goBack,
       save,
       updateSteps,
+      infoForm,
     };
   },
 });
