@@ -8,6 +8,7 @@ export interface WorkflowStep {
   displayName: string;
   description: string;
   icon: string;
+  iconFileName: string;
   widgets: WorkflowWidget[];
   events: WorkflowEvent[];
   layouts: WorkflowLayout[];

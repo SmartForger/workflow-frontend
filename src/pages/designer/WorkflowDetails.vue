@@ -45,6 +45,7 @@ export default defineComponent({
             category: '',
             subCategory: '',
             icon: '',
+            iconFileName: '',
             description: '',
             mode: '',
             displayName: '',

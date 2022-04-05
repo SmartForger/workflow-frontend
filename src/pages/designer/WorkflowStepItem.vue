@@ -5,7 +5,9 @@
     </q-item-section>
 
     <q-item-section side>
-      <q-icon :name="details.icon" color="green" />
+      <q-avatar square>
+        <img :src="details.icon" />
+      </q-avatar>
     </q-item-section>
 
     <q-item-section> {{ details.displayName }} </q-item-section>

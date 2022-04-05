@@ -1,4 +1,4 @@
-import { WorkflowStep } from "./WorkflowStep";
+import { WorkflowStep } from './WorkflowStep';
 
 export interface Workflow {
   id: number;
@@ -9,5 +9,6 @@ export interface Workflow {
   displayName: string;
   description: string;
   icon: string;
+  iconFileName: string;
   steps: WorkflowStep[];
 }

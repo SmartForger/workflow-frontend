@@ -34,14 +34,14 @@
       outlined
       dense
       label="Select Step Icon"
-      v-model="step.icon"
+      v-model="iconFile"
     >
       <template v-slot:prepend>
         <q-icon name="image" />
       </template>
       <template v-slot:append>
-        <q-avatar>
-          <q-icon :name="step.icon"></q-icon>
+        <q-avatar square v-if="step.icon">
+          <img :src="step.icon" />
         </q-avatar>
       </template>
     </q-file>
@@ -59,12 +59,12 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
+import { useFile } from 'src/common/composables/useFile';
 
 export default defineComponent({
   props: {
     details: {
       type: Object as () => WorkflowStep,
-      required: true,
     },
   },
   setup(props, { emit }) {
@@ -77,10 +77,18 @@ export default defineComponent({
             displayName: '',
             description: '',
             icon: '',
+            iconFileName: '',
             widgets: [],
             events: [],
             layouts: [],
           }
+    );
+    const { file: iconFile } = useFile(
+      step.value.iconFileName,
+      (filename, data) => {
+        step.value.iconFileName = filename;
+        step.value.icon = data;
+      }
     );
 
     const save = () => {
@@ -90,6 +98,7 @@ export default defineComponent({
     return {
       step,
       save,
+      iconFile,
     };
   },
 });

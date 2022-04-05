@@ -71,6 +71,7 @@
       class="q-pb-xs"
       color="teal"
       outlined
+      v-model="iconFile"
       label="Select Workflow Icon"
     >
       <template v-slot:prepend>
@@ -78,8 +79,8 @@
       </template>
 
       <template v-slot:append>
-        <q-avatar>
-          <q-icon size="35px" :name="workflow.icon"></q-icon>
+        <q-avatar square v-if="workflow.icon">
+          <img :src="workflow.icon" />
         </q-avatar>
       </template>
     </q-file>
@@ -87,8 +88,9 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, PropType, ref } from 'vue';
+import { useFile } from 'src/common/composables/useFile';
 import { Workflow } from 'src/common/types/Workflow';
-import { computed, defineComponent, PropType, ref, watch } from 'vue';
 import {
   workflowCategories,
   workflowVerticals,
@@ -104,6 +106,13 @@ export default defineComponent({
   },
   setup(props) {
     const workflow = ref<Workflow>(props.details);
+    const { file: iconFile } = useFile(
+      workflow.value.iconFileName,
+      (filename, data) => {
+        workflow.value.icon = data;
+        workflow.value.iconFileName = filename;
+      }
+    );
 
     const selectedModes = computed({
       get: () => (workflow.value.mode ? workflow.value.mode.split(',') : []),
@@ -118,6 +127,7 @@ export default defineComponent({
       workflowModes,
       workflow,
       selectedModes,
+      iconFile,
     };
   },
 });

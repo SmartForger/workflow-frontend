@@ -31,8 +31,8 @@
             v-ripple
           >
             <q-item-section avatar>
-              <q-avatar>
-                <q-icon size="30px" :name="workflow.icon"></q-icon>
+              <q-avatar square v-if="workflow.icon">
+                <img :src="workflow.icon" />
               </q-avatar>
             </q-item-section>
 
