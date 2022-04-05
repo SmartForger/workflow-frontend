@@ -42,10 +42,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType, watch } from 'vue';
 import { useMachine } from '@xstate/vue';
 import { createListViewMachine } from 'src/common/machines/list-view.machine';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
+import { Workflow } from 'src/common/types/Workflow';
 import WorkflowStepItem from './WorkflowStepItem.vue';
 import WorkflowStepSettings from './WorkflowStepSettings.vue';
 
@@ -58,8 +59,23 @@ export default defineComponent({
     WorkflowStepItem,
     WorkflowStepSettings,
   },
-  setup() {
+  props: {
+    workflow: {
+      type: Object as PropType<Workflow>,
+      required: true,
+    },
+  },
+  setup(props, { emit }) {
     const { state, send } = useMachine(workflowStepsMachine);
+
+    send({ type: 'SET_LIST', list: [...props.workflow.steps] });
+
+    watch(
+      () => state.value.context.list,
+      (newVal) => {
+        emit('update:steps', newVal);
+      }
+    );
 
     return { state, send };
   },

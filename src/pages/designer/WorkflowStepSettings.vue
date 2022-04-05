@@ -69,16 +69,18 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const step = ref<WorkflowStep>(
-      props.details || {
-        id: new Date().getTime(),
-        name: '',
-        displayName: '',
-        description: '',
-        icon: '',
-        widgets: [],
-        events: [],
-        layouts: [],
-      }
+      props.details
+        ? { ...props.details }
+        : {
+            id: new Date().getTime(),
+            name: '',
+            displayName: '',
+            description: '',
+            icon: '',
+            widgets: [],
+            events: [],
+            layouts: [],
+          }
     );
 
     const save = () => {

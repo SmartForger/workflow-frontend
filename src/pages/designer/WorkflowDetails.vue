@@ -11,7 +11,10 @@
 
     <div class="q-pa-xs">
       <workflow-info :details="details"></workflow-info>
-      <workflow-steps></workflow-steps>
+      <workflow-steps
+        :workflow="details"
+        @update:steps="updateSteps"
+      ></workflow-steps>
     </div>
   </div>
 </template>
@@ -21,6 +24,7 @@ import { defineComponent, ref, PropType } from 'vue';
 import { Workflow } from 'src/common/types/Workflow';
 import WorkflowInfo from './WorkflowInfo.vue';
 import WorkflowSteps from './WorkflowSteps.vue';
+import { WorkflowStep } from 'src/common/types/WorkflowStep';
 
 export default defineComponent({
   name: 'WorkflowDetails',
@@ -61,10 +65,15 @@ export default defineComponent({
       emit('save', details.value);
     };
 
+    const updateSteps = (steps: WorkflowStep[]) => {
+      details.value.steps = steps;
+    };
+
     return {
       details,
       goBack,
       save,
+      updateSteps,
     };
   },
 });
