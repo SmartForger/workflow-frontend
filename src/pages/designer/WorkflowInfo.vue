@@ -105,13 +105,6 @@ export default defineComponent({
   setup(props) {
     const workflow = ref<Workflow>(props.details);
 
-    watch(
-      () => props.details,
-      () => {
-        workflow.value = props.details;
-      }
-    );
-
     const selectedModes = computed({
       get: () => (workflow.value.mode ? workflow.value.mode.split(',') : []),
       set: (modes) => {

@@ -46,7 +46,6 @@ import { defineComponent } from 'vue';
 import { useMachine } from '@xstate/vue';
 import { createListViewMachine } from 'src/common/machines/list-view.machine';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
-import { workflowSteps } from './constants';
 import WorkflowStepItem from './WorkflowStepItem.vue';
 import WorkflowStepSettings from './WorkflowStepSettings.vue';
 
@@ -61,8 +60,6 @@ export default defineComponent({
   },
   setup() {
     const { state, send } = useMachine(workflowStepsMachine);
-
-    send({ type: 'SET_LIST', list: workflowSteps });
 
     return { state, send };
   },

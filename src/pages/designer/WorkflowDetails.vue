@@ -44,6 +44,7 @@ export default defineComponent({
             description: '',
             mode: '',
             displayName: '',
+            steps: [],
           }
     );
 

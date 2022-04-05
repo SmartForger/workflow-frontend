@@ -1,3 +1,5 @@
+import { WorkflowStep } from "./WorkflowStep";
+
 export interface Workflow {
   id: number;
   category: string;
@@ -7,4 +9,5 @@ export interface Workflow {
   displayName: string;
   description: string;
   icon: string;
+  steps: WorkflowStep[];
 }
