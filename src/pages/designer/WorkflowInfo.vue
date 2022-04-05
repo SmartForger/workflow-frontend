@@ -106,7 +106,7 @@
 </style>
 
 <script lang="ts">
-import { computed, defineComponent, defineExpose, PropType, ref } from 'vue';
+import { computed, defineComponent, PropType, ref } from 'vue';
 import { useFile } from 'src/common/composables/useFile';
 import { Workflow } from 'src/common/types/Workflow';
 import { required, arrayRequired } from 'src/common/utils/validations';
