@@ -49,6 +49,13 @@
           </q-avatar>
         </template>
       </q-file>
+
+      <q-list bordered>
+        <workflow-step-widgets></workflow-step-widgets>
+        <workflow-step-events></workflow-step-events>
+        <workflow-step-layouts></workflow-step-layouts>
+      </q-list>
+
       <q-btn
         class="q-mt-md"
         type="submit"
@@ -76,8 +83,16 @@ import { defineComponent, ref } from 'vue';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import { useFile } from 'src/common/composables/useFile';
 import { required } from 'src/common/utils/validations';
+import WorkflowStepWidgets from './WorkflowStepWidgets.vue';
+import WorkflowStepEvents from './WorkflowStepEvents.vue';
+import WorkflowStepLayouts from './WorkflowStepLayouts.vue';
 
 export default defineComponent({
+  components: {
+    WorkflowStepWidgets,
+    WorkflowStepEvents,
+    WorkflowStepLayouts,
+  },
   props: {
     details: {
       type: Object as () => WorkflowStep,
