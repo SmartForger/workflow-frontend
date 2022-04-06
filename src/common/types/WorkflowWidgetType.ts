@@ -1,6 +1,6 @@
 export enum WorkflowWidgetType {
   SELECT = 'QSelect',
-  INPUT = 'QINput',
+  INPUT = 'QInput',
   LIST = 'QList',
   TABLE = 'QTable',
   SIGNATURE = 'SignaturePad',

@@ -55,6 +55,7 @@
       </q-toolbar>
       <workflow-step-settings
         @save="send({ type: 'SAVE', item: $event })"
+        @cancel="send({ type: 'BACK' })"
       ></workflow-step-settings>
     </template>
 
@@ -66,6 +67,7 @@
       <workflow-step-settings
         :details="state.context.selected"
         @save="send({ type: 'SAVE', item: $event })"
+        @cancel="send({ type: 'BACK' })"
       ></workflow-step-settings>
     </template>
   </q-card-section>

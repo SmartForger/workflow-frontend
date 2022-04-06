@@ -56,14 +56,16 @@
         <workflow-step-layouts></workflow-step-layouts>
       </q-list>
 
-      <q-btn
-        class="q-mt-md"
-        type="submit"
-        label="Save"
-        icon="save"
-        color="primary"
-        outline
-      ></q-btn>
+      <div class="row q-mt-md">
+        <q-btn
+          class="q-mr-sm"
+          type="submit"
+          label="Save"
+          icon="save"
+          color="primary"
+        ></q-btn>
+        <q-btn label="Cancel" @click="cancel()"></q-btn>
+      </div>
     </q-form>
   </div>
 </template>
@@ -126,9 +128,14 @@ export default defineComponent({
       emit('save', step.value);
     };
 
+    const cancel = () => {
+      emit('cancel');
+    };
+
     return {
       step,
       save,
+      cancel,
       iconFile,
       required,
     };
