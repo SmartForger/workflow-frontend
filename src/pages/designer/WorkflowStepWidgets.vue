@@ -95,7 +95,7 @@ export default defineComponent({
     WorkflowWidgetForm,
   },
   setup() {
-    const { state, send } = useMachine(widgetsMachine);
+    const { state, send } = useMachine(widgetsMachine, { devTools: true });
     const open = ref(false);
 
     const widgets = computed({

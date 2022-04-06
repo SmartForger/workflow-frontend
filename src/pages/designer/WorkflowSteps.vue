@@ -106,7 +106,7 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const { state, send } = useMachine(workflowStepsMachine);
+    const { state, send } = useMachine(workflowStepsMachine, { devTools: true });
 
     const steps = computed({
       get: () => state.value.context.list,
