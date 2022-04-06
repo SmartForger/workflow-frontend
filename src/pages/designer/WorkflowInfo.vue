@@ -1,6 +1,6 @@
 <template>
   <q-card-section>
-    <q-form ref="formRef" @submit="save">
+    <q-form ref="formRef">
       <q-select
         class="field"
         dense

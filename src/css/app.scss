@@ -1,1 +1,9 @@
 // app global css in SCSS form
+
+.pvn-field {
+  padding-bottom: 4px;
+
+  &.q-field--error {
+    padding-bottom: 24px;
+  }
+}
