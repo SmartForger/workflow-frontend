@@ -105,7 +105,7 @@
 
       <workflow-steps
         :workflow="details"
-        @update:steps="update({ steps: $event })"
+        @update:steps="update('steps', $event)"
       ></workflow-steps>
     </div>
   </div>

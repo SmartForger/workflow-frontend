@@ -39,7 +39,14 @@
             <q-item-section>
               <q-item-label>{{ workflow.displayName }}</q-item-label>
               <q-item-label caption lines="1">
-                <q-badge color="green"> mode: {{ workflow.mode }} </q-badge>
+                <q-badge
+                  :key="mode"
+                  color="green"
+                  class="q-mr-xs"
+                  v-for="mode in workflow.mode"
+                >
+                  {{ mode }}
+                </q-badge>
               </q-item-label>
             </q-item-section>
 

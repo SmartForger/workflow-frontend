@@ -29,11 +29,20 @@
 
             <q-item-section side>
               <div class="row">
-                <q-icon name="edit" @click.prevent="editItem(step)"></q-icon>
-                <q-icon
-                  name="delete"
+                <q-btn
+                  icon="edit"
+                  flat
+                  round
+                  size="sm"
+                  @click.prevent="editItem(step)"
+                ></q-btn>
+                <q-btn
+                  icon="delete"
+                  flat
+                  round
+                  size="sm"
                   @click.prevent="deleteItem(step)"
-                ></q-icon>
+                ></q-btn>
               </div>
             </q-item-section>
           </q-item>
