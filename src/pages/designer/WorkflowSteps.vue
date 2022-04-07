@@ -66,9 +66,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, watch, computed } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { v4 as uuid } from 'uuid';
 import Draggable from 'vuedraggable';
+import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import { Workflow } from 'src/common/types/Workflow';
@@ -86,6 +87,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ['update'],
   setup(props, { emit }) {
     const { state, addItem, editItem, save, cancel, update, setList } =
       useListMachine<WorkflowStep>('worflowSteps', () => ({
@@ -99,20 +101,9 @@ export default defineComponent({
         events: [],
         layouts: [],
       }));
-
-    const steps = computed({
-      get: () => state.value.context.list,
-      set: (val) => setList(val),
-    });
+    const steps = useContextListSync<WorkflowStep>(state, setList, emit);
 
     setList([...props.workflow.steps]);
-
-    watch(
-      () => state.value.context.list,
-      (newVal) => {
-        emit('update:steps', newVal);
-      }
-    );
 
     return { state, steps, addItem, editItem, save, cancel, update };
   },

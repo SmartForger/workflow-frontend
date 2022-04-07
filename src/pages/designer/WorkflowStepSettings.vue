@@ -57,7 +57,10 @@
       </q-file>
 
       <q-list bordered>
-        <workflow-step-widgets></workflow-step-widgets>
+        <workflow-step-widgets
+          :step="details"
+          @update="update('widgets', $event)"
+        ></workflow-step-widgets>
         <workflow-step-events></workflow-step-events>
         <workflow-step-layouts></workflow-step-layouts>
       </q-list>
@@ -98,9 +101,9 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['save', 'cance', 'update'],
+  emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    const { save, cancel, getFieldModel, getIconFileModel } =
+    const { save, cancel, update, getFieldModel, getIconFileModel } =
       useDetailsForm<WorkflowStep>(props, emit);
 
     const displayName = getFieldModel('displayName');
@@ -113,6 +116,7 @@ export default defineComponent({
       iconFile,
       save,
       cancel,
+      update,
       required,
     };
   },

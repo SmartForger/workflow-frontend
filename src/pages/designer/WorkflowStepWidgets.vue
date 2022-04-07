@@ -4,14 +4,14 @@
     dense
     expand-separator
     v-model="open"
-    @after-hide="send({ type: 'BACK' })"
+    @after-hide="cancel()"
   >
     <template v-slot:header>
       <q-item-section avatar>
         <q-avatar icon="img:src/assets/images/widgets.svg" />
       </q-item-section>
 
-      <q-item-section> Widgets </q-item-section>
+      <q-item-section> Widgets ({{ state.context.list.length }}) </q-item-section>
 
       <q-item-section side>
         <q-btn flat round icon="add" @click.stop="add()"></q-btn>
@@ -19,9 +19,10 @@
     </template>
 
     <workflow-widget-form
-      :widget="state.context.selected"
-      @save="send({ type: 'SAVE', item: $event })"
-      @cancel="send({ type: 'BACK' })"
+      :details="state.context.current"
+      @save="save"
+      @cancel="cancel"
+      @update="update"
       v-if="state.matches('add') || state.matches('edit')"
     ></workflow-widget-form>
 
@@ -61,14 +62,14 @@
                   round
                   size="sm"
                   icon="edit"
-                  @click="send({ type: 'EDIT', item: widget })"
+                  @click="editItem(widget)"
                 ></q-btn>
                 <q-btn
                   flat
                   round
                   size="sm"
                   icon="delete"
-                  @click="send({ type: 'DELETE', item: widget })"
+                  @click="deleteItem(widget)"
                 ></q-btn>
               </div>
             </q-item-section>
@@ -80,31 +81,48 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
-import { useMachine } from '@xstate/vue';
+import { defineComponent, PropType, ref } from 'vue';
+import { v4 as uuid } from 'uuid';
 import Draggable from 'vuedraggable';
-import { createListViewMachine } from 'src/common/machines/list-view.machine';
+import { useContextListSync } from 'src/common/composables/useContextListSync';
+import { useListMachine } from 'src/common/composables/useListMachine';
+import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
+import { WorkflowWidgetType } from 'src/common/types/WorkflowWidgetType';
 import WorkflowWidgetForm from './WorkflowWidgetForm.vue';
-
-const widgetsMachine = createListViewMachine<WorkflowWidget>('widgets');
 
 export default defineComponent({
   components: {
     Draggable,
     WorkflowWidgetForm,
   },
-  setup() {
-    const { state, send } = useMachine(widgetsMachine, { devTools: true });
+  props: {
+    step: {
+      type: Object as PropType<WorkflowStep>,
+      required: true,
+    },
+  },
+  emits: ['update'],
+  setup(props, { emit }) {
+    const { state, addItem, editItem, save, cancel, update, setList } =
+      useListMachine<WorkflowWidget>('worflowStepWidgets', () => ({
+        id: uuid(),
+        type: WorkflowWidgetType.INPUT,
+        displayName: '',
+        description: '',
+        icon: '',
+        iconFileName: '',
+        field: '',
+        updateEvent: '',
+      }));
+    const widgets = useContextListSync<WorkflowWidget>(state, setList, emit);
+
+    setList([...props.step.widgets]);
+
     const open = ref(false);
 
-    const widgets = computed({
-      get: () => state.value.context.list,
-      set: (val) => send({ type: 'SET_LIST', list: val }),
-    });
-
     const add = () => {
-      send({ type: 'ADD' });
+      addItem();
       if (!open.value) {
         setTimeout(() => {
           open.value = true;
@@ -112,7 +130,17 @@ export default defineComponent({
       }
     };
 
-    return { state, widgets, open, send, add };
+    return {
+      state,
+      widgets,
+      add,
+      editItem,
+      save,
+      cancel,
+      update,
+      setList,
+      open,
+    };
   },
 });
 </script>

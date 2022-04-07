@@ -4,7 +4,7 @@
       class="pvn-field"
       dense
       outlined
-      v-model="formData.type"
+      v-model="widgetType"
       :options="widgetTypeOptions"
       label="Widget Type"
       :rules="[required()]"
@@ -18,7 +18,7 @@
       class="pvn-field"
       dense
       outlined
-      v-model="formData.displayName"
+      v-model="displayName"
       label="Display Name"
       :rules="[required()]"
     >
@@ -31,7 +31,7 @@
       class="pvn-field"
       dense
       outlined
-      v-model="formData.description"
+      v-model="description"
       label="Description"
       :rules="[required()]"
     >
@@ -52,8 +52,8 @@
         <q-icon name="image" />
       </template>
       <template v-slot:append>
-        <q-avatar square v-if="formData.icon">
-          <img :src="formData.icon" />
+        <q-avatar square v-if="details.icon">
+          <img :src="details.icon" />
         </q-avatar>
       </template>
     </q-file>
@@ -62,7 +62,7 @@
       class="pvn-field"
       dense
       outlined
-      v-model="formData.field"
+      v-model="field"
       label="Field"
       :rules="[required()]"
     >
@@ -75,7 +75,7 @@
       class="pvn-field"
       dense
       outlined
-      v-model="formData.updateEvent"
+      v-model="updateEvent"
       label="On Update Event"
     >
       <template v-slot:prepend>
@@ -97,51 +97,43 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, PropType } from 'vue';
+import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
-import { WorkflowWidgetType } from 'src/common/types/WorkflowWidgetType';
-import { useFile } from 'src/common/composables/useFile';
 import { required } from 'src/common/utils/validations';
 import { widgetTypeOptions } from './constants';
 
 export default defineComponent({
   props: {
-    widget: {
-      type: Object as () => WorkflowWidget,
+    details: {
+      type: Object as PropType<WorkflowWidget>,
+      required: true,
     },
   },
+  emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    const formData = ref<WorkflowWidget>(
-      props.widget
-        ? { ...props.widget }
-        : {
-            id: new Date().getTime(),
-            type: WorkflowWidgetType.INPUT,
-            displayName: '',
-            description: '',
-            icon: '',
-            iconFileName: '',
-            field: '',
-            updateEvent: '',
-          }
-    );
-    const { file: iconFile } = useFile(
-      formData.value.iconFileName,
-      (filename, data) => {
-        formData.value.iconFileName = filename;
-        formData.value.icon = data;
-      }
-    );
+    const { save, cancel, getFieldModel, getIconFileModel } =
+      useDetailsForm<WorkflowWidget>(props, emit);
 
-    const save = () => {
-      emit('save', formData.value);
+    const widgetType = getFieldModel('type');
+    const displayName = getFieldModel('displayName');
+    const description = getFieldModel('description');
+    const iconFile = getIconFileModel('iconFileName', 'icon');
+    const field = getFieldModel('field');
+    const updateEvent = getFieldModel('updateEvent');
+
+    return {
+      widgetTypeOptions,
+      widgetType,
+      displayName,
+      description,
+      iconFile,
+      field,
+      updateEvent,
+      save,
+      cancel,
+      required,
     };
-
-    const cancel = () => {
-      emit('cancel');
-    };
-
-    return { widgetTypeOptions, formData, iconFile, save, cancel, required };
   },
 });
 </script>

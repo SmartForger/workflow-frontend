@@ -82,9 +82,9 @@
     <workflow-details
       :details="state.context.current"
       :editing="state.matches('edit')"
-      @save="save()"
-      @cancel="cancel()"
-      @update="update($event)"
+      @save="save"
+      @cancel="cancel"
+      @update="update"
     ></workflow-details>
   </div>
 </template>
