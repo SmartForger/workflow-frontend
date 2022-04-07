@@ -20,5 +20,5 @@ export const useFile = (
     }
   );
 
-  return { file };
+  return file;
 };

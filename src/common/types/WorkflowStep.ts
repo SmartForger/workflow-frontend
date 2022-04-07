@@ -3,7 +3,7 @@ import { WorkflowLayout } from './WorkflowLayout';
 import { WorkflowWidget } from './WorkflowWidget';
 
 export interface WorkflowStep {
-  id: number;
+  id: string;
   name: string;
   displayName: string;
   description: string;

@@ -1,7 +1,7 @@
 import { WorkflowWidgetType } from './WorkflowWidgetType';
 
 export interface WorkflowWidget {
-  id: number;
+  id: string;
   type: WorkflowWidgetType;
   displayName: string;
   description: string;

@@ -1,13 +1,19 @@
 <template>
+  <q-toolbar class="q-pb-xs">
+    <q-btn flat round icon="arrow_back" @click="cancel()" />
+    <q-toolbar-title>
+      {{ editing ? 'Edit Workflow Step' : 'Add Workflow Step' }}
+    </q-toolbar-title>
+  </q-toolbar>
   <div class="q-pa-sm">
     <q-form @submit="save">
       <q-input
-        class="field"
+        class="pvn-field"
         dense
         outlined
         label="Step Name"
         placeholder="Enter step name"
-        v-model="step.displayName"
+        v-model="displayName"
         :rules="[required()]"
       >
         <template v-slot:prepend>
@@ -16,12 +22,12 @@
       </q-input>
 
       <q-input
-        class="field"
+        class="pvn-field"
         type="textarea"
         rows="2"
         dense
         outlined
-        v-model="step.description"
+        v-model="description"
         label="Step Description"
         placeholder="Enter step description"
         :rules="[required()]"
@@ -32,7 +38,7 @@
       </q-input>
 
       <q-file
-        class="field"
+        class="pvn-field"
         color="teal"
         outlined
         dense
@@ -44,8 +50,8 @@
           <q-icon name="image" />
         </template>
         <template v-slot:append>
-          <q-avatar square v-if="step.icon">
-            <img :src="step.icon" />
+          <q-avatar square v-if="details.icon">
+            <img :src="details.icon" />
           </q-avatar>
         </template>
       </q-file>
@@ -70,20 +76,10 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-.field {
-  padding-bottom: 4px;
-
-  &.q-field--error {
-    padding-bottom: 24px;
-  }
-}
-</style>
-
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, PropType } from 'vue';
+import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
-import { useFile } from 'src/common/composables/useFile';
 import { required } from 'src/common/utils/validations';
 import WorkflowStepWidgets from './WorkflowStepWidgets.vue';
 import WorkflowStepEvents from './WorkflowStepEvents.vue';
@@ -96,47 +92,27 @@ export default defineComponent({
     WorkflowStepLayouts,
   },
   props: {
+    editing: Boolean,
     details: {
-      type: Object as () => WorkflowStep,
+      type: Object as PropType<WorkflowStep>,
+      required: true,
     },
   },
+  emits: ['save', 'cance', 'update'],
   setup(props, { emit }) {
-    const step = ref<WorkflowStep>(
-      props.details
-        ? { ...props.details }
-        : {
-            id: new Date().getTime(),
-            name: '',
-            displayName: '',
-            description: '',
-            icon: '',
-            iconFileName: '',
-            widgets: [],
-            events: [],
-            layouts: [],
-          }
-    );
-    const { file: iconFile } = useFile(
-      step.value.iconFileName,
-      (filename, data) => {
-        step.value.iconFileName = filename;
-        step.value.icon = data;
-      }
-    );
+    const { save, cancel, getFieldModel, getIconFileModel } =
+      useDetailsForm<WorkflowStep>(props, emit);
 
-    const save = () => {
-      emit('save', step.value);
-    };
-
-    const cancel = () => {
-      emit('cancel');
-    };
+    const displayName = getFieldModel('displayName');
+    const description = getFieldModel('description');
+    const iconFile = getIconFileModel('iconFileName', 'icon');
 
     return {
-      step,
+      displayName,
+      description,
+      iconFile,
       save,
       cancel,
-      iconFile,
       required,
     };
   },

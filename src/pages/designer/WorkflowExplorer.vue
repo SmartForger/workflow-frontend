@@ -6,13 +6,13 @@
         Workflows
       </q-toolbar-title>
 
-      <q-btn @click="send({ type: 'ADD' })" flat outlined round icon="add" />
+      <q-btn @click="addItem()" flat outlined round icon="add" />
     </q-toolbar>
 
     <div class="q-pa-xs">
       <search-input
         :modelValue="state.context.search"
-        @update:modelValue="(val) => send({ type: 'SET_SEARCH', search: val })"
+        @update:modelValue="setSearch($event)"
         placeholder="Search workflows ..."
       ></search-input>
 
@@ -44,14 +44,22 @@
             </q-item-section>
 
             <q-item-section side>
-              <q-btn
-                flat
-                round
-                dense
-                color="secondary"
-                icon="edit"
-                @click.prevent="send({ type: 'EDIT', item: workflow })"
-              />
+              <div class="row">
+                <q-btn
+                  flat
+                  round
+                  dense
+                  icon="edit"
+                  @click.prevent="editItem(workflow)"
+                />
+                <q-btn
+                  flat
+                  round
+                  dense
+                  icon="delete"
+                  @click.prevent="deleteItem(workflow)"
+                />
+              </div>
             </q-item-section>
           </q-item>
 
@@ -65,23 +73,22 @@
   </div>
   <div v-if="state.matches('add') || state.matches('edit')">
     <workflow-details
-      :workflow="state.context.selected"
+      :details="state.context.current"
       :editing="state.matches('edit')"
-      @back="send({ type: 'BACK' })"
-      @save="send({ type: 'SAVE', item: $event })"
+      @save="save()"
+      @cancel="cancel()"
+      @update="update($event)"
     ></workflow-details>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
-import { useMachine } from '@xstate/vue';
-import { createListViewMachine } from 'src/common/machines/list-view.machine';
+import { v4 as uuid } from 'uuid';
+import { useListMachine } from 'src/common/composables/useListMachine';
 import { Workflow } from 'src/common/types/Workflow';
 import SearchInput from 'src/components/SearchInput.vue';
 import WorkflowDetails from './WorkflowDetails.vue';
-
-const explorerMachine = createListViewMachine<Workflow>('explorer');
 
 export default defineComponent({
   name: 'WorkflowExplorer',
@@ -90,7 +97,27 @@ export default defineComponent({
     WorkflowDetails,
   },
   setup() {
-    const { state, send } = useMachine(explorerMachine, { devTools: true });
+    const {
+      state,
+      addItem,
+      editItem,
+      deleteItem,
+      save,
+      cancel,
+      update,
+      setSearch,
+    } = useListMachine<Workflow>('workflows', () => ({
+      id: uuid(),
+      category: '',
+      subCategory: '',
+      name: '',
+      mode: [],
+      displayName: '',
+      description: '',
+      icon: '',
+      iconFileName: '',
+      steps: [],
+    }));
 
     const filteredWorkflows = computed(() => {
       const searchVal = state.value.context.search.toLowerCase();
@@ -104,7 +131,13 @@ export default defineComponent({
 
     return {
       state,
-      send,
+      addItem,
+      editItem,
+      deleteItem,
+      save,
+      cancel,
+      update,
+      setSearch,
       filteredWorkflows,
       filtered,
     };

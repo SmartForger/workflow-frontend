@@ -1,17 +1,19 @@
 import { AnyEventObject, assign, createMachine } from 'xstate';
+import { BaseItem } from '../types/BaseItem';
 
-export interface ListViewContext<TItem extends { id: string | number }> {
+export interface ListViewContext<TItem extends BaseItem> {
   list: TItem[];
-  selected: TItem | null;
+  current: TItem | null;
   search: string;
 }
 
-export const createListViewMachine = <TItem extends { id: string | number }>(
-  id: string
+export const createListViewMachine = <TItem extends BaseItem>(
+  id: string,
+  creatEmptyItem: () => TItem
 ) => {
   const initialContext: ListViewContext<TItem> = {
     list: [],
-    selected: null,
+    current: null,
     search: '',
   };
 
@@ -25,7 +27,7 @@ export const createListViewMachine = <TItem extends { id: string | number }>(
           on: {
             ADD: {
               target: 'add',
-              actions: 'deselectItem',
+              actions: 'setNewCurrentItem',
             },
             EDIT: {
               target: 'edit',
@@ -49,6 +51,9 @@ export const createListViewMachine = <TItem extends { id: string | number }>(
               target: 'list',
               actions: ['addItem'],
             },
+            UPDATE: {
+              actions: ['updateCurrentItem'],
+            },
           },
         },
         edit: {
@@ -57,6 +62,9 @@ export const createListViewMachine = <TItem extends { id: string | number }>(
             SAVE: {
               target: 'list',
               actions: ['updateItem'],
+            },
+            UPDATE: {
+              actions: ['updateCurrentItem'],
             },
           },
         },
@@ -68,28 +76,31 @@ export const createListViewMachine = <TItem extends { id: string | number }>(
           list: (_context, ev) => ev.list,
         }),
         selectItem: assign({
-          selected: (_context, ev) => ev.item,
+          current: (_context, ev) => ({ ...ev.item }),
         }),
-        deselectItem: assign<ListViewContext<TItem>, AnyEventObject>({
-          selected: () => null,
+        setNewCurrentItem: assign<ListViewContext<TItem>, AnyEventObject>({
+          current: () => creatEmptyItem(),
         }),
         setSearch: assign({
           search: (_context, ev) => ev.search,
         }),
         addItem: assign<ListViewContext<TItem>, AnyEventObject>({
-          list: (context, ev) => context.list.concat(ev.item),
-          selected: () => null,
+          list: (context) => context.list.concat(context.current as TItem),
+          current: null,
         }),
         updateItem: assign<ListViewContext<TItem>, AnyEventObject>({
-          list: (context, ev) =>
+          list: (context) =>
             context.list.map((item) =>
-              item.id === ev.item.id ? ev.item : item
+              item.id === context.current?.id ? context.current : item
             ),
-          selected: null,
+          current: null,
         }),
         deleteItem: assign<ListViewContext<TItem>, AnyEventObject>({
           list: (context, ev) =>
             context.list.filter((item) => item.id !== ev.item.id),
+        }),
+        updateCurrentItem: assign<ListViewContext<TItem>, AnyEventObject>({
+          current: ({ current }, ev) => ({ ...current, ...ev.payload }),
         }),
       },
     }
