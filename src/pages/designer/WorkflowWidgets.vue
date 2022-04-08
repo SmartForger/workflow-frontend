@@ -19,14 +19,6 @@
       </q-item-section>
     </template>
 
-    <workflow-widget-form
-      :details="state.context.current"
-      @save="save"
-      @cancel="cancel"
-      @update="update"
-      v-if="state.matches('add') || state.matches('edit')"
-    ></workflow-widget-form>
-
     <div class="q-pa-sm" v-if="state.matches('list')">
       <div class="q-px-sm" v-if="!state.context.list.length">No widgets</div>
       <q-list bordered v-else>
@@ -74,6 +66,14 @@
         </draggable>
       </q-list>
     </div>
+
+    <workflow-widget-form
+      :details="state.context.current"
+      @save="save"
+      @cancel="cancel"
+      @update="update"
+      v-else
+    ></workflow-widget-form>
   </q-expansion-item>
 </template>
 

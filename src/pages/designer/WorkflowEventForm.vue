@@ -1,26 +1,12 @@
 <template>
   <q-card class="q-ma-sm q-pa-sm" bordered>
     <q-form @submit="save">
-      <q-select
-        class="pvn-field"
-        dense
-        outlined
-        v-model="widgetType"
-        :options="widgetTypeOptions"
-        label="Widget Type"
-        :rules="[required()]"
-      >
-        <template v-slot:prepend>
-          <q-icon name="widgets" />
-        </template>
-      </q-select>
-
       <q-input
         class="pvn-field"
         dense
         outlined
-        v-model="displayName"
-        label="Display Name"
+        v-model="name"
+        label="Event Name"
         :rules="[required()]"
       >
         <template v-slot:prepend>
@@ -41,46 +27,47 @@
         </template>
       </q-input>
 
-      <q-file
+      <q-select
         class="pvn-field"
-        outlined
         dense
-        label="Select Widget Icon"
-        v-model="iconFile"
+        outlined
+        label="Target Step"
+        v-model="step"
+        :options="steps"
+        option-value="id"
+        option-label="displayName"
+        :display-value="stepName"
+        emit-value
+      >
+        <template v-slot:prepend>
+          <q-icon name="directions" />
+        </template>
+      </q-select>
+
+      <q-select
+        class="pvn-field"
+        dense
+        outlined
+        label="Actions"
+        v-model="action"
+        :options="eventActions"
         :rules="[required()]"
       >
         <template v-slot:prepend>
-          <q-icon name="image" />
+          <q-icon name="directions" />
         </template>
-        <template v-slot:append>
-          <q-avatar square v-if="details.icon">
-            <img :src="details.icon" />
-          </q-avatar>
-        </template>
-      </q-file>
+      </q-select>
 
       <q-input
         class="pvn-field"
         dense
         outlined
-        v-model="field"
-        label="Field"
+        label="Condition"
+        v-model="condition"
         :rules="[required()]"
       >
         <template v-slot:prepend>
-          <q-icon name="img:src/assets/images/field.svg" />
-        </template>
-      </q-input>
-
-      <q-input
-        class="pvn-field"
-        dense
-        outlined
-        v-model="updateEvent"
-        label="On Update Event"
-      >
-        <template v-slot:prepend>
-          <q-icon name="img:src/assets/images/update_event.svg" />
+          <q-icon name="compare_arrows" />
         </template>
       </q-input>
 
@@ -88,7 +75,7 @@
         <q-btn
           class="q-mr-sm"
           type="submit"
-          label="Save Widget"
+          label="Save Event"
           icon="save"
           color="primary"
         ></q-btn>
@@ -99,39 +86,51 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
-import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
+import { WorkflowStep } from 'src/common/types/WorkflowStep';
+import { WorkflowEvent } from 'src/common/types/WorkflowEvent';
 import { required } from 'src/common/utils/validations';
-import { widgetTypeOptions } from './constants';
+import { eventActions } from './constants';
 
 export default defineComponent({
   props: {
     details: {
-      type: Object as PropType<WorkflowWidget>,
+      type: Object as PropType<WorkflowEvent>,
+      required: true,
+    },
+    steps: {
+      type: Array as PropType<WorkflowStep[]>,
       required: true,
     },
   },
   emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    const { save, cancel, getFieldModel, getIconFileModel } =
-      useDetailsForm<WorkflowWidget>(props, emit);
+    console.log(111, props.details);
 
-    const widgetType = getFieldModel('type');
-    const displayName = getFieldModel('displayName');
+    const { save, cancel, getFieldModel } = useDetailsForm<WorkflowEvent>(
+      props,
+      emit
+    );
+
+    const name = getFieldModel('name');
     const description = getFieldModel('description');
-    const iconFile = getIconFileModel('iconFileName', 'icon');
-    const field = getFieldModel('field');
-    const updateEvent = getFieldModel('updateEvent');
+    const step = getFieldModel('step');
+    const action = getFieldModel('action');
+    const condition = getFieldModel('condition');
+    const stepName = computed(() => {
+      const stepObj = props.steps.find(s => s.id === step.value);
+      return stepObj?.displayName || '';
+    });
 
     return {
-      widgetTypeOptions,
-      widgetType,
-      displayName,
+      eventActions,
+      name,
       description,
-      iconFile,
-      field,
-      updateEvent,
+      step,
+      action,
+      condition,
+      stepName,
       save,
       cancel,
       required,

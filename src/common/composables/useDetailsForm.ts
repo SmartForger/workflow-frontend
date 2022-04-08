@@ -3,9 +3,7 @@
 import { computed, ref } from 'vue';
 import { useFile } from './useFile';
 
-export const useDetailsForm = <
-  T extends { iconFileName: string; icon: string }
->(
+export const useDetailsForm = <T>(
   props: {
     details: T;
   },

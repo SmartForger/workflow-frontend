@@ -1,7 +1,8 @@
 export interface WorkflowEvent {
+  id: string;
   name: string;
   description: string;
-  step: number;
+  step: string;
   action: string;
   condition: string;
 }

@@ -94,7 +94,7 @@
         <q-btn
           class="q-mr-sm"
           type="submit"
-          label="Save"
+          label="Save Layout"
           icon="save"
           color="primary"
         ></q-btn>

@@ -103,7 +103,7 @@ export default defineComponent({
       required: true,
     },
     layouts: {
-      type: Object as PropType<WorkflowLayout[]>,
+      type: Array as PropType<WorkflowLayout[]>,
       required: true,
     },
   },

@@ -61,7 +61,12 @@
         :widgets="details.widgets"
         @update="update('widgets', $event)"
       ></workflow-widgets>
-      <workflow-events></workflow-events>
+      <workflow-events
+        expansionGroup="step"
+        :events="details.events"
+        :steps="steps"
+        @update="update('events', $event)"
+      ></workflow-events>
       <workflow-layouts
         expansionGroup="step"
         :layouts="details.layouts"
@@ -73,7 +78,7 @@
       <q-btn
         class="q-mr-sm"
         type="submit"
-        label="Save"
+        label="Save Step"
         icon="save"
         color="primary"
       ></q-btn>
@@ -102,6 +107,10 @@ export default defineComponent({
     details: {
       type: Object as PropType<WorkflowStep>,
       required: true,
+    },
+    steps: {
+      type: Array as PropType<WorkflowStep[]>,
+      default: () => [],
     },
   },
   emits: ['save', 'cancel', 'update'],

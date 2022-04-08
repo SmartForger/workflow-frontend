@@ -56,6 +56,7 @@
     <workflow-step-settings
       :editing="state.matches('editing')"
       :details="state.context.current"
+      :steps="steps"
       @save="save"
       @cancel="cancel"
       @update="update"

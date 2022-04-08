@@ -23,13 +23,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
 
 export default defineComponent({
   props: {
     details: {
-      type: Object as () => WorkflowStep,
+      type: Object as PropType<WorkflowStep>,
       required: true,
     },
   },

@@ -18,3 +18,14 @@ export const widgetTypeOptions = [
   WorkflowWidgetType.SIGNATURE,
   WorkflowWidgetType.VIDEO,
 ];
+
+export const eventActions = [
+  'Send Email',
+  'Take Photo',
+  'Record Video',
+  'Enter Comment',
+  'Live Screening',
+  'Share Photo',
+  'Share Video',
+  'Send Chat Message',
+];
