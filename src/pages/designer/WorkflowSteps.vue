@@ -1,5 +1,5 @@
 <template>
-  <q-card-section>
+  <q-card-section class="q-px-none">
     <template v-if="state.matches('list')">
       <q-toolbar class="q-pb-none">
         <q-toolbar-title> Workflow Steps </q-toolbar-title>
@@ -53,15 +53,14 @@
       </q-banner>
     </template>
 
-    <template v-else>
-      <workflow-step-settings
-        :editing="state.matches('editing')"
-        :details="state.context.current"
-        @save="save"
-        @cancel="cancel"
-        @update="update"
-      ></workflow-step-settings>
-    </template>
+    <workflow-step-settings
+      :editing="state.matches('editing')"
+      :details="state.context.current"
+      @save="save"
+      @cancel="cancel"
+      @update="update"
+      v-else
+    ></workflow-step-settings>
   </q-card-section>
 </template>
 

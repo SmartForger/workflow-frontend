@@ -9,7 +9,7 @@
       <q-btn @click="addItem()" flat outlined round icon="add" />
     </q-toolbar>
 
-    <div class="q-pa-xs">
+    <div class="q-pa-md">
       <search-input
         :modelValue="state.context.search"
         @update:modelValue="setSearch($event)"
@@ -22,7 +22,7 @@
           {{ state.context.list.length }} workflows
         </q-banner>
 
-        <q-list class="q-mt-xs" bordered>
+        <q-list class="q-mt-sm" bordered>
           <q-item
             v-for="workflow in filteredWorkflows"
             :key="workflow.id"
@@ -73,20 +73,19 @@
           <q-separator />
         </q-list>
       </template>
-      <q-banner class="bg-grey-3 q-mt-xs" dense v-else>
+      <q-banner class="bg-grey-3 q-mt-sm" dense v-else>
         No workflows found.
       </q-banner>
     </div>
   </div>
-  <div v-if="state.matches('add') || state.matches('edit')">
-    <workflow-details
-      :details="state.context.current"
-      :editing="state.matches('edit')"
-      @save="save"
-      @cancel="cancel"
-      @update="update"
-    ></workflow-details>
-  </div>
+  <workflow-details
+    :details="state.context.current"
+    :editing="state.matches('edit')"
+    @save="save"
+    @cancel="cancel"
+    @update="update"
+    v-else
+  ></workflow-details>
 </template>
 
 <script lang="ts">

@@ -1,87 +1,85 @@
 <template>
-  <q-toolbar class="q-pb-xs">
+  <q-toolbar class="q-px-none">
     <q-btn flat round icon="arrow_back" @click="cancel()" />
     <q-toolbar-title>
       {{ editing ? 'Edit Workflow Step' : 'Add Workflow Step' }}
     </q-toolbar-title>
   </q-toolbar>
-  <div class="q-pa-sm">
-    <q-form @submit="save">
-      <q-input
-        class="pvn-field"
-        dense
-        outlined
-        label="Step Name"
-        placeholder="Enter step name"
-        v-model="displayName"
-        :rules="[required()]"
-      >
-        <template v-slot:prepend>
-          <q-icon name="img:src/assets/images/input_text.svg" />
-        </template>
-      </q-input>
+  <q-form @submit="save">
+    <q-input
+      class="pvn-field"
+      dense
+      outlined
+      label="Step Name"
+      placeholder="Enter step name"
+      v-model="displayName"
+      :rules="[required()]"
+    >
+      <template v-slot:prepend>
+        <q-icon name="img:src/assets/images/input_text.svg" />
+      </template>
+    </q-input>
 
-      <q-input
-        class="pvn-field"
-        type="textarea"
-        rows="2"
-        dense
-        outlined
-        v-model="description"
-        label="Step Description"
-        placeholder="Enter step description"
-        :rules="[required()]"
-      >
-        <template v-slot:prepend>
-          <q-icon name="img:src/assets/images/input_text.svg" />
-        </template>
-      </q-input>
+    <q-input
+      class="pvn-field"
+      type="textarea"
+      rows="2"
+      dense
+      outlined
+      v-model="description"
+      label="Step Description"
+      placeholder="Enter step description"
+      :rules="[required()]"
+    >
+      <template v-slot:prepend>
+        <q-icon name="img:src/assets/images/input_text.svg" />
+      </template>
+    </q-input>
 
-      <q-file
-        class="pvn-field"
-        color="teal"
-        outlined
-        dense
-        label="Select Step Icon"
-        v-model="iconFile"
-        :rules="[required()]"
-      >
-        <template v-slot:prepend>
-          <q-icon name="image" />
-        </template>
-        <template v-slot:append>
-          <q-avatar square v-if="details.icon">
-            <img :src="details.icon" />
-          </q-avatar>
-        </template>
-      </q-file>
+    <q-file
+      class="pvn-field"
+      color="teal"
+      outlined
+      dense
+      label="Select Step Icon"
+      v-model="iconFile"
+      :rules="[required()]"
+    >
+      <template v-slot:prepend>
+        <q-icon name="image" />
+      </template>
+      <template v-slot:append>
+        <q-avatar square v-if="details.icon">
+          <img :src="details.icon" />
+        </q-avatar>
+      </template>
+    </q-file>
 
-      <q-list bordered>
-        <workflow-step-widgets
-          expansionGroup="step"
-          :widgets="details.widgets"
-          @update="update('widgets', $event)"
-        ></workflow-step-widgets>
-        <workflow-step-events></workflow-step-events>
-        <workflow-step-layouts
-          expansionGroup="step"
-          :layouts="details.layouts"
-          @update="update('layouts', $event)"
-        ></workflow-step-layouts>
-      </q-list>
+    <q-list bordered>
+      <workflow-step-widgets
+        expansionGroup="step"
+        :widgets="details.widgets"
+        @update="update('widgets', $event)"
+      ></workflow-step-widgets>
+      <workflow-step-events></workflow-step-events>
+      <workflow-step-layouts
+        expansionGroup="step"
+        :layouts="details.layouts"
+        @update="update('layouts', $event)"
+      ></workflow-step-layouts>
+    </q-list>
 
-      <div class="row q-mt-md">
-        <q-btn
-          class="q-mr-sm"
-          type="submit"
-          label="Save"
-          icon="save"
-          color="primary"
-        ></q-btn>
-        <q-btn label="Cancel" @click="cancel()"></q-btn>
-      </div>
-    </q-form>
-  </div>
+    <div class="row q-mt-md">
+      <q-btn
+        class="q-mr-sm"
+        type="submit"
+        label="Save"
+        icon="save"
+        color="primary"
+      ></q-btn>
+      <q-btn label="Cancel" @click="cancel()"></q-btn>
+    </div>
+  </q-form>
 </template>
 
 <script lang="ts">
