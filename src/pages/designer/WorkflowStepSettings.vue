@@ -56,17 +56,17 @@
     </q-file>
 
     <q-list bordered>
-      <workflow-step-widgets
+      <workflow-widgets
         expansionGroup="step"
         :widgets="details.widgets"
         @update="update('widgets', $event)"
-      ></workflow-step-widgets>
-      <workflow-step-events></workflow-step-events>
-      <workflow-step-layouts
+      ></workflow-widgets>
+      <workflow-events></workflow-events>
+      <workflow-layouts
         expansionGroup="step"
         :layouts="details.layouts"
         @update="update('layouts', $event)"
-      ></workflow-step-layouts>
+      ></workflow-layouts>
     </q-list>
 
     <div class="row q-mt-md">
@@ -87,15 +87,15 @@ import { defineComponent, PropType } from 'vue';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import { required } from 'src/common/utils/validations';
-import WorkflowStepWidgets from './WorkflowStepWidgets.vue';
-import WorkflowStepEvents from './WorkflowStepEvents.vue';
-import WorkflowStepLayouts from './WorkflowStepLayouts.vue';
+import WorkflowWidgets from './WorkflowWidgets.vue';
+import WorkflowEvents from './WorkflowEvents.vue';
+import WorkflowLayouts from './WorkflowLayouts.vue';
 
 export default defineComponent({
   components: {
-    WorkflowStepWidgets,
-    WorkflowStepEvents,
-    WorkflowStepLayouts,
+    WorkflowWidgets,
+    WorkflowEvents,
+    WorkflowLayouts,
   },
   props: {
     editing: Boolean,

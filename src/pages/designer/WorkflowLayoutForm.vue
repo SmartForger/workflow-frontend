@@ -83,11 +83,11 @@
       <q-toggle label="Visibility" v-model="visible" color="green" />
 
       <q-list bordered>
-        <workflow-step-widgets
+        <workflow-widgets
           expansionGroup="layout"
           :widgets="details.widgets"
           @update="update('widgets', $event)"
-        ></workflow-step-widgets>
+        ></workflow-widgets>
       </q-list>
 
       <div class="row q-mt-md">
@@ -109,10 +109,10 @@ import { defineComponent, PropType } from 'vue';
 import { WorkflowLayout } from 'src/common/types/WorkflowLayout';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { required } from 'src/common/utils/validations';
-import WorkflowStepWidgets from './WorkflowStepWidgets.vue';
+import WorkflowWidgets from './WorkflowWidgets.vue';
 
 export default defineComponent({
-  components: { WorkflowStepWidgets },
+  components: { WorkflowWidgets },
   props: {
     details: {
       type: Object as PropType<WorkflowLayout>,
