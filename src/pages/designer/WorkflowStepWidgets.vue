@@ -1,8 +1,7 @@
 <template>
   <q-expansion-item
-    group="settings"
+    :group="expansionGroup"
     dense
-    expand-separator
     v-model="open"
     @after-hide="cancel()"
   >
@@ -11,7 +10,9 @@
         <q-avatar icon="img:src/assets/images/widgets.svg" />
       </q-item-section>
 
-      <q-item-section> Widgets ({{ state.context.list.length }}) </q-item-section>
+      <q-item-section>
+        Widgets ({{ state.context.list.length }})
+      </q-item-section>
 
       <q-item-section side>
         <q-btn flat round icon="add" @click.stop="add()"></q-btn>
@@ -28,54 +29,50 @@
 
     <div class="q-pa-sm" v-if="state.matches('list')">
       <div class="q-px-sm" v-if="!state.context.list.length">No widgets</div>
-      <draggable
-        v-model="widgets"
-        class="list-group"
-        handle=".handle"
-        item-key="id"
-        v-else
-      >
-        <template #item="{ element: widget }">
-          <q-item clickable v-ripple>
-            <q-item-section side>
-              <q-icon class="handle" name="drag_indicator"></q-icon>
-            </q-item-section>
-            <q-item-section avatar>
-              <q-avatar square>
-                <img :src="widget.icon" />
-              </q-avatar>
-            </q-item-section>
+      <q-list bordered v-else>
+        <draggable v-model="list" handle=".handle" item-key="id">
+          <template #item="{ element: widget }">
+            <q-item clickable v-ripple>
+              <q-item-section side>
+                <q-icon class="handle" name="drag_indicator"></q-icon>
+              </q-item-section>
+              <q-item-section avatar>
+                <q-avatar square>
+                  <img :src="widget.icon" />
+                </q-avatar>
+              </q-item-section>
 
-            <q-item-section>
-              <q-item-label>{{ widget.displayName }}</q-item-label>
-              <div>
-                <q-badge class="bg-green text-white">
-                  {{ widget.type }}
-                </q-badge>
-              </div>
-            </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ widget.displayName }}</q-item-label>
+                <div>
+                  <q-badge class="bg-green text-white">
+                    {{ widget.type }}
+                  </q-badge>
+                </div>
+              </q-item-section>
 
-            <q-item-section side>
-              <div class="row">
-                <q-btn
-                  flat
-                  round
-                  size="sm"
-                  icon="edit"
-                  @click="editItem(widget)"
-                ></q-btn>
-                <q-btn
-                  flat
-                  round
-                  size="sm"
-                  icon="delete"
-                  @click="deleteItem(widget)"
-                ></q-btn>
-              </div>
-            </q-item-section>
-          </q-item>
-        </template>
-      </draggable>
+              <q-item-section side>
+                <div class="row">
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="edit"
+                    @click="editItem(widget)"
+                  ></q-btn>
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="delete"
+                    @click="deleteItem(widget)"
+                  ></q-btn>
+                </div>
+              </q-item-section>
+            </q-item>
+          </template>
+        </draggable>
+      </q-list>
     </div>
   </q-expansion-item>
 </template>
@@ -86,7 +83,6 @@ import { v4 as uuid } from 'uuid';
 import Draggable from 'vuedraggable';
 import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
-import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
 import { WorkflowWidgetType } from 'src/common/types/WorkflowWidgetType';
 import WorkflowWidgetForm from './WorkflowWidgetForm.vue';
@@ -97,15 +93,19 @@ export default defineComponent({
     WorkflowWidgetForm,
   },
   props: {
-    step: {
-      type: Object as PropType<WorkflowStep>,
+    expansionGroup: {
+      type: String,
+      required: true,
+    },
+    widgets: {
+      type: Object as PropType<WorkflowWidget[]>,
       required: true,
     },
   },
   emits: ['update'],
   setup(props, { emit }) {
     const { state, addItem, editItem, save, cancel, update, setList } =
-      useListMachine<WorkflowWidget>('worflowStepWidgets', () => ({
+      useListMachine<WorkflowWidget>('worflowWidgets', () => ({
         id: uuid(),
         type: WorkflowWidgetType.INPUT,
         displayName: '',
@@ -115,9 +115,9 @@ export default defineComponent({
         field: '',
         updateEvent: '',
       }));
-    const widgets = useContextListSync<WorkflowWidget>(state, setList, emit);
+    const list = useContextListSync<WorkflowWidget>(state, setList, emit);
 
-    setList([...props.step.widgets]);
+    setList([...props.widgets]);
 
     const open = ref(false);
 
@@ -132,7 +132,7 @@ export default defineComponent({
 
     return {
       state,
-      widgets,
+      list,
       add,
       editItem,
       save,

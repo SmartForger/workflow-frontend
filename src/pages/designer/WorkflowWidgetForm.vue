@@ -1,99 +1,101 @@
 <template>
-  <q-form class="q-pa-md" @submit="save">
-    <q-select
-      class="pvn-field"
-      dense
-      outlined
-      v-model="widgetType"
-      :options="widgetTypeOptions"
-      label="Widget Type"
-      :rules="[required()]"
-    >
-      <template v-slot:prepend>
-        <q-icon name="widgets" />
-      </template>
-    </q-select>
+  <q-card class="q-ma-sm q-pa-sm" bordered>
+    <q-form @submit="save">
+      <q-select
+        class="pvn-field"
+        dense
+        outlined
+        v-model="widgetType"
+        :options="widgetTypeOptions"
+        label="Widget Type"
+        :rules="[required()]"
+      >
+        <template v-slot:prepend>
+          <q-icon name="widgets" />
+        </template>
+      </q-select>
 
-    <q-input
-      class="pvn-field"
-      dense
-      outlined
-      v-model="displayName"
-      label="Display Name"
-      :rules="[required()]"
-    >
-      <template v-slot:prepend>
-        <q-icon name="text_fields" />
-      </template>
-    </q-input>
+      <q-input
+        class="pvn-field"
+        dense
+        outlined
+        v-model="displayName"
+        label="Display Name"
+        :rules="[required()]"
+      >
+        <template v-slot:prepend>
+          <q-icon name="text_fields" />
+        </template>
+      </q-input>
 
-    <q-input
-      class="pvn-field"
-      dense
-      outlined
-      v-model="description"
-      label="Description"
-      :rules="[required()]"
-    >
-      <template v-slot:prepend>
-        <q-icon name="text_fields" />
-      </template>
-    </q-input>
+      <q-input
+        class="pvn-field"
+        dense
+        outlined
+        v-model="description"
+        label="Description"
+        :rules="[required()]"
+      >
+        <template v-slot:prepend>
+          <q-icon name="text_fields" />
+        </template>
+      </q-input>
 
-    <q-file
-      class="pvn-field"
-      outlined
-      dense
-      label="Select Widget Icon"
-      v-model="iconFile"
-      :rules="[required()]"
-    >
-      <template v-slot:prepend>
-        <q-icon name="image" />
-      </template>
-      <template v-slot:append>
-        <q-avatar square v-if="details.icon">
-          <img :src="details.icon" />
-        </q-avatar>
-      </template>
-    </q-file>
+      <q-file
+        class="pvn-field"
+        outlined
+        dense
+        label="Select Widget Icon"
+        v-model="iconFile"
+        :rules="[required()]"
+      >
+        <template v-slot:prepend>
+          <q-icon name="image" />
+        </template>
+        <template v-slot:append>
+          <q-avatar square v-if="details.icon">
+            <img :src="details.icon" />
+          </q-avatar>
+        </template>
+      </q-file>
 
-    <q-input
-      class="pvn-field"
-      dense
-      outlined
-      v-model="field"
-      label="Field"
-      :rules="[required()]"
-    >
-      <template v-slot:prepend>
-        <q-icon name="img:src/assets/images/field.svg" />
-      </template>
-    </q-input>
+      <q-input
+        class="pvn-field"
+        dense
+        outlined
+        v-model="field"
+        label="Field"
+        :rules="[required()]"
+      >
+        <template v-slot:prepend>
+          <q-icon name="img:src/assets/images/field.svg" />
+        </template>
+      </q-input>
 
-    <q-input
-      class="pvn-field"
-      dense
-      outlined
-      v-model="updateEvent"
-      label="On Update Event"
-    >
-      <template v-slot:prepend>
-        <q-icon name="img:src/assets/images/update_event.svg" />
-      </template>
-    </q-input>
+      <q-input
+        class="pvn-field"
+        dense
+        outlined
+        v-model="updateEvent"
+        label="On Update Event"
+      >
+        <template v-slot:prepend>
+          <q-icon name="img:src/assets/images/update_event.svg" />
+        </template>
+      </q-input>
 
-    <div class="row q-mt-md">
-      <q-btn
-        class="q-mr-sm"
-        type="submit"
-        label="Save"
-        icon="save"
-        color="primary"
-      ></q-btn>
-      <q-btn label="Cancel" @click="cancel()"></q-btn>
-    </div>
-  </q-form>
+      <div class="row q-mt-md">
+        <q-btn
+          class="q-mr-sm"
+          type="submit"
+          label="Save"
+          icon="save"
+          color="primary"
+        ></q-btn>
+        <q-btn label="Cancel" @click="cancel()"></q-btn>
+      </div>
+    </q-form>
+  </q-card>
 </template>
 
 <script lang="ts">

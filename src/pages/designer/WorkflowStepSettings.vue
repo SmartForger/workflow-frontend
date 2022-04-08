@@ -58,11 +58,16 @@
 
       <q-list bordered>
         <workflow-step-widgets
-          :step="details"
+          expansionGroup="step"
+          :widgets="details.widgets"
           @update="update('widgets', $event)"
         ></workflow-step-widgets>
         <workflow-step-events></workflow-step-events>
-        <workflow-step-layouts></workflow-step-layouts>
+        <workflow-step-layouts
+          expansionGroup="step"
+          :layouts="details.layouts"
+          @update="update('layouts', $event)"
+        ></workflow-step-layouts>
       </q-list>
 
       <div class="row q-mt-md">

@@ -42,6 +42,9 @@ export const createListViewMachine = <TItem extends BaseItem>(
             SET_SEARCH: {
               actions: ['setSearch'],
             },
+            UPDATE: {
+              actions: ['updateItemInList'],
+            },
           },
         },
         add: {
@@ -102,6 +105,17 @@ export const createListViewMachine = <TItem extends BaseItem>(
         updateCurrentItem: assign<ListViewContext<TItem>, AnyEventObject>({
           current: ({ current }, ev) => ({ ...current, ...ev.payload }),
         }),
+        updateItemInList: (
+          context: ListViewContext<TItem>,
+          ev: AnyEventObject
+        ) => {
+          const { id, ...data } = ev.payload;
+          const index = context.list.findIndex(item => item.id === id);
+          context.list[index] = {
+            ...context.list[index],
+            ...data,
+          };
+        },
       },
     }
   );
