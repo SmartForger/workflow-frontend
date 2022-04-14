@@ -16,61 +16,70 @@
         placeholder="Search workflows ..."
       ></search-input>
 
-      <template v-if="filteredWorkflows.length">
-        <q-banner class="bg-grey-3 q-mt-xs" dense v-if="filtered">
-          Filtered {{ filteredWorkflows.length }} out of
-          {{ state.context.list.length }} workflows
+      <template v-if="groupedWorkflows.filteredCount">
+        <q-banner
+          class="bg-grey-3 q-mt-xs"
+          dense
+          v-if="groupedWorkflows.filtered"
+        >
+          Filtered {{ groupedWorkflows.filteredCount }} out of
+          {{ groupedWorkflows.totalCount }} workflows
         </q-banner>
 
-        <q-list class="q-mt-sm" bordered>
-          <q-item
-            v-for="workflow in filteredWorkflows"
-            :key="workflow.id"
-            class="q-my-sm"
-            clickable
-            v-ripple
+        <q-list class="q-mt-xs" bordered>
+          <template
+            v-for="group in groupedWorkflows.groups"
+            :key="group.category"
           >
-            <q-item-section avatar>
-              <q-avatar square v-if="workflow.icon">
-                <img :src="workflow.icon" />
-              </q-avatar>
-            </q-item-section>
+            <q-item-label class="q-pb-none" header>{{ group.category }}</q-item-label>
 
-            <q-item-section>
-              <q-item-label>{{ workflow.displayName }}</q-item-label>
-              <q-item-label caption lines="1">
-                <q-badge
-                  :key="mode"
-                  color="green"
-                  class="q-mr-xs"
-                  v-for="mode in workflow.mode"
-                >
-                  {{ mode }}
-                </q-badge>
-              </q-item-label>
-            </q-item-section>
+            <q-item
+              v-for="workflow in group.workflows"
+              :key="workflow.id"
+              class="q-my-sm"
+              clickable
+              v-ripple
+            >
+              <q-item-section avatar>
+                <q-avatar square v-if="workflow.icon">
+                  <img :src="workflow.icon" />
+                </q-avatar>
+              </q-item-section>
 
-            <q-item-section side>
-              <div class="row">
-                <q-btn
-                  flat
-                  round
-                  dense
-                  icon="edit"
-                  @click.prevent="editItem(workflow)"
-                />
-                <q-btn
-                  flat
-                  round
-                  dense
-                  icon="delete"
-                  @click.prevent="deleteItem(workflow)"
-                />
-              </div>
-            </q-item-section>
-          </q-item>
+              <q-item-section>
+                <q-item-label>{{ workflow.displayName }}</q-item-label>
+                <q-item-label caption lines="1">
+                  <q-badge
+                    :key="mode"
+                    color="green"
+                    class="q-mr-xs"
+                    v-for="mode in workflow.mode"
+                  >
+                    {{ mode }}
+                  </q-badge>
+                </q-item-label>
+              </q-item-section>
 
-          <q-separator />
+              <q-item-section side>
+                <div class="row">
+                  <q-btn
+                    flat
+                    round
+                    dense
+                    icon="edit"
+                    @click.prevent="editItem(workflow)"
+                  />
+                  <q-btn
+                    flat
+                    round
+                    dense
+                    icon="delete"
+                    @click.prevent="deleteItem(workflow)"
+                  />
+                </div>
+              </q-item-section>
+            </q-item>
+          </template>
         </q-list>
       </template>
       <q-banner class="bg-grey-3 q-mt-sm" dense v-else>
@@ -91,6 +100,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
 import { v4 as uuid } from 'uuid';
+import { groupBy, forIn } from 'lodash';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import { Workflow } from 'src/common/types/Workflow';
 import SearchInput from 'src/components/SearchInput.vue';
@@ -125,14 +135,24 @@ export default defineComponent({
       steps: [],
     }));
 
-    const filteredWorkflows = computed(() => {
+    const groupedWorkflows = computed(() => {
       const searchVal = state.value.context.search.toLowerCase();
-      return state.value.context.list.filter((workflow) =>
+      const filteredWorkflows = state.value.context.list.filter((workflow) =>
         workflow.displayName.toLowerCase().includes(searchVal)
       );
-    });
-    const filtered = computed(() => {
-      return filteredWorkflows.value.length < state.value.context.list.length;
+
+      const grouped = groupBy(filteredWorkflows, 'category');
+      const groups: Array<{ category: string; workflows: Workflow[] }> = [];
+      forIn(grouped, (group, category) => {
+        groups.push({ category, workflows: group });
+      });
+
+      return {
+        filtered: !!searchVal,
+        filteredCount: filteredWorkflows.length,
+        totalCount: state.value.context.list.length,
+        groups,
+      };
     });
 
     return {
@@ -144,8 +164,7 @@ export default defineComponent({
       cancel,
       update,
       setSearch,
-      filteredWorkflows,
-      filtered,
+      groupedWorkflows,
     };
   },
 });
