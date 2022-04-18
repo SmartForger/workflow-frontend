@@ -1,12 +1,14 @@
 import { useMachine } from '@xstate/vue';
-import { createListViewMachine } from '../machines/list-view.machine';
+import {
+  createListViewMachine,
+  CreateListViewMachineParams,
+} from '../machines/list-view.machine';
 import { BaseItem } from '../types/BaseItem';
 
 export const useListMachine = <TItem extends BaseItem>(
-  id: string,
-  creatEmptyItem: () => TItem
+  params: CreateListViewMachineParams<TItem>
 ) => {
-  const machine = createListViewMachine<TItem>(id, creatEmptyItem);
+  const machine = createListViewMachine<TItem>(params);
   const { state, send } = useMachine(machine, { devTools: true });
 
   const addItem = () => {
@@ -18,7 +20,7 @@ export const useListMachine = <TItem extends BaseItem>(
   };
 
   const deleteItem = (item: TItem) => {
-    send({ type: 'DELETE', item });
+    send({ type: 'DELETE', id: item.id });
   };
 
   const save = () => {
@@ -42,7 +44,7 @@ export const useListMachine = <TItem extends BaseItem>(
       return;
     }
 
-    send({ type: 'SET_LIST', list: data });
+    send({ type: 'SET_LIST', data });
   };
 
   const setSearch = (search: string) => {
