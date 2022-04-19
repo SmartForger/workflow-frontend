@@ -5,4 +5,5 @@ export interface WorkflowEvent {
   step: string;
   action: string;
   condition: string;
+  stepId?: string;
 }

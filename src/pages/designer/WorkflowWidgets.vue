@@ -92,6 +92,7 @@ import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
 import { WorkflowWidgetType } from 'src/common/types/WorkflowWidgetType';
+import api from 'src/common/api';
 import WorkflowWidgetForm from './WorkflowWidgetForm.vue';
 
 export default defineComponent({
@@ -108,23 +109,40 @@ export default defineComponent({
       type: Object as PropType<WorkflowWidget[]>,
       required: true,
     },
+    stepId: String,
+    layoutId: String,
   },
   emits: ['update'],
   setup(props, { emit }) {
     const { state, addItem, editItem, save, cancel, update, setList } =
-      useListMachine<WorkflowWidget>('worflowWidgets', () => ({
-        id: uuid(),
-        type: WorkflowWidgetType.INPUT,
-        displayName: '',
-        description: '',
-        icon: '',
-        iconFileName: '',
-        field: '',
-        updateEvent: '',
-      }));
+      useListMachine<WorkflowWidget>({
+        id: 'worflowWidgets',
+        createEmptyItem: () => ({
+          id: uuid(),
+          type: WorkflowWidgetType.INPUT,
+          displayName: '',
+          description: '',
+          icon: '',
+          iconFileName: '',
+          field: '',
+          updateEvent: '',
+        }),
+        getListRequest: async () => props.widgets,
+        createItemRequest: (widget) =>
+          api.createWorkflowWidget({
+            ...widget,
+            stepId: props.stepId,
+            layoutId: props.layoutId,
+          }),
+        updateItemRequest: (widget) =>
+          api.updateWorkflowWidget({
+            ...widget,
+            stepId: props.stepId,
+            layoutId: props.layoutId,
+          }),
+        deleteItemRequest: api.deleteWorkflowWidget,
+      });
     const list = useContextListSync<WorkflowWidget>(state, setList, emit);
-
-    setList([...props.widgets]);
 
     const open = ref(false);
 

@@ -59,17 +59,20 @@
       <workflow-widgets
         expansionGroup="step"
         :widgets="details.widgets"
+        :stepId="details.id"
         @update="update('widgets', $event)"
       ></workflow-widgets>
       <workflow-events
         expansionGroup="step"
         :events="details.events"
         :steps="steps"
+        :stepId="details.id"
         @update="update('events', $event)"
       ></workflow-events>
       <workflow-layouts
         expansionGroup="step"
         :layouts="details.layouts"
+        :stepId="details.id"
         @update="update('layouts', $event)"
       ></workflow-layouts>
     </q-list>

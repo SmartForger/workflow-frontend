@@ -86,6 +86,7 @@
         <workflow-widgets
           expansionGroup="layout"
           :widgets="details.widgets"
+          :layoutId="details.id"
           @update="update('widgets', $event)"
         ></workflow-widgets>
       </q-list>

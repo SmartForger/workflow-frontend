@@ -8,5 +8,6 @@ export interface WorkflowLayout {
   backgroundColor: string;
   textColor: string;
   visible: boolean;
+  stepId?: string;
   widgets: WorkflowWidget[];
 }

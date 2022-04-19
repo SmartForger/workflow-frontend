@@ -97,6 +97,7 @@ import Draggable from 'vuedraggable';
 import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowLayout } from 'src/common/types/WorkflowLayout';
+import api from 'src/common/api';
 import WorkflowLayoutForm from './WorkflowLayoutForm.vue';
 
 export default defineComponent({
@@ -113,20 +114,33 @@ export default defineComponent({
       type: Array as PropType<WorkflowLayout[]>,
       required: true,
     },
+    stepId: {
+      type: String,
+      required: true,
+    },
   },
   emits: ['update'],
   setup(props, { emit }) {
     const { state, addItem, editItem, save, cancel, update, setList } =
-      useListMachine<WorkflowLayout>('worflowLayouts', () => ({
-        id: uuid(),
-        title: '',
-        icon: '',
-        iconFileName: '',
-        backgroundColor: '',
-        textColor: '',
-        visible: true,
-        widgets: [],
-      }));
+      useListMachine<WorkflowLayout>({
+        id: 'worflowLayouts',
+        createEmptyItem: () => ({
+          id: uuid(),
+          title: '',
+          icon: '',
+          iconFileName: '',
+          backgroundColor: '',
+          textColor: '',
+          visible: true,
+          widgets: [],
+        }),
+        getListRequest: async () => props.layouts,
+        createItemRequest: (layout) =>
+          api.createWorkflowLayout({ ...layout, stepId: props.stepId }),
+        updateItemRequest: (layout) =>
+          api.updateWorkflowLayout({ ...layout, stepId: props.stepId }),
+        deleteItemRequest: api.deleteWorkflowLayout,
+      });
 
     const list = useContextListSync<WorkflowLayout>(state, setList, emit);
     const open = ref(false);

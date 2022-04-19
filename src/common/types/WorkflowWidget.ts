@@ -9,4 +9,6 @@ export interface WorkflowWidget {
   iconFileName: string;
   field: string;
   updateEvent: string;
+  stepId?: string;
+  layoutId?: string;
 }
