@@ -117,12 +117,12 @@ export default defineComponent({
     const { save, cancel, getFieldModel, getIconFileModel } =
       useDetailsForm<WorkflowWidget>(props, emit);
 
-    const widgetType = getFieldModel('type');
-    const displayName = getFieldModel('displayName');
-    const description = getFieldModel('description');
+    const widgetType = getFieldModel('type', '');
+    const displayName = getFieldModel('displayName', '');
+    const description = getFieldModel('description', '');
     const iconFile = getIconFileModel('iconFileName', 'icon');
-    const field = getFieldModel('field');
-    const updateEvent = getFieldModel('updateEvent');
+    const field = getFieldModel('field', '');
+    const updateEvent = getFieldModel('updateEvent', '');
 
     return {
       widgetTypeOptions,

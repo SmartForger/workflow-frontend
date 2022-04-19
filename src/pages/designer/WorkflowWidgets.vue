@@ -86,12 +86,10 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue';
-import { v4 as uuid } from 'uuid';
 import Draggable from 'vuedraggable';
 import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
-import { WorkflowWidgetType } from 'src/common/types/WorkflowWidgetType';
 import api from 'src/common/api';
 import WorkflowWidgetForm from './WorkflowWidgetForm.vue';
 
@@ -106,8 +104,8 @@ export default defineComponent({
       required: true,
     },
     widgets: {
-      type: Object as PropType<WorkflowWidget[]>,
-      required: true,
+      type: Array as PropType<WorkflowWidget[]>,
+      default: () => [],
     },
     stepId: String,
     layoutId: String,
@@ -117,17 +115,7 @@ export default defineComponent({
     const { state, addItem, editItem, save, cancel, update, setList } =
       useListMachine<WorkflowWidget>({
         id: 'worflowWidgets',
-        createEmptyItem: () => ({
-          id: uuid(),
-          type: WorkflowWidgetType.INPUT,
-          displayName: '',
-          description: '',
-          icon: '',
-          iconFileName: '',
-          field: '',
-          updateEvent: '',
-        }),
-        getListRequest: async () => props.widgets,
+        getListRequest: async () => props.widgets || [],
         createItemRequest: (widget) =>
           api.createWorkflowWidget({
             ...widget,

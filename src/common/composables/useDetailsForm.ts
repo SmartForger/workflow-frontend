@@ -33,16 +33,16 @@ export const useDetailsForm = <T>(
     emit('cancel');
   };
 
-  const getFieldModel = (field: keyof T) => {
+  const getFieldModel = (field: keyof T, initialValue: any) => {
     return computed({
-      get: () => props.details[field],
+      get: () => props.details[field] ?? initialValue,
       set: (val) => update(field, val),
     });
   };
 
   const getDisplayNameModel = () => {
     return computed({
-      get: () => (props.details as any)['displayName'],
+      get: () => (props.details as any)['displayName'] || '',
       set: (val) => {
         emit('update', {
           name: val.replaceAll(' ', '_').toLowerCase(),
@@ -54,7 +54,7 @@ export const useDetailsForm = <T>(
 
   const getIconFileModel = (fileNameField: keyof T, fileDataField: keyof T) => {
     return useFile(
-      props.details[fileNameField] as any,
+      (props.details[fileNameField] as any) || '',
       (filename: string, data: string) => {
         emit('update', {
           [fileDataField]: data,

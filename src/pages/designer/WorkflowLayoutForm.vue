@@ -125,11 +125,11 @@ export default defineComponent({
     const { save, cancel, update, getFieldModel, getIconFileModel } =
       useDetailsForm<WorkflowLayout>(props, emit);
 
-    const title = getFieldModel('title');
+    const title = getFieldModel('title', '');
     const iconFile = getIconFileModel('iconFileName', 'icon');
-    const backgroundColor = getFieldModel('backgroundColor');
-    const textColor = getFieldModel('textColor');
-    const visible = getFieldModel('visible');
+    const backgroundColor = getFieldModel('backgroundColor', '');
+    const textColor = getFieldModel('textColor', '');
+    const visible = getFieldModel('visible', false);
 
     return {
       title,

@@ -101,7 +101,7 @@ export default defineComponent({
     },
     steps: {
       type: Array as PropType<WorkflowStep[]>,
-      required: true,
+      default: () => [],
     },
   },
   emits: ['save', 'cancel', 'update'],
@@ -113,13 +113,13 @@ export default defineComponent({
       emit
     );
 
-    const name = getFieldModel('name');
-    const description = getFieldModel('description');
-    const step = getFieldModel('step');
-    const action = getFieldModel('action');
-    const condition = getFieldModel('condition');
+    const name = getFieldModel('name', '');
+    const description = getFieldModel('description', '');
+    const step = getFieldModel('step', '');
+    const action = getFieldModel('action', '');
+    const condition = getFieldModel('condition', '');
     const stepName = computed(() => {
-      const stepObj = props.steps.find(s => s.id === step.value);
+      const stepObj = props.steps.find((s) => s.id === step.value);
       return stepObj?.displayName || '';
     });
 

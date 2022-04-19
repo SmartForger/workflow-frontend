@@ -92,7 +92,6 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue';
-import { v4 as uuid } from 'uuid';
 import Draggable from 'vuedraggable';
 import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
@@ -112,7 +111,7 @@ export default defineComponent({
     },
     layouts: {
       type: Array as PropType<WorkflowLayout[]>,
-      required: true,
+      default: () => [],
     },
     stepId: {
       type: String,
@@ -124,17 +123,7 @@ export default defineComponent({
     const { state, addItem, editItem, save, cancel, update, setList } =
       useListMachine<WorkflowLayout>({
         id: 'worflowLayouts',
-        createEmptyItem: () => ({
-          id: uuid(),
-          title: '',
-          icon: '',
-          iconFileName: '',
-          backgroundColor: '',
-          textColor: '',
-          visible: true,
-          widgets: [],
-        }),
-        getListRequest: async () => props.layouts,
+        getListRequest: async () => props.layouts || [],
         createItemRequest: (layout) =>
           api.createWorkflowLayout({ ...layout, stepId: props.stepId }),
         updateItemRequest: (layout) =>
@@ -144,8 +133,6 @@ export default defineComponent({
 
     const list = useContextListSync<WorkflowLayout>(state, setList, emit);
     const open = ref(false);
-
-    setList([...props.layouts]);
 
     const add = () => {
       addItem();

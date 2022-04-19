@@ -73,7 +73,6 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { v4 as uuid } from 'uuid';
 import Draggable from 'vuedraggable';
 import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
@@ -107,19 +106,7 @@ export default defineComponent({
       setList,
     } = useListMachine<WorkflowStep>({
       id: 'worflowSteps',
-      createEmptyItem: () => ({
-        id: uuid(),
-        name: '',
-        displayName: '',
-        description: '',
-        icon: '',
-        iconFileName: '',
-        widgets: [],
-        events: [],
-        layouts: [],
-        workflowId: props.workflow.id,
-      }),
-      getListRequest: async () => props.workflow.steps,
+      getListRequest: async () => props.workflow.steps || [],
       createItemRequest: (data) =>
         api.createWorkflowStep({ ...data, workflowId: props.workflow.id }),
       updateItemRequest: (data) =>
@@ -127,8 +114,6 @@ export default defineComponent({
       deleteItemRequest: api.deleteWorkflowStep,
     });
     const steps = useContextListSync<WorkflowStep>(state, setList, emit);
-
-    setList([...props.workflow.steps]);
 
     return {
       state,

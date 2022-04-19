@@ -1,5 +1,7 @@
 import { AnyEventObject, assign, createMachine } from 'xstate';
+import { v4 as uuid } from 'uuid';
 import { BaseItem } from '../types/BaseItem';
+import { ParentRequiredError } from '../utils/api-utils';
 
 export interface ListViewContext<TItem extends BaseItem> {
   list: TItem[];
@@ -10,7 +12,6 @@ export interface ListViewContext<TItem extends BaseItem> {
 
 export interface CreateListViewMachineParams<TItem> {
   id: string;
-  createEmptyItem: () => TItem;
   getListRequest?: () => Promise<TItem[]>;
   createItemRequest?: (data: TItem) => Promise<TItem>;
   updateItemRequest?: (data: TItem) => Promise<TItem>;
@@ -19,7 +20,6 @@ export interface CreateListViewMachineParams<TItem> {
 
 export const createListViewMachine = <TItem extends BaseItem>({
   id,
-  createEmptyItem,
   getListRequest,
   createItemRequest,
   updateItemRequest,
@@ -117,7 +117,15 @@ export const createListViewMachine = <TItem extends BaseItem>({
                 return context.current;
               }
 
-              return await createItemRequest(context.current);
+              try {
+                return await createItemRequest(context.current);
+              } catch (err: unknown) {
+                if (err instanceof ParentRequiredError) {
+                  return context.current;
+                }
+
+                throw err;
+              }
             },
             onDone: {
               target: 'list',
@@ -169,7 +177,10 @@ export const createListViewMachine = <TItem extends BaseItem>({
           current: (_context, ev) => ({ ...ev.item }),
         }),
         setNewCurrentItem: assign<ListViewContext<TItem>, AnyEventObject>({
-          current: () => createEmptyItem(),
+          current: () =>
+            ({
+              id: `new_${uuid()}`,
+            } as TItem),
         }),
         setSearch: assign({
           search: (_context, ev) => ev.search,

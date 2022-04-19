@@ -143,11 +143,11 @@ export default defineComponent({
       getIconFileModel,
     } = useDetailsForm<Workflow>(props, emit);
 
-    const category = getFieldModel('category');
-    const subCategory = getFieldModel('subCategory');
+    const category = getFieldModel('category', '');
+    const subCategory = getFieldModel('subCategory', '');
     const displayName = getDisplayNameModel();
-    const description = getFieldModel('description');
-    const mode = getFieldModel('mode');
+    const description = getFieldModel('description', '');
+    const mode = getFieldModel('mode', []);
     const iconFile = getIconFileModel('iconFileName', 'icon');
 
     return {

@@ -118,11 +118,17 @@ export default defineComponent({
   },
   emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    const { save, cancel, update, getFieldModel, getIconFileModel } =
-      useDetailsForm<WorkflowStep>(props, emit);
+    const {
+      save,
+      cancel,
+      update,
+      getFieldModel,
+      getIconFileModel,
+      getDisplayNameModel,
+    } = useDetailsForm<WorkflowStep>(props, emit);
 
-    const displayName = getFieldModel('displayName');
-    const description = getFieldModel('description');
+    const displayName = getDisplayNameModel();
+    const description = getFieldModel('description', '');
     const iconFile = getIconFileModel('iconFileName', 'icon');
 
     return {

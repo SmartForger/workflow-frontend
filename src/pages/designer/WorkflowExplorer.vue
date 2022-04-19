@@ -107,7 +107,6 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
-import { v4 as uuid } from 'uuid';
 import { groupBy, forIn } from 'lodash';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import api from 'src/common/api';
@@ -133,18 +132,6 @@ export default defineComponent({
       setSearch,
     } = useListMachine<Workflow>({
       id: 'workflows',
-      createEmptyItem: () => ({
-        id: uuid(),
-        category: '',
-        subCategory: '',
-        name: '',
-        mode: [],
-        displayName: '',
-        description: '',
-        icon: '',
-        iconFileName: '',
-        steps: [],
-      }),
       createItemRequest: api.createWorkflow,
       getListRequest: api.getWorkflows,
       updateItemRequest: api.updateWorkflow,
