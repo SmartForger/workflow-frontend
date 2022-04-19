@@ -1,5 +1,11 @@
 <template>
-  <div v-if="state.matches('list')">
+  <div
+    v-if="
+      state.matches('list') ||
+      state.matches('listRequest') ||
+      state.matches('deleteRequest')
+    "
+  >
     <q-toolbar class="bg-secondary text-white">
       <q-toolbar-title>
         <q-icon size="35px" name="img:src/assets/images/workflow.svg"></q-icon>
@@ -31,7 +37,9 @@
             v-for="group in groupedWorkflows.groups"
             :key="group.category"
           >
-            <q-item-label class="q-pb-none" header>{{ group.category }}</q-item-label>
+            <q-item-label class="q-pb-none" header>{{
+              group.category
+            }}</q-item-label>
 
             <q-item
               v-for="workflow in group.workflows"
@@ -102,6 +110,7 @@ import { computed, defineComponent } from 'vue';
 import { v4 as uuid } from 'uuid';
 import { groupBy, forIn } from 'lodash';
 import { useListMachine } from 'src/common/composables/useListMachine';
+import api from 'src/common/api';
 import { Workflow } from 'src/common/types/Workflow';
 import SearchInput from 'src/components/SearchInput.vue';
 import WorkflowDetails from './WorkflowDetails.vue';
@@ -122,18 +131,25 @@ export default defineComponent({
       cancel,
       update,
       setSearch,
-    } = useListMachine<Workflow>('workflows', () => ({
-      id: uuid(),
-      category: '',
-      subCategory: '',
-      name: '',
-      mode: [],
-      displayName: '',
-      description: '',
-      icon: '',
-      iconFileName: '',
-      steps: [],
-    }));
+    } = useListMachine<Workflow>({
+      id: 'workflows',
+      createEmptyItem: () => ({
+        id: uuid(),
+        category: '',
+        subCategory: '',
+        name: '',
+        mode: [],
+        displayName: '',
+        description: '',
+        icon: '',
+        iconFileName: '',
+        steps: [],
+      }),
+      createItemRequest: api.createWorkflow,
+      getListRequest: api.getWorkflows,
+      updateItemRequest: api.updateWorkflow,
+      deleteItemRequest: api.deleteWorkflow,
+    });
 
     const groupedWorkflows = computed(() => {
       const searchVal = state.value.context.search.toLowerCase();

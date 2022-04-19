@@ -19,7 +19,14 @@
       </q-item-section>
     </template>
 
-    <div class="q-pa-sm" v-if="state.matches('list')">
+    <div
+      class="q-pa-sm"
+      v-if="
+        state.matches('list') ||
+        state.matches('listRequest') ||
+        state.matches('deleteRequest')
+      "
+    >
       <div class="q-px-sm" v-if="!state.context.list.length">No events</div>
       <q-list bordered v-else>
         <draggable v-model="list" handle=".handle" item-key="id">

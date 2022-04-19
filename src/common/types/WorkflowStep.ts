@@ -9,6 +9,7 @@ export interface WorkflowStep {
   description: string;
   icon: string;
   iconFileName: string;
+  workflowId?: string;
   widgets: WorkflowWidget[];
   events: WorkflowEvent[];
   layouts: WorkflowLayout[];
