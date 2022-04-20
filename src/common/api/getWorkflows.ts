@@ -32,6 +32,7 @@ export const getWorkflows = (): Promise<Workflow[]> =>
           name
           displayName
           description
+          mode
           icon
           iconFileName
         }

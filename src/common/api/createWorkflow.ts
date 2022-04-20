@@ -11,6 +11,7 @@ const CreateWorkflowGQL = gql`
     $name: String!
     $displayName: String!
     $description: String!
+    $mode: [String!]!
     $icon: String!
     $iconFileName: String!
   ) {
@@ -21,6 +22,7 @@ const CreateWorkflowGQL = gql`
         name: $name
         displayName: $displayName
         description: $description
+        mode: $mode
         icon: $icon
         iconFileName: $iconFileName
       }
@@ -37,6 +39,7 @@ const CreateWorkflowGQL = gql`
     name
     displayName
     description
+    mode
     icon
     iconFileName
   }

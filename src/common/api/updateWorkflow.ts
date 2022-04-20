@@ -12,6 +12,7 @@ const UpdateWorkflowGQL = gql`
     $name: String
     $displayName: String
     $description: String
+    $mode: [String!]!
     $icon: String
     $iconFileName: String
   ) {
@@ -23,6 +24,7 @@ const UpdateWorkflowGQL = gql`
         name: $name
         displayName: $displayName
         description: $description
+        mode: $mode
         icon: $icon
         iconFileName: $iconFileName
       }
@@ -39,6 +41,7 @@ const UpdateWorkflowGQL = gql`
     name
     displayName
     description
+    mode
     icon
     iconFileName
   }
