@@ -120,16 +120,24 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { state, addItem, editItem, save, cancel, update, setList } =
-      useListMachine<WorkflowLayout>({
-        id: 'worflowLayouts',
-        getListRequest: async () => props.layouts || [],
-        createItemRequest: (layout) =>
-          api.createWorkflowLayout({ ...layout, stepId: props.stepId }),
-        updateItemRequest: (layout) =>
-          api.updateWorkflowLayout({ ...layout, stepId: props.stepId }),
-        deleteItemRequest: api.deleteWorkflowLayout,
-      });
+    const {
+      state,
+      addItem,
+      editItem,
+      deleteItem,
+      save,
+      cancel,
+      update,
+      setList,
+    } = useListMachine<WorkflowLayout>({
+      id: 'worflowLayouts',
+      getListRequest: async () => props.layouts || [],
+      createItemRequest: (layout) =>
+        api.createWorkflowLayout({ ...layout, stepId: props.stepId }),
+      updateItemRequest: (layout) =>
+        api.updateWorkflowLayout({ ...layout, stepId: props.stepId }),
+      deleteItemRequest: api.deleteWorkflowLayout,
+    });
 
     const list = useContextListSync<WorkflowLayout>(state, setList, emit);
     const open = ref(false);
@@ -148,6 +156,7 @@ export default defineComponent({
       list,
       add,
       editItem,
+      deleteItem,
       save,
       cancel,
       update,

@@ -88,7 +88,15 @@ export const createListViewMachine = <TItem extends BaseItem>({
                 return ev.id;
               }
 
-              return await deleteItemRequest(ev.id);
+              try {
+                return await deleteItemRequest(ev.id);
+              } catch (err: unknown) {
+                if (err instanceof ParentRequiredError) {
+                  return ev.id;
+                }
+
+                throw err;
+              }
             },
             onDone: {
               target: 'list',
@@ -154,7 +162,15 @@ export const createListViewMachine = <TItem extends BaseItem>({
                 return context.current;
               }
 
-              return await updateItemRequest(context.current);
+              try {
+                return await updateItemRequest(context.current);
+              } catch (err: unknown) {
+                if (err instanceof ParentRequiredError) {
+                  return context.current;
+                }
+
+                throw err;
+              }
             },
             onDone: {
               target: 'list',
