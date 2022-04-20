@@ -1,8 +1,8 @@
 {
-  "name": "prodeo-vue-next",
+  "name": "prodeo-eurika",
   "version": "0.0.1",
-  "description": "Prodeo application",
-  "productName": "Prodeo App",
+  "description": "Prodeo Eureka",
+  "productName": "Prodeo",
   "author": "Serhii",
   "private": true,
   "scripts": {
