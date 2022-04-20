@@ -53,7 +53,7 @@ export const updateWorkflow = (workflow: Workflow): Promise<Workflow> =>
     : client
         .mutate({
           mutation: UpdateWorkflowGQL,
-          variables: omit(workflow, ['mode', 'steps']),
+          variables: omit(workflow, ['steps']),
         })
         .then((response) => ({
           ...response.data.workflow,

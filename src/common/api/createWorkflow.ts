@@ -49,7 +49,7 @@ const createWorkflowObject = (workflow: Workflow): Promise<Workflow> =>
   client
     .mutate({
       mutation: CreateWorkflowGQL,
-      variables: omit(workflow, ['id', 'mode', 'steps']),
+      variables: omit(workflow, ['id', 'steps']),
     })
     .then((response) => ({ ...response.data.workflow, steps: [] }));
 
