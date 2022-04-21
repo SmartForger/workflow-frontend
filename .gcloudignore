@@ -1,0 +1,15 @@
+.quasar/
+.vscode/
+node_modules/
+public/
+src/
+src-pwa/
+.editorconfig
+.eslintignore
+.eslintrc.js
+.gitignore
+.prettierrc
+index.html
+postcss.config.js
+quasar.config.js
+tsconfig.js
