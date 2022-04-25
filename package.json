@@ -10,7 +10,7 @@
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "dev": "quasar dev",
     "build": "quasar build",
-    "build:pwa": "quasar build -m pwa"
+    "build:pwa": "quasar build -m pwa && mkdir -p mkdir dist/pwa/src/assets && cp -R src/assets/images dist/pwa/src/assets/images"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",

@@ -1,7 +1,0 @@
-runtime: nodejs14
-service: prodeo-eureka-app
-handlers:
-- url: /public
-  static_dir: dist/pwa
-- url: /.*
-  static_files: dist/pwa/index.html
