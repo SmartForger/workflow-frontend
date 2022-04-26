@@ -9,9 +9,7 @@
     "lint": "eslint --ext .js,.ts,.vue ./",
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "dev": "quasar dev",
-    "build": "quasar build",
-    "build:pwa": "quasar build -m pwa && mkdir -p mkdir dist/pwa/src/assets && cp -R src/assets/images dist/pwa/src/assets/images",
-    "deploy:prep": "node env.js && cp -R dist/pwa ../frontend-deploy/dist"
+    "build": "quasar build -m pwa && node postbuild.js"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
