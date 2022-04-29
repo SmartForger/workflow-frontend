@@ -81,7 +81,14 @@
         </template>
       </q-select>
 
-      <q-file
+      <file-uploader
+        label="Icon"
+        field-icon="image"
+        :model-value="{ name: 'Test', url: '' }"
+        :rules="[required()]"
+        :multiple="true"
+      ></file-uploader>
+      <!-- <q-file
         dense
         class="pvn-field"
         color="teal"
@@ -99,7 +106,7 @@
             <img :src="details.icon" />
           </q-avatar>
         </template>
-      </q-file>
+      </q-file> -->
     </q-form>
 
     <workflow-steps
@@ -113,6 +120,7 @@
 import { defineComponent, PropType } from 'vue';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { Workflow } from 'src/common/types/Workflow';
+import FileUploader from 'src/components/FileUploader.vue';
 import { required, arrayRequired } from 'src/common/utils/validations';
 import WorkflowSteps from './WorkflowSteps.vue';
 import {
@@ -123,7 +131,7 @@ import {
 
 export default defineComponent({
   name: 'WorkflowDetails',
-  components: { WorkflowSteps },
+  components: { WorkflowSteps, FileUploader },
   props: {
     editing: Boolean,
     details: {
@@ -140,7 +148,6 @@ export default defineComponent({
       update,
       getFieldModel,
       getDisplayNameModel,
-      getIconFileModel,
     } = useDetailsForm<Workflow>(props, emit);
 
     const category = getFieldModel('category', '');
@@ -148,7 +155,6 @@ export default defineComponent({
     const displayName = getDisplayNameModel();
     const description = getFieldModel('description', '');
     const mode = getFieldModel('mode', []);
-    const iconFile = getIconFileModel('iconFileName', 'icon');
 
     return {
       workflowCategories,
@@ -160,7 +166,6 @@ export default defineComponent({
       displayName,
       description,
       mode,
-      iconFile,
       save,
       cancel,
       update,

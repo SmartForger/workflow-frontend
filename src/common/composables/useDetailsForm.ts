@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { computed, ref } from 'vue';
-import { useFile } from './useFile';
 
 export const useDetailsForm = <T>(
   props: {
@@ -52,18 +51,6 @@ export const useDetailsForm = <T>(
     });
   };
 
-  const getIconFileModel = (fileNameField: keyof T, fileDataField: keyof T) => {
-    return useFile(
-      (props.details[fileNameField] as any) || '',
-      (filename: string, data: string) => {
-        emit('update', {
-          [fileDataField]: data,
-          [fileNameField]: filename,
-        });
-      }
-    );
-  };
-
   if (expose) {
     expose({ form: formRef });
   }
@@ -75,6 +62,5 @@ export const useDetailsForm = <T>(
     update,
     getFieldModel,
     getDisplayNameModel,
-    getIconFileModel,
   };
 };
