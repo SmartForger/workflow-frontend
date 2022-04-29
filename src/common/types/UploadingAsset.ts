@@ -1,11 +1,12 @@
 export interface UploadingAsset {
-  id: number;
-  session: string;
+  id: string;
   file: File;
   fileName: string;
   assetUrl: string;
   uploadUrl: string;
   progress: number;
-  thumbnail: string;
+  icon: string;
+  thumbnail?: string;
+  expiresAt: number;
   abort: AbortController;
 }

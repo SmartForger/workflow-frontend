@@ -36,24 +36,12 @@
       </template>
     </q-input>
 
-    <q-file
-      class="pvn-field"
-      color="teal"
-      outlined
-      dense
-      label="Select Step Icon"
-      v-model="iconFile"
-      :rules="[required()]"
-    >
-      <template v-slot:prepend>
-        <q-icon name="image" />
-      </template>
-      <template v-slot:append>
-        <q-avatar square v-if="details.icon">
-          <img :src="details.icon" />
-        </q-avatar>
-      </template>
-    </q-file>
+    <file-uploader
+      label="Icon"
+      field-icon="image"
+      v-model="icon"
+      :rules="[arrayRequired()]"
+    ></file-uploader>
 
     <q-list bordered>
       <workflow-widgets
@@ -78,13 +66,7 @@
     </q-list>
 
     <div class="row q-mt-md">
-      <q-btn
-        class="q-mr-sm"
-        type="submit"
-        label="Save Step"
-        icon="save"
-        color="primary"
-      ></q-btn>
+      <q-btn class="q-mr-sm" type="submit" label="Save Step" icon="save" color="primary"></q-btn>
       <q-btn label="Cancel" @click="cancel()"></q-btn>
     </div>
   </q-form>
@@ -94,7 +76,8 @@
 import { defineComponent, PropType } from 'vue';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
-import { required } from 'src/common/utils/validations';
+import FileUploader from 'src/components/FileUploader.vue';
+import { required, arrayRequired } from 'src/common/utils/validations';
 import WorkflowWidgets from './WorkflowWidgets.vue';
 import WorkflowEvents from './WorkflowEvents.vue';
 import WorkflowLayouts from './WorkflowLayouts.vue';
@@ -104,6 +87,7 @@ export default defineComponent({
     WorkflowWidgets,
     WorkflowEvents,
     WorkflowLayouts,
+    FileUploader,
   },
   props: {
     editing: Boolean,
@@ -118,27 +102,22 @@ export default defineComponent({
   },
   emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    const {
-      save,
-      cancel,
-      update,
-      getFieldModel,
-      getIconFileModel,
-      getDisplayNameModel,
-    } = useDetailsForm<WorkflowStep>(props, emit);
+    const { save, cancel, update, getFieldModel, getIconModel, getDisplayNameModel } =
+      useDetailsForm<WorkflowStep>(props, emit);
 
     const displayName = getDisplayNameModel();
     const description = getFieldModel('description', '');
-    const iconFile = getIconFileModel('iconFileName', 'icon');
+    const icon = getIconModel();
 
     return {
       displayName,
       description,
-      iconFile,
+      icon,
       save,
       cancel,
       update,
       required,
+      arrayRequired,
     };
   },
 });

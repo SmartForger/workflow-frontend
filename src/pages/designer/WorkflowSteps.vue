@@ -26,9 +26,7 @@
             </q-item-section>
 
             <q-item-section side>
-              <q-avatar square>
-                <img :src="step.icon" />
-              </q-avatar>
+              <q-img :src="step.icon" width="40px" height="40px" />
             </q-item-section>
 
             <q-item-section> {{ step.displayName }} </q-item-section>

@@ -18,7 +18,7 @@ export const getWorkflows = (): Promise<Workflow[]> =>
                 ...widgetFields
               }
               layouts {
-                ...layoutFields
+                ...layoutFields1
               }
             }
           }
@@ -65,7 +65,7 @@ export const getWorkflows = (): Promise<Workflow[]> =>
           updateEvent
         }
 
-        fragment layoutFields on WorkflowLayout {
+        fragment layoutFields1 on WorkflowLayout {
           id
           title
           icon

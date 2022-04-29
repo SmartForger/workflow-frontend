@@ -1,10 +1,6 @@
 <template>
   <div
-    v-if="
-      state.matches('list') ||
-      state.matches('listRequest') ||
-      state.matches('deleteRequest')
-    "
+    v-if="state.matches('list') || state.matches('listRequest') || state.matches('deleteRequest')"
   >
     <q-toolbar class="bg-secondary text-white">
       <q-toolbar-title>
@@ -23,23 +19,14 @@
       ></search-input>
 
       <template v-if="groupedWorkflows.filteredCount">
-        <q-banner
-          class="bg-grey-3 q-mt-xs"
-          dense
-          v-if="groupedWorkflows.filtered"
-        >
+        <q-banner class="bg-grey-3 q-mt-xs" dense v-if="groupedWorkflows.filtered">
           Filtered {{ groupedWorkflows.filteredCount }} out of
           {{ groupedWorkflows.totalCount }} workflows
         </q-banner>
 
         <q-list class="q-mt-xs" bordered>
-          <template
-            v-for="group in groupedWorkflows.groups"
-            :key="group.category"
-          >
-            <q-item-label class="q-pb-none" header>{{
-              group.category
-            }}</q-item-label>
+          <template v-for="group in groupedWorkflows.groups" :key="group.category">
+            <q-item-label class="q-pb-none" header>{{ group.category }}</q-item-label>
 
             <q-item
               v-for="workflow in group.workflows"
@@ -49,20 +36,13 @@
               v-ripple
             >
               <q-item-section avatar>
-                <q-avatar square v-if="workflow.icon">
-                  <img :src="workflow.icon" />
-                </q-avatar>
+                <q-img :src="workflow.icon" width="46px" height="46px" v-if="workflow.icon" />
               </q-item-section>
 
               <q-item-section>
                 <q-item-label>{{ workflow.displayName }}</q-item-label>
                 <q-item-label caption lines="1">
-                  <q-badge
-                    :key="mode"
-                    color="green"
-                    class="q-mr-xs"
-                    v-for="mode in workflow.mode"
-                  >
+                  <q-badge :key="mode" color="green" class="q-mr-xs" v-for="mode in workflow.mode">
                     {{ mode }}
                   </q-badge>
                 </q-item-label>
@@ -70,29 +50,15 @@
 
               <q-item-section side>
                 <div class="row">
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    icon="edit"
-                    @click.prevent="editItem(workflow)"
-                  />
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    icon="delete"
-                    @click.prevent="deleteItem(workflow)"
-                  />
+                  <q-btn flat round dense icon="edit" @click.prevent="editItem(workflow)" />
+                  <q-btn flat round dense icon="delete" @click.prevent="deleteItem(workflow)" />
                 </div>
               </q-item-section>
             </q-item>
           </template>
         </q-list>
       </template>
-      <q-banner class="bg-grey-3 q-mt-sm" dense v-else>
-        No workflows found.
-      </q-banner>
+      <q-banner class="bg-grey-3 q-mt-sm" dense v-else> No workflows found. </q-banner>
     </div>
   </div>
   <workflow-details
@@ -121,22 +87,14 @@ export default defineComponent({
     WorkflowDetails,
   },
   setup() {
-    const {
-      state,
-      addItem,
-      editItem,
-      deleteItem,
-      save,
-      cancel,
-      update,
-      setSearch,
-    } = useListMachine<Workflow>({
-      id: 'workflows',
-      createItemRequest: api.createWorkflow,
-      getListRequest: api.getWorkflows,
-      updateItemRequest: api.updateWorkflow,
-      deleteItemRequest: api.deleteWorkflow,
-    });
+    const { state, addItem, editItem, deleteItem, save, cancel, update, setSearch } =
+      useListMachine<Workflow>({
+        id: 'workflows',
+        createItemRequest: api.createWorkflow,
+        getListRequest: api.getWorkflows,
+        updateItemRequest: api.updateWorkflow,
+        deleteItemRequest: api.deleteWorkflow,
+      });
 
     const groupedWorkflows = computed(() => {
       const searchVal = state.value.context.search.toLowerCase();

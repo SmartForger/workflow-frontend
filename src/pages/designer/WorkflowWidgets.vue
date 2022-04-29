@@ -1,18 +1,11 @@
 <template>
-  <q-expansion-item
-    :group="expansionGroup"
-    dense
-    v-model="open"
-    @after-hide="cancel()"
-  >
+  <q-expansion-item :group="expansionGroup" dense v-model="open" @after-hide="cancel()">
     <template v-slot:header>
       <q-item-section avatar>
         <q-avatar icon="img:src/assets/images/widgets.svg" />
       </q-item-section>
 
-      <q-item-section>
-        Widgets ({{ state.context.list.length }})
-      </q-item-section>
+      <q-item-section> Widgets ({{ state.context.list.length }}) </q-item-section>
 
       <q-item-section side>
         <q-btn flat round icon="add" @click.stop="add()"></q-btn>
@@ -21,11 +14,7 @@
 
     <div
       class="q-pa-sm"
-      v-if="
-        state.matches('list') ||
-        state.matches('listRequest') ||
-        state.matches('deleteRequest')
-      "
+      v-if="state.matches('list') || state.matches('listRequest') || state.matches('deleteRequest')"
     >
       <div class="q-px-sm" v-if="!state.context.list.length">No widgets</div>
       <q-list bordered v-else>
@@ -36,9 +25,7 @@
                 <q-icon class="handle" name="drag_indicator"></q-icon>
               </q-item-section>
               <q-item-section avatar>
-                <q-avatar square>
-                  <img :src="widget.icon" />
-                </q-avatar>
+                <q-img :src="widget.icon" width="40px" height="40px" />
               </q-item-section>
 
               <q-item-section>
@@ -52,20 +39,8 @@
 
               <q-item-section side>
                 <div class="row">
-                  <q-btn
-                    flat
-                    round
-                    size="sm"
-                    icon="edit"
-                    @click="editItem(widget)"
-                  ></q-btn>
-                  <q-btn
-                    flat
-                    round
-                    size="sm"
-                    icon="delete"
-                    @click="deleteItem(widget)"
-                  ></q-btn>
+                  <q-btn flat round size="sm" icon="edit" @click="editItem(widget)"></q-btn>
+                  <q-btn flat round size="sm" icon="delete" @click="deleteItem(widget)"></q-btn>
                 </div>
               </q-item-section>
             </q-item>

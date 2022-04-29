@@ -1,7 +1,10 @@
 <template>
-  <q-card class="q-py-sm q-pl-md q-pr-sm">
-    <div class="row justify-between items-center">
-      <span>{{ label || 'Uploaded Files' }}</span>
+  <q-card flat bordered class="q-py-sm q-px-sm q-mb-xs bg-grey-1">
+    <div class="header row justify-between items-center">
+      <div>
+        <q-icon :name="fieldIcon" size="sm" />
+        <span class="q-ml-xs">{{ label || 'Uploaded Files' }}</span>
+      </div>
       <q-btn
         dense
         flat
@@ -12,9 +15,10 @@
         v-if="assetsInProgress.length === 0"
       ></q-btn>
     </div>
-    <div v-for="(asset, i) in assetsInProgress" :key="i" class="uploaded-file q-mt-sm">
+    <div v-for="asset in assetsInProgress" :key="asset.id" class="uploaded-file q-mt-sm">
       <div class="image">
-        <q-icon :name="asset.thumbnail" size="xl" color="grey" />
+        <q-img :src="asset.thumbnail" width="46px" height="46px" v-if="asset.thumbnail" />
+        <q-icon :name="asset.icon" size="xl" color="grey" v-else />
         <q-circular-progress
           class="progress"
           :value="100 - asset.progress"
@@ -50,11 +54,15 @@
       size="12px"
       v-if="multiple && assetsInProgress.length"
     ></q-btn>
+    <input ref="inputRef" type="file" class="input" :multiple="multiple" @change="onFileChange" />
   </q-card>
-  <input ref="inputRef" type="file" class="input" :multiple="multiple" @change="onFileChange" />
 </template>
 
 <style lang="scss" scoped>
+.header {
+  color: rgba(0, 0, 0, 0.7);
+}
+
 .uploaded-file {
   display: flex;
 
@@ -81,6 +89,7 @@
   }
 }
 .input {
+  display: block;
   visibility: hidden;
   opacity: 0;
   width: 0;
@@ -90,7 +99,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue';
+import { defineComponent, PropType, ref, watch } from 'vue';
 import { FileObject } from 'src/common/types/FileObject';
 import { useUploader } from 'src/common/composables/useUploader';
 
@@ -99,17 +108,19 @@ export default defineComponent({
     label: String,
     fieldIcon: String,
     modelValue: {
-      type: Object as PropType<FileObject[]>,
+      type: Array as PropType<FileObject[]>,
+      default: () => [],
     },
+    image: Boolean,
     multiple: Boolean,
     rules: {
       type: Array as PropType<Array<(val: unknown) => unknown>>,
     },
   },
-
-  setup() {
+  emits: ['update:model-value'],
+  setup(props, { emit }) {
     const inputRef = ref<HTMLInputElement>();
-    const { upload, cancelUpload, assetsInProgress } = useUploader();
+    const { upload, cancelUpload, assetsInProgress } = useUploader(props.modelValue);
 
     const uploadFile = () => {
       inputRef.value?.click();
@@ -130,6 +141,24 @@ export default defineComponent({
 
       upload(files);
     };
+
+    watch(
+      () => assetsInProgress.value,
+      (assets) => {
+        const uploaded = assets.every((asset) => asset.progress === 100);
+        if (!uploaded) {
+          return;
+        }
+
+        emit(
+          'update:model-value',
+          assets.map((asset) => ({
+            name: asset.fileName,
+            url: asset.assetUrl,
+          }))
+        );
+      }
+    );
 
     return { inputRef, assetsInProgress, uploadFile, cancelUpload, onFileChange };
   },

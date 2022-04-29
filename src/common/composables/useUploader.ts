@@ -2,13 +2,29 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { createSignedURL } from '../api/createSignedURL';
 import { UploadingAsset } from '../types/UploadingAsset';
+import { FileObject } from '../types/FileObject';
+import { readFileBase64 } from '../utils/file';
 
-export const useUploader = () => {
-  const assetsInProgress = ref<UploadingAsset[]>([]);
+const getAssetId = () => 'asset-' + new Date().getTime();
 
-  const checkStatus = async (index: number): Promise<number> => {
+export const useUploader = (initialFiles: FileObject[]) => {
+  const assetsInProgress = ref<UploadingAsset[]>(
+    initialFiles.map((obj) => ({
+      id: getAssetId(),
+      file: new File([], obj.name),
+      fileName: obj.name,
+      assetUrl: obj.url,
+      uploadUrl: '',
+      progress: 100,
+      icon: obj.icon || 'description',
+      thumbnail: obj.thumbnail,
+      expiresAt: 0,
+      abort: new AbortController(),
+    }))
+  );
+
+  const checkStatus = async (asset: UploadingAsset): Promise<number> => {
     try {
-      const asset = assetsInProgress.value[index];
       await axios.put(asset.uploadUrl, null, {
         headers: {
           'Content-Range': 'bytes */*',
@@ -29,25 +45,23 @@ export const useUploader = () => {
   };
 
   const removeAsset = (asset: UploadingAsset) => {
-    assetsInProgress.value = assetsInProgress.value.filter(
-      (item) => item.session !== asset.session
+    assetsInProgress.value = assetsInProgress.value.filter((item) => item.id !== asset.id);
+  };
+
+  const updateAsset = (assetId: string, data: Partial<UploadingAsset>) => {
+    assetsInProgress.value = assetsInProgress.value.map((asset) =>
+      asset.id === assetId ? { ...asset, ...data } : asset
     );
   };
 
-  const updateAsset = (asset: UploadingAsset) => {
-    assetsInProgress.value = assetsInProgress.value.map((asset1) =>
-      asset1.id === asset.id ? asset : asset1
-    );
-  };
-
-  const uploadAsset = async (index: number) => {
-    const asset = assetsInProgress.value[index];
+  const uploadAsset = async (assetId: string) => {
+    const asset = assetsInProgress.value.find((item) => item.id === assetId);
     if (!asset?.uploadUrl) {
       return;
     }
 
     try {
-      const range = await checkStatus(index);
+      const range = await checkStatus(asset);
 
       if (range === -1) {
         removeAsset(asset);
@@ -62,8 +76,7 @@ export const useUploader = () => {
         },
         signal: asset.abort.signal,
         onUploadProgress: (event) => {
-          updateAsset({
-            ...asset,
+          updateAsset(asset.id, {
             progress: Math.round(((event.loaded + range) * 100) / buffer.byteLength),
           });
         },
@@ -82,7 +95,7 @@ export const useUploader = () => {
     removeAsset(asset);
   };
 
-  const getThumbnail = (file: File) => {
+  const getIcon = (file: File) => {
     if (file.type.startsWith('image/')) {
       return 'image';
     } else if (file.type.startsWith('application/pdf')) {
@@ -94,33 +107,39 @@ export const useUploader = () => {
 
   const upload = async (files: File[]) => {
     const assets = files.map<UploadingAsset>((file) => ({
-      id: new Date().getTime(),
-      session: '',
+      id: getAssetId(),
       file,
       fileName: file.name,
       assetUrl: '',
       uploadUrl: '',
       progress: 0,
-      thumbnail: getThumbnail(file),
+      icon: getIcon(file),
       abort: new AbortController(),
+      expiresAt: 0,
     }));
     assetsInProgress.value = [...assetsInProgress.value, ...assets];
 
     const port = window.location.port ? `:${window.location.port}` : '';
     const origin = `${window.location.protocol}//${window.location.hostname}${port}`;
-    for (let i = 0; i < assets.length; i++) {
-      const { url, newFileName } = await createSignedURL(
-        assets[i].file.name,
-        assets[i].file.type,
+    for (const asset of assets) {
+      if (asset.icon === 'image') {
+        const thumbnail = await readFileBase64(asset.file);
+        updateAsset(asset.id, { thumbnail });
+      }
+
+      const { url, newFileName, expiresAt } = await createSignedURL(
+        asset.file.name,
+        asset.file.type,
         origin
       );
-      updateAsset({
-        ...assets[i],
+      updateAsset(asset.id, {
         uploadUrl: url,
         fileName: newFileName,
         assetUrl: `https://storage.cloud.google.com/prodeo-eureka-files/${newFileName}`,
+        expiresAt,
       });
-      uploadAsset(i);
+
+      uploadAsset(asset.id);
     }
   };
 

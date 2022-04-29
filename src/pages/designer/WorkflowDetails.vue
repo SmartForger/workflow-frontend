@@ -84,35 +84,12 @@
       <file-uploader
         label="Icon"
         field-icon="image"
-        :model-value="{ name: 'Test', url: '' }"
-        :rules="[required()]"
-        :multiple="true"
+        v-model="icon"
+        :rules="[arrayRequired()]"
       ></file-uploader>
-      <!-- <q-file
-        dense
-        class="pvn-field"
-        color="teal"
-        outlined
-        v-model="iconFile"
-        label="Select Workflow Icon"
-        :rules="[required()]"
-      >
-        <template v-slot:prepend>
-          <q-icon name="image" />
-        </template>
-
-        <template v-slot:append>
-          <q-avatar square v-if="details.icon">
-            <img :src="details.icon" />
-          </q-avatar>
-        </template>
-      </q-file> -->
     </q-form>
 
-    <workflow-steps
-      :workflow="details"
-      @update="update('steps', $event)"
-    ></workflow-steps>
+    <workflow-steps :workflow="details" @update="update('steps', $event)"></workflow-steps>
   </div>
 </template>
 
@@ -123,11 +100,7 @@ import { Workflow } from 'src/common/types/Workflow';
 import FileUploader from 'src/components/FileUploader.vue';
 import { required, arrayRequired } from 'src/common/utils/validations';
 import WorkflowSteps from './WorkflowSteps.vue';
-import {
-  workflowCategories,
-  workflowVerticals,
-  workflowModes,
-} from './constants';
+import { workflowCategories, workflowVerticals, workflowModes } from './constants';
 
 export default defineComponent({
   name: 'WorkflowDetails',
@@ -141,20 +114,15 @@ export default defineComponent({
   },
   emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    const {
-      formRef,
-      save,
-      cancel,
-      update,
-      getFieldModel,
-      getDisplayNameModel,
-    } = useDetailsForm<Workflow>(props, emit);
+    const { formRef, save, cancel, update, getFieldModel, getDisplayNameModel, getIconModel } =
+      useDetailsForm<Workflow>(props, emit);
 
     const category = getFieldModel('category', '');
     const subCategory = getFieldModel('subCategory', '');
     const displayName = getDisplayNameModel();
     const description = getFieldModel('description', '');
     const mode = getFieldModel('mode', []);
+    const icon = getIconModel();
 
     return {
       workflowCategories,
@@ -166,6 +134,7 @@ export default defineComponent({
       displayName,
       description,
       mode,
+      icon,
       save,
       cancel,
       update,

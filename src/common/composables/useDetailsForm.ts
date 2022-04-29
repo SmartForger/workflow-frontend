@@ -51,6 +51,37 @@ export const useDetailsForm = <T>(
     });
   };
 
+  const getIconModel = () => {
+    return computed({
+      get: () => {
+        const details = props.details as any;
+
+        return details.icon
+          ? [
+              {
+                name: details.iconFileName,
+                url: details.icon,
+                thumbnail: details.icon,
+              },
+            ]
+          : [];
+      },
+      set: (val) => {
+        if (!val || !val[0]) {
+          emit('update', {
+            icon: '',
+            iconFileName: '',
+          });
+        } else {
+          emit('update', {
+            icon: val[0].url,
+            iconFileName: val[0].name,
+          });
+        }
+      },
+    });
+  };
+
   if (expose) {
     expose({ form: formRef });
   }
@@ -62,5 +93,6 @@ export const useDetailsForm = <T>(
     update,
     getFieldModel,
     getDisplayNameModel,
+    getIconModel,
   };
 };

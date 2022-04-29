@@ -41,44 +41,20 @@
         </template>
       </q-input>
 
-      <q-file
-        class="pvn-field"
-        outlined
-        dense
-        label="Select Widget Icon"
-        v-model="iconFile"
-        :rules="[required()]"
-      >
-        <template v-slot:prepend>
-          <q-icon name="image" />
-        </template>
-        <template v-slot:append>
-          <q-avatar square v-if="details.icon">
-            <img :src="details.icon" />
-          </q-avatar>
-        </template>
-      </q-file>
+      <file-uploader
+        label="Icon"
+        field-icon="image"
+        v-model="icon"
+        :rules="[arrayRequired()]"
+      ></file-uploader>
 
-      <q-input
-        class="pvn-field"
-        dense
-        outlined
-        v-model="field"
-        label="Field"
-        :rules="[required()]"
-      >
+      <q-input class="pvn-field" dense outlined v-model="field" label="Field" :rules="[required()]">
         <template v-slot:prepend>
           <q-icon name="img:src/assets/images/field.svg" />
         </template>
       </q-input>
 
-      <q-input
-        class="pvn-field"
-        dense
-        outlined
-        v-model="updateEvent"
-        label="On Update Event"
-      >
+      <q-input class="pvn-field" dense outlined v-model="updateEvent" label="On Update Event">
         <template v-slot:prepend>
           <q-icon name="img:src/assets/images/update_event.svg" />
         </template>
@@ -102,10 +78,12 @@
 import { defineComponent, PropType } from 'vue';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
-import { required } from 'src/common/utils/validations';
+import FileUploader from 'src/components/FileUploader.vue';
+import { required, arrayRequired } from 'src/common/utils/validations';
 import { widgetTypeOptions } from './constants';
 
 export default defineComponent({
+  components: { FileUploader },
   props: {
     details: {
       type: Object as PropType<WorkflowWidget>,
@@ -114,13 +92,15 @@ export default defineComponent({
   },
   emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    const { save, cancel, getFieldModel, getIconFileModel } =
-      useDetailsForm<WorkflowWidget>(props, emit);
+    const { save, cancel, getFieldModel, getIconModel } = useDetailsForm<WorkflowWidget>(
+      props,
+      emit
+    );
 
     const widgetType = getFieldModel('type', '');
     const displayName = getFieldModel('displayName', '');
     const description = getFieldModel('description', '');
-    const iconFile = getIconFileModel('iconFileName', 'icon');
+    const icon = getIconModel();
     const field = getFieldModel('field', '');
     const updateEvent = getFieldModel('updateEvent', '');
 
@@ -129,12 +109,13 @@ export default defineComponent({
       widgetType,
       displayName,
       description,
-      iconFile,
+      icon,
       field,
       updateEvent,
       save,
       cancel,
       required,
+      arrayRequired,
     };
   },
 });

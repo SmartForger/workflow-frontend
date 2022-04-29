@@ -12,9 +12,7 @@
         <q-avatar icon="img:src/assets/images/layout.svg" />
       </q-item-section>
 
-      <q-item-section>
-        Layouts ({{ state.context.list.length }})
-      </q-item-section>
+      <q-item-section> Layouts ({{ state.context.list.length }}) </q-item-section>
 
       <q-item-section side>
         <q-btn flat round icon="add" @click.stop="add()"></q-btn>
@@ -23,11 +21,7 @@
 
     <div
       class="q-pa-sm"
-      v-if="
-        state.matches('list') ||
-        state.matches('listRequest') ||
-        state.matches('deleteRequest')
-      "
+      v-if="state.matches('list') || state.matches('listRequest') || state.matches('deleteRequest')"
     >
       <div class="q-px-sm" v-if="!state.context.list.length">No layouts</div>
       <q-list bordered v-else>
@@ -38,9 +32,7 @@
                 <q-icon class="handle" name="drag_indicator"></q-icon>
               </q-item-section>
               <q-item-section avatar>
-                <q-avatar square>
-                  <img :src="layout.icon" />
-                </q-avatar>
+                <q-img :src="layout.icon" width="40px" height="40px" />
               </q-item-section>
 
               <q-item-section>
@@ -54,17 +46,9 @@
                     round
                     size="sm"
                     :icon="layout.visible ? 'visibility' : 'visibility_off'"
-                    @click.stop="
-                      update({ id: layout.id, visible: !layout.visible })
-                    "
+                    @click.stop="update({ id: layout.id, visible: !layout.visible })"
                   ></q-btn>
-                  <q-btn
-                    flat
-                    round
-                    size="sm"
-                    icon="edit"
-                    @click.stop="editItem(layout)"
-                  ></q-btn>
+                  <q-btn flat round size="sm" icon="edit" @click.stop="editItem(layout)"></q-btn>
                   <q-btn
                     flat
                     round
@@ -120,24 +104,16 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const {
-      state,
-      addItem,
-      editItem,
-      deleteItem,
-      save,
-      cancel,
-      update,
-      setList,
-    } = useListMachine<WorkflowLayout>({
-      id: 'worflowLayouts',
-      getListRequest: async () => props.layouts || [],
-      createItemRequest: (layout) =>
-        api.createWorkflowLayout({ ...layout, stepId: props.stepId }),
-      updateItemRequest: (layout) =>
-        api.updateWorkflowLayout({ ...layout, stepId: props.stepId }),
-      deleteItemRequest: api.deleteWorkflowLayout,
-    });
+    const { state, addItem, editItem, deleteItem, save, cancel, update, setList } =
+      useListMachine<WorkflowLayout>({
+        id: 'worflowLayouts',
+        getListRequest: async () => props.layouts || [],
+        createItemRequest: (layout) =>
+          api.createWorkflowLayout({ ...layout, stepId: props.stepId }),
+        updateItemRequest: (layout) =>
+          api.updateWorkflowLayout({ ...layout, stepId: props.stepId }),
+        deleteItemRequest: api.deleteWorkflowLayout,
+      });
 
     const list = useContextListSync<WorkflowLayout>(state, setList, emit);
     const open = ref(false);
