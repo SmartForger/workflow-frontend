@@ -27,58 +27,10 @@
         </template>
       </q-input>
 
-      <q-select
-        class="pvn-field"
-        dense
-        outlined
-        label="Target Step"
-        v-model="step"
-        :options="steps"
-        option-value="id"
-        option-label="displayName"
-        :display-value="stepName"
-        emit-value
-      >
-        <template v-slot:prepend>
-          <q-icon name="directions" />
-        </template>
-      </q-select>
-
-      <q-select
-        class="pvn-field"
-        dense
-        outlined
-        label="Actions"
-        v-model="action"
-        :options="eventActions"
-        :rules="[required()]"
-      >
-        <template v-slot:prepend>
-          <q-icon name="directions" />
-        </template>
-      </q-select>
-
-      <q-input
-        class="pvn-field"
-        dense
-        outlined
-        label="Condition"
-        v-model="condition"
-        :rules="[required()]"
-      >
-        <template v-slot:prepend>
-          <q-icon name="compare_arrows" />
-        </template>
-      </q-input>
+      <select-component v-model="target" :options="targetOptions" label="Target" icon="directions" />
 
       <div class="row q-mt-md">
-        <q-btn
-          class="q-mr-sm"
-          type="submit"
-          label="Save Event"
-          icon="save"
-          color="primary"
-        ></q-btn>
+        <q-btn class="q-mr-sm" type="submit" label="Save Event" icon="save" color="primary"></q-btn>
         <q-btn label="Cancel" @click="cancel()"></q-btn>
       </div>
     </q-form>
@@ -90,10 +42,11 @@ import { computed, defineComponent, PropType } from 'vue';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import { WorkflowEvent } from 'src/common/types/WorkflowEvent';
+import SelectComponent from 'src/components/Select.vue';
 import { required } from 'src/common/utils/validations';
-import { eventActions } from '../constants';
 
 export default defineComponent({
+  components: { SelectComponent },
   props: {
     details: {
       type: Object as PropType<WorkflowEvent>,
@@ -103,23 +56,40 @@ export default defineComponent({
       type: Array as PropType<WorkflowStep[]>,
       default: () => [],
     },
+    currentStepId: {
+      type: String,
+    },
   },
   emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    console.log(111, props.details);
-
-    const { save, cancel, getFieldModel } = useDetailsForm<WorkflowEvent>(
-      props,
-      emit
-    );
+    const { save, cancel, getFieldModel } = useDetailsForm<WorkflowEvent>(props, emit);
 
     const name = getFieldModel('name', '');
     const description = getFieldModel('description', '');
+    const target = computed({
+      get: () => props.details.target?.id || '',
+      set: (targetId: string) => {
+        const target = props.steps.find((step) => step.id === targetId);
+        emit('update', {
+          targetId,
+          target,
+        });
+      },
+    });
+    const targetOptions = computed(() => {
+      return props.steps
+        .filter((step) => step.id !== props.currentStepId)
+        .map((step) => ({
+          value: step.id,
+          label: step.name,
+        }));
+    });
 
     return {
-      eventActions,
+      targetOptions,
       name,
       description,
+      target,
       save,
       cancel,
       required,

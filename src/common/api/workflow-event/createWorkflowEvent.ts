@@ -12,7 +12,12 @@ export const createWorkflowEventObject = (event: WorkflowEvent): Promise<Workflo
     : client
         .mutate({
           mutation: CreateWorkflowEventGQL,
-          variables: omit(event, ['id', 'actions', 'conditions']),
+          variables: {
+            name: event.name,
+            description: event.description,
+            targetId: event.target?.id,
+            stepId: event.stepId,
+          },
         })
         .then((response) => ({ ...response.data.event, actions: [], conditions: [] }));
 

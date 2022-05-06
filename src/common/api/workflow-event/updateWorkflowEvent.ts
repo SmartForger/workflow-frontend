@@ -10,6 +10,12 @@ export const updateWorkflowEvent = (event: WorkflowEvent): Promise<WorkflowEvent
     : client
         .mutate({
           mutation: UpdateWorkflowEventGQL,
-          variables: omit(event, ['actions', 'conditions']),
+          variables: {
+            id: event.id,
+            name: event.name,
+            description: event.description,
+            targetId: event.target?.id,
+            stepId: event.stepId,
+          },
         })
         .then((response) => response.data.event);

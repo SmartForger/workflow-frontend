@@ -1,14 +1,11 @@
 import gql from 'graphql-tag';
 
 export default gql`
-  fragment workflowFields on Workflow {
+  fragment workflowStepFields on WorkflowStep {
     id
     name
-    category
-    subCategory
-    name
     displayName
-    description
+    description 
     icon
     iconFileName
   }

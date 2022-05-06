@@ -38,6 +38,10 @@ export default defineComponent({
     required: {
       type: Boolean,
     },
+    label: {
+      type: String,
+      required: true,
+    },
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {

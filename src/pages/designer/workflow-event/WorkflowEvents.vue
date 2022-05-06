@@ -1,18 +1,11 @@
 <template>
-  <q-expansion-item
-    :group="expansionGroup"
-    dense
-    v-model="open"
-    @after-hide="cancel()"
-  >
+  <q-expansion-item :group="expansionGroup" dense v-model="open" @after-hide="cancel()">
     <template v-slot:header>
       <q-item-section avatar>
         <q-avatar icon="timeline" />
       </q-item-section>
 
-      <q-item-section>
-        Events ({{ state.context.list.length }})
-      </q-item-section>
+      <q-item-section> Events ({{ state.context.list.length }}) </q-item-section>
 
       <q-item-section side>
         <q-btn flat round icon="add" @click.stop="add()"></q-btn>
@@ -21,11 +14,7 @@
 
     <div
       class="q-pa-sm"
-      v-if="
-        state.matches('list') ||
-        state.matches('listRequest') ||
-        state.matches('deleteRequest')
-      "
+      v-if="state.matches('list') || state.matches('listRequest') || state.matches('deleteRequest')"
     >
       <div class="q-px-sm" v-if="!state.context.list.length">No events</div>
       <q-list bordered v-else>
@@ -47,20 +36,8 @@
 
               <q-item-section side>
                 <div class="row">
-                  <q-btn
-                    flat
-                    round
-                    size="sm"
-                    icon="edit"
-                    @click="editItem(ev)"
-                  ></q-btn>
-                  <q-btn
-                    flat
-                    round
-                    size="sm"
-                    icon="delete"
-                    @click="deleteItem(ev)"
-                  ></q-btn>
+                  <q-btn flat round size="sm" icon="edit" @click="editItem(ev)"></q-btn>
+                  <q-btn flat round size="sm" icon="delete" @click="deleteItem(ev)"></q-btn>
                 </div>
               </q-item-section>
             </q-item>
@@ -72,6 +49,7 @@
     <workflow-event-form
       :details="state.context.current"
       :steps="steps"
+      :currentStepId="stepId"
       @save="save"
       @cancel="cancel"
       @update="update"
@@ -119,10 +97,8 @@ export default defineComponent({
       useListMachine<WorkflowEvent>({
         id: 'worflowEvents',
         getListRequest: async () => props.events || [],
-        createItemRequest: (event) =>
-          api.createWorkflowEvent({ ...event, stepId: props.stepId }),
-        updateItemRequest: (event) =>
-          api.updateWorkflowEvent({ ...event, stepId: props.stepId }),
+        createItemRequest: (event) => api.createWorkflowEvent({ ...event, stepId: props.stepId }),
+        updateItemRequest: (event) => api.updateWorkflowEvent({ ...event, stepId: props.stepId }),
         deleteItemRequest: api.deleteWorkflowEvent,
       });
     const list = useContextListSync<WorkflowEvent>(state, setList, emit);
