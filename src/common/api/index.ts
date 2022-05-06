@@ -15,6 +15,10 @@ import { createWorkflowLayout } from './createWorkflowLayout';
 import { updateWorkflowLayout } from './updateWorkflowLayout';
 import { deleteWorkflowLayout } from './deleteWorkflowLayout';
 import { createSignedURL } from './createSignedURL';
+import { getWorkflowActions } from './getWorkflowActions';
+import { createWorkflowAction } from './createWorkflowAction';
+import { updateWorkflowAction } from './updateWorkflowAction';
+import { deleteWorkflowAction } from './deleteWorkflowAction';
 
 export default {
   getWorkflows,
@@ -34,4 +38,8 @@ export default {
   updateWorkflowLayout,
   deleteWorkflowLayout,
   createSignedURL,
+  getWorkflowActions,
+  createWorkflowAction,
+  updateWorkflowAction,
+  deleteWorkflowAction,
 };
