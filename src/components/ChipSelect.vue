@@ -4,7 +4,7 @@
     v-model="model"
     :options="options"
     :rules="rules"
-    label="Categories"
+    :label="label"
     outlined
     emit-value
     multiple
@@ -32,6 +32,9 @@ export default defineComponent({
   props: {
     modelValue: {
       type: Array as PropType<string[]>,
+    },
+    label: {
+      type: String,
     },
     icon: {
       type: String,

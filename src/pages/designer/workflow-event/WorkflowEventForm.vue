@@ -27,7 +27,27 @@
         </template>
       </q-input>
 
-      <select-component v-model="target" :options="targetOptions" label="Target" icon="directions" />
+      <select-component
+        v-model="target"
+        :options="targetOptions"
+        label="Target"
+        icon="directions"
+      />
+
+      <q-list bordered>
+        <workflow-event-actions
+          expansionGroup="action"
+          :actions="details.actions"
+          :eventId="details.id"
+          @update="update('actions', $event)"
+        ></workflow-event-actions>
+        <workflow-event-conditions
+          expansionGroup="condition"
+          :conditions="details.conditions"
+          :eventId="details.id"
+          @update="update('conditions', $event)"
+        ></workflow-event-conditions>
+      </q-list>
 
       <div class="row q-mt-md">
         <q-btn class="q-mr-sm" type="submit" label="Save Event" icon="save" color="primary"></q-btn>
@@ -44,9 +64,11 @@ import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import { WorkflowEvent } from 'src/common/types/WorkflowEvent';
 import SelectComponent from 'src/components/Select.vue';
 import { required } from 'src/common/utils/validations';
+import WorkflowEventConditions from '../workflow-event-condition/WorkflowEventConditions.vue';
+import WorkflowEventActions from '../workflow-event-action/WorkflowEventActions.vue';
 
 export default defineComponent({
-  components: { SelectComponent },
+  components: { SelectComponent, WorkflowEventConditions, WorkflowEventActions },
   props: {
     details: {
       type: Object as PropType<WorkflowEvent>,
@@ -62,7 +84,7 @@ export default defineComponent({
   },
   emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    const { save, cancel, getFieldModel } = useDetailsForm<WorkflowEvent>(props, emit);
+    const { save, cancel, update, getFieldModel } = useDetailsForm<WorkflowEvent>(props, emit);
 
     const name = getFieldModel('name', '');
     const description = getFieldModel('description', '');
@@ -92,6 +114,7 @@ export default defineComponent({
       target,
       save,
       cancel,
+      update,
       required,
     };
   },

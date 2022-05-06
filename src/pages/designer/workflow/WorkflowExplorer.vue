@@ -72,13 +72,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, provide } from 'vue';
 import { groupBy, forIn } from 'lodash';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import api from 'src/common/api';
 import { Workflow } from 'src/common/types/Workflow';
 import SearchInput from 'src/components/SearchInput.vue';
 import WorkflowForm from './WorkflowForm.vue';
+import { WorkflowAction } from 'src/common/types/WorkflowAction';
 
 export default defineComponent({
   name: 'WorkflowExplorer',
@@ -95,6 +96,13 @@ export default defineComponent({
         updateItemRequest: api.updateWorkflow,
         deleteItemRequest: api.deleteWorkflow,
       });
+
+    const { state: actionsState } = useListMachine<WorkflowAction>({
+      id: 'workflowActions',
+      getListRequest: api.getWorkflowActions,
+    });
+
+    provide('workflowActions', actionsState);
 
     const groupedWorkflows = computed(() => {
       const searchVal = state.value.context.search.toLowerCase();

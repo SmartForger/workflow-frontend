@@ -29,7 +29,12 @@
         <q-icon name="text_fields" />
       </template>
     </q-input>
-    <chip-select v-model="categories" icon="category" :options="componentTypes" />
+    <chip-select
+      v-model="components"
+      icon="category"
+      label="Components"
+      :options="componentTypes"
+    />
   </q-form>
   <div class="q-mt-md">
     <q-btn class="q-mr-sm" @click="save()" label="Save" type="button" color="primary" />
