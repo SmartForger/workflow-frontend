@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import UpdateWorkflowEventGQL from 'src/common/graphql/workflow-event/UpdateWorkflowEvent';
 import { WorkflowEvent } from '../../types/WorkflowEvent';
 import { isNewID, rejectParentRequired } from '../../utils/api-utils';
@@ -9,6 +10,6 @@ export const updateWorkflowEvent = (event: WorkflowEvent): Promise<WorkflowEvent
     : client
         .mutate({
           mutation: UpdateWorkflowEventGQL,
-          variables: event,
+          variables: omit(event, ['actions', 'conditions']),
         })
         .then((response) => response.data.event);

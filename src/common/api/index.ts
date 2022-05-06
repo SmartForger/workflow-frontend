@@ -9,6 +9,12 @@ import { deleteWorkflowAction } from './workflow-action/deleteWorkflowAction';
 import { createWorkflowEvent } from './workflow-event/createWorkflowEvent';
 import { updateWorkflowEvent } from './workflow-event/updateWorkflowEvent';
 import { deleteWorkflowEvent } from './workflow-event/deleteWorkflowEvent';
+import { createWorkflowEventAction } from './workflow-event-action/createWorkflowEventAction';
+import { updateWorkflowEventAction } from './workflow-event-action/updateWorkflowEventAction';
+import { deleteWorkflowEventAction } from './workflow-event-action/deleteWorkflowEventAction';
+import { createWorkflowEventCondition } from './workflow-event-condition/createWorkflowEventAction';
+import { updateWorkflowEventCondition } from './workflow-event-condition/updateWorkflowEventAction';
+import { deleteWorkflowEventCondition } from './workflow-event-condition/deleteWorkflowEventAction';
 import { createWorkflowLayout } from './workflow-layout/createWorkflowLayout';
 import { updateWorkflowLayout } from './workflow-layout/updateWorkflowLayout';
 import { deleteWorkflowLayout } from './workflow-layout/deleteWorkflowLayout';
@@ -31,6 +37,12 @@ export default {
   createWorkflowEvent,
   updateWorkflowEvent,
   deleteWorkflowEvent,
+  createWorkflowEventAction,
+  updateWorkflowEventAction,
+  deleteWorkflowEventAction,
+  createWorkflowEventCondition,
+  updateWorkflowEventCondition,
+  deleteWorkflowEventCondition,
   createWorkflowWidget,
   updateWorkflowWidget,
   deleteWorkflowWidget,
