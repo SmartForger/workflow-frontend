@@ -1,24 +1,24 @@
-import { getWorkflows } from './getWorkflows';
-import { createWorkflow } from './createWorkflow';
-import { updateWorkflow } from './updateWorkflow';
-import { deleteWorkflow } from './deleteWorkflow';
-import { createWorkflowStep } from './createWorkflowStep';
-import { updateWorkflowStep } from './updateWorkflowStep';
-import { deleteWorkflowStep } from './deleteWorkflowStep';
-import { createWorkflowEvent } from './createWorkflowEvent';
-import { updateWorkflowEvent } from './updateWorkflowEvent';
-import { deleteWorkflowEvent } from './deleteWorkflowEvent';
-import { createWorkflowWidget } from './createWorkflowWidget';
-import { updateWorkflowWidget } from './updateWorkflowWidget';
-import { deleteWorkflowWidget } from './deleteWorkflowWidget';
-import { createWorkflowLayout } from './createWorkflowLayout';
-import { updateWorkflowLayout } from './updateWorkflowLayout';
-import { deleteWorkflowLayout } from './deleteWorkflowLayout';
+import { getWorkflows } from './workflow/getWorkflows';
+import { createWorkflow } from './workflow/createWorkflow';
+import { updateWorkflow } from './workflow/updateWorkflow';
+import { deleteWorkflow } from './workflow/deleteWorkflow';
+import { getWorkflowActions } from './workflow-action/getWorkflowActions';
+import { createWorkflowAction } from './workflow-action/createWorkflowAction';
+import { updateWorkflowAction } from './workflow-action/updateWorkflowAction';
+import { deleteWorkflowAction } from './workflow-action/deleteWorkflowAction';
+import { createWorkflowEvent } from './workflow-event/createWorkflowEvent';
+import { updateWorkflowEvent } from './workflow-event/updateWorkflowEvent';
+import { deleteWorkflowEvent } from './workflow-event/deleteWorkflowEvent';
+import { createWorkflowLayout } from './workflow-layout/createWorkflowLayout';
+import { updateWorkflowLayout } from './workflow-layout/updateWorkflowLayout';
+import { deleteWorkflowLayout } from './workflow-layout/deleteWorkflowLayout';
+import { createWorkflowStep } from './workflow-step/createWorkflowStep';
+import { updateWorkflowStep } from './workflow-step/updateWorkflowStep';
+import { deleteWorkflowStep } from './workflow-step/deleteWorkflowStep';
+import { createWorkflowWidget } from './workflow-widget/createWorkflowWidget';
+import { updateWorkflowWidget } from './workflow-widget/updateWorkflowWidget';
+import { deleteWorkflowWidget } from './workflow-widget/deleteWorkflowWidget';
 import { createSignedURL } from './createSignedURL';
-import { getWorkflowActions } from './getWorkflowActions';
-import { createWorkflowAction } from './createWorkflowAction';
-import { updateWorkflowAction } from './updateWorkflowAction';
-import { deleteWorkflowAction } from './deleteWorkflowAction';
 
 export default {
   getWorkflows,

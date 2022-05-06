@@ -1,21 +1,5 @@
-import gql from 'graphql-tag';
+import CreateSignedURLGQL from '../graphql/CreateSignedURL';
 import client from './client';
-
-const CreateSignedURLGQL = gql`
-  mutation CreateSignedURL(
-    $fileName: String!
-    $contentType: String!
-    $origin: String!
-  ) {
-    createSignedURL(
-      input: { fileName: $fileName, contentType: $contentType, origin: $origin }
-    ) {
-      url
-      newFileName
-      expiresAt
-    }
-  }
-`;
 
 export const createSignedURL = (
   fileName: string,
