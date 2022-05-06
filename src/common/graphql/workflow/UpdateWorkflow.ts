@@ -7,7 +7,6 @@ export default gql`
     $category: String
     $subCategory: String
     $name: String
-    $displayName: String
     $description: String
     $icon: String
     $iconFileName: String
@@ -18,7 +17,6 @@ export default gql`
         category: $category
         subCategory: $subCategory
         name: $name
-        displayName: $displayName
         description: $description
         icon: $icon
         iconFileName: $iconFileName

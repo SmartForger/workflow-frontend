@@ -40,7 +40,7 @@
               </q-item-section>
 
               <q-item-section>
-                <q-item-label>{{ workflow.displayName }}</q-item-label>
+                <q-item-label>{{ workflow.name }}</q-item-label>
                 <q-item-label caption lines="1">
                   <q-badge :key="mode" color="green" class="q-mr-xs" v-for="mode in workflow.mode">
                     {{ mode }}
@@ -99,7 +99,7 @@ export default defineComponent({
     const groupedWorkflows = computed(() => {
       const searchVal = state.value.context.search.toLowerCase();
       const filteredWorkflows = state.value.context.list.filter((workflow) =>
-        workflow.displayName.toLowerCase().includes(searchVal)
+        workflow.name.toLowerCase().includes(searchVal)
       );
 
       const grouped = groupBy(filteredWorkflows, 'category');

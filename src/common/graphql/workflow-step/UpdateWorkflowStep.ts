@@ -5,7 +5,6 @@ export default gql`
   mutation UpdateWorkflowStep(
     $id: String!
     $name: String
-    $displayName: String
     $description: String
     $icon: String
     $iconFileName: String
@@ -15,7 +14,6 @@ export default gql`
       stepInput: {
         id: $id
         name: $name
-        displayName: $displayName
         description: $description
         icon: $icon
         iconFileName: $iconFileName

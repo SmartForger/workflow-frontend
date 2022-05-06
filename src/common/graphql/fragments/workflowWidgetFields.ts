@@ -4,7 +4,7 @@ export default gql`
   fragment workflowWidgetFields on WorkflowWidget {
     id
     type
-    displayName
+    name
     description
     icon
     iconFileName

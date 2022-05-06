@@ -40,7 +40,7 @@
         class="pvn-field"
         dense
         outlined
-        v-model="displayName"
+        v-model="name"
         label="Workflow Name"
         placeholder="Workflow name"
         :rules="[required()]"
@@ -114,12 +114,12 @@ export default defineComponent({
   },
   emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    const { formRef, save, cancel, update, getFieldModel, getDisplayNameModel, getIconModel } =
+    const { formRef, save, cancel, update, getFieldModel, getIconModel } =
       useDetailsForm<Workflow>(props, emit);
 
     const category = getFieldModel('category', '');
     const subCategory = getFieldModel('subCategory', '');
-    const displayName = getDisplayNameModel();
+    const name = getFieldModel('name', '');
     const description = getFieldModel('description', '');
     const mode = getFieldModel('mode', []);
     const icon = getIconModel();
@@ -131,7 +131,7 @@ export default defineComponent({
       formRef,
       category,
       subCategory,
-      displayName,
+      name,
       description,
       mode,
       icon,

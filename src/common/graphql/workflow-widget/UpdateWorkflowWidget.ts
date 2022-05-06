@@ -2,24 +2,24 @@ import gql from 'graphql-tag';
 import workflowWidgetFields from '../fragments/workflowWidgetFields';
 
 export default gql`
-  mutation CreateWorkflowWidget(
-    $type: String!
-    $displayName: String!
-    $description: String!
-    $icon: String!
-    $iconFileName: String!
-    $field: String!
-    $updateEvent: String!
+  mutation UpdateWorkflowWidget(
+    $id: String!
+    $type: String
+    $name: String
+    $description: String
+    $icon: String
+    $field: String
+    $updateEvent: String
     $stepId: String
     $layoutId: String
   ) {
-    widget: createWorkflowWidget(
+    widget: updateWorkflowWidget(
       widgetInput: {
+        id: $id
         type: $type
-        displayName: $displayName
+        name: $name
         description: $description
         icon: $icon
-        iconFileName: $iconFileName
         field: $field
         updateEvent: $updateEvent
         stepId: $stepId

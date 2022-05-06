@@ -19,8 +19,8 @@
         class="pvn-field"
         dense
         outlined
-        v-model="displayName"
-        label="Display Name"
+        v-model="name"
+        label="Widget Name"
         :rules="[required()]"
       >
         <template v-slot:prepend>
@@ -98,7 +98,7 @@ export default defineComponent({
     );
 
     const widgetType = getFieldModel('type', '');
-    const displayName = getFieldModel('displayName', '');
+    const name = getFieldModel('name', '');
     const description = getFieldModel('description', '');
     const icon = getIconModel();
     const field = getFieldModel('field', '');
@@ -107,7 +107,7 @@ export default defineComponent({
     return {
       widgetTypeOptions,
       widgetType,
-      displayName,
+      name,
       description,
       icon,
       field,

@@ -4,7 +4,7 @@ import workflowWidgetFields from '../fragments/workflowWidgetFields';
 export default gql`
   mutation CreateWorkflowWidget(
     $type: String!
-    $displayName: String!
+    $name: String!
     $description: String!
     $icon: String!
     $iconFileName: String!
@@ -16,7 +16,7 @@ export default gql`
     widget: createWorkflowWidget(
       widgetInput: {
         type: $type
-        displayName: $displayName
+        name: $name
         description: $description
         icon: $icon
         iconFileName: $iconFileName

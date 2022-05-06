@@ -39,18 +39,6 @@ export const useDetailsForm = <T>(
     });
   };
 
-  const getDisplayNameModel = () => {
-    return computed({
-      get: () => (props.details as any)['displayName'] || '',
-      set: (val) => {
-        emit('update', {
-          name: val.replaceAll(' ', '_').toLowerCase(),
-          displayName: val,
-        });
-      },
-    });
-  };
-
   const getIconModel = () => {
     return computed({
       get: () => {
@@ -92,7 +80,6 @@ export const useDetailsForm = <T>(
     cancel,
     update,
     getFieldModel,
-    getDisplayNameModel,
     getIconModel,
   };
 };

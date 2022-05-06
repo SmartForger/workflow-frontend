@@ -29,7 +29,7 @@
               </q-item-section>
 
               <q-item-section>
-                <q-item-label>{{ widget.displayName }}</q-item-label>
+                <q-item-label>{{ widget.name }}</q-item-label>
                 <div>
                   <q-badge class="bg-green text-white">
                     {{ widget.type }}

@@ -7,7 +7,6 @@ export default gql`
     category
     subCategory
     name
-    displayName
     description
     icon
     iconFileName

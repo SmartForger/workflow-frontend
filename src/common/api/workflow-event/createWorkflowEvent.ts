@@ -1,4 +1,3 @@
-import { omit } from 'lodash';
 import CreateWorkflowEventGQL from 'src/common/graphql/workflow-event/CreateWorkflowEvent';
 import { WorkflowEvent } from '../../types/WorkflowEvent';
 import { isNewID, rejectParentRequired } from '../../utils/api-utils';

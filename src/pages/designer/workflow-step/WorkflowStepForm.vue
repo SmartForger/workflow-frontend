@@ -12,7 +12,7 @@
       outlined
       label="Step Name"
       placeholder="Enter step name"
-      v-model="displayName"
+      v-model="name"
       :rules="[required()]"
     >
       <template v-slot:prepend>
@@ -102,15 +102,15 @@ export default defineComponent({
   },
   emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    const { save, cancel, update, getFieldModel, getIconModel, getDisplayNameModel } =
+    const { save, cancel, update, getFieldModel, getIconModel } =
       useDetailsForm<WorkflowStep>(props, emit);
 
-    const displayName = getDisplayNameModel();
+    const name = getFieldModel('name', '');
     const description = getFieldModel('description', '');
     const icon = getIconModel();
 
     return {
-      displayName,
+      name,
       description,
       icon,
       save,

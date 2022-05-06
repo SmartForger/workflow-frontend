@@ -4,7 +4,6 @@ import workflowStepFields from '../fragments/workflowStepFields';
 export default gql`
   mutation CreateWorkflowStep(
     $name: String!
-    $displayName: String!
     $description: String!
     $icon: String!
     $iconFileName: String!
@@ -13,7 +12,6 @@ export default gql`
     step: createWorkflowStep(
       stepInput: {
         name: $name
-        displayName: $displayName
         description: $description
         icon: $icon
         iconFileName: $iconFileName

@@ -29,7 +29,7 @@
               <q-img :src="step.icon" width="40px" height="40px" />
             </q-item-section>
 
-            <q-item-section> {{ step.displayName }} </q-item-section>
+            <q-item-section> {{ step.name }} </q-item-section>
 
             <q-item-section side>
               <div class="row">
