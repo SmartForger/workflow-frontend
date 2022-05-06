@@ -8,6 +8,7 @@ export default gql`
     subCategory
     name
     description
+    mode
     icon
     iconFileName
   }

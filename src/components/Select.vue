@@ -5,7 +5,7 @@
     emit-value
     v-model="model"
     :options="options"
-    label="Type"
+    :label="label"
     :rules="rules"
   >
     <template v-slot:prepend>

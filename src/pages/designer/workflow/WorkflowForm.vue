@@ -114,8 +114,10 @@ export default defineComponent({
   },
   emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    const { formRef, save, cancel, update, getFieldModel, getIconModel } =
-      useDetailsForm<Workflow>(props, emit);
+    const { formRef, save, cancel, update, getFieldModel, getIconModel } = useDetailsForm<Workflow>(
+      props,
+      emit
+    );
 
     const category = getFieldModel('category', '');
     const subCategory = getFieldModel('subCategory', '');

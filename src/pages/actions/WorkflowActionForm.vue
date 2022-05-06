@@ -5,7 +5,13 @@
         <q-icon name="text_fields" />
       </template>
     </q-input>
-    <select-component v-model="actionType" icon="category" :options="actionTypes" required />
+    <select-component
+      v-model="actionType"
+      label="Type"
+      icon="category"
+      :options="actionTypes"
+      required
+    />
     <q-input class="pvn-field" dense outlined v-model="code" label="Code" :rules="[required()]">
       <template v-slot:prepend>
         <q-icon name="text_fields" />

@@ -7,7 +7,6 @@ import client from '../client';
 export const createWorkflowWidget = (
   widget: WorkflowWidget
 ): Promise<WorkflowWidget> => {
-  console.log(222, widget, isNewID(widget.layoutId) || isNewID(widget.stepId));
   return isNewID(widget.layoutId) || isNewID(widget.stepId)
     ? rejectParentRequired('stepId or layoutId is required')
     : client

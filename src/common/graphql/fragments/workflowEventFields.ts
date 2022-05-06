@@ -5,5 +5,9 @@ export default gql`
     id
     name
     description
+    target {
+      id
+      name
+    }
   }
 `;
