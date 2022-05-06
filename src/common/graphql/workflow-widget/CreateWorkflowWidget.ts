@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import workflowWidgetFields from '../fragments/workflowWidgetFields';
 
 export default gql`
   mutation CreateWorkflowWidget(
@@ -28,4 +29,5 @@ export default gql`
       ...workflowWidgetFields
     }
   }
+  ${workflowWidgetFields}
 `;

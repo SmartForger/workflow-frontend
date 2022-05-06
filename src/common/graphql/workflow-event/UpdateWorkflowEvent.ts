@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import workflowEventFields from '../fragments/workflowEventFields';
 
 export default gql`
   mutation UpdateWorkflowEvent($id: String!, $name: String, $description: String, $stepId: String) {
@@ -8,4 +9,5 @@ export default gql`
       ...workflowEventFields
     }
   }
+  ${workflowEventFields}
 `;

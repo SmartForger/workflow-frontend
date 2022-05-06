@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import workflowEventConditionFields from '../fragments/workflowEventConditionFields';
 
 export default gql`
   mutation UpdateWorkflowEventCondition(
@@ -13,4 +14,5 @@ export default gql`
       ...workflowEventConditionFields
     }
   }
+  ${workflowEventConditionFields}
 `;

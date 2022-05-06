@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import workflowStepFields from '../fragments/workflowStepFields';
 
 export default gql`
   mutation UpdateWorkflowStep(
@@ -24,4 +25,5 @@ export default gql`
       ...workflowStepFields
     }
   }
+  ${workflowStepFields}
 `;

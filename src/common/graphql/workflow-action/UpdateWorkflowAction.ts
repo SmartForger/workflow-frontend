@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import workflowActionFields from '../fragments/workflowActionFields';
 
 export default gql`
   mutation UpdateWorkflowAction(
@@ -22,4 +23,5 @@ export default gql`
       ...workflowActionFields
     }
   }
+  ${workflowActionFields}
 `;

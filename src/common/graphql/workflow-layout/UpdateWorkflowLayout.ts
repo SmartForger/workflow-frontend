@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import workflowLayoutFields from '../fragments/workflowLayoutFields';
 
 export default gql`
   mutation UpdateWorkflowLayout(
@@ -26,4 +27,5 @@ export default gql`
       ...workflowLayoutFields
     }
   }
+  ${workflowLayoutFields}
 `;
