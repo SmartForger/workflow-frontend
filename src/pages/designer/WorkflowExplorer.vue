@@ -61,14 +61,14 @@
       <q-banner class="bg-grey-3 q-mt-sm" dense v-else> No workflows found. </q-banner>
     </div>
   </div>
-  <workflow-details
+  <workflow-form
     :details="state.context.current"
     :editing="state.matches('edit')"
     @save="save"
     @cancel="cancel"
     @update="update"
     v-else
-  ></workflow-details>
+  ></workflow-form>
 </template>
 
 <script lang="ts">
@@ -78,13 +78,13 @@ import { useListMachine } from 'src/common/composables/useListMachine';
 import api from 'src/common/api';
 import { Workflow } from 'src/common/types/Workflow';
 import SearchInput from 'src/components/SearchInput.vue';
-import WorkflowDetails from './WorkflowDetails.vue';
+import WorkflowForm from './WorkflowForm.vue';
 
 export default defineComponent({
   name: 'WorkflowExplorer',
   components: {
     SearchInput,
-    WorkflowDetails,
+    WorkflowForm,
   },
   setup() {
     const { state, addItem, editItem, deleteItem, save, cancel, update, setSearch } =

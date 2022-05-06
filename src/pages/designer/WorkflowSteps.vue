@@ -57,7 +57,7 @@
       </q-banner>
     </template>
 
-    <workflow-step-settings
+    <workflow-step-form
       :editing="state.matches('editing')"
       :details="state.context.current"
       :steps="steps"
@@ -65,7 +65,7 @@
       @cancel="cancel"
       @update="update"
       v-else
-    ></workflow-step-settings>
+    ></workflow-step-form>
   </q-card-section>
 </template>
 
@@ -77,13 +77,13 @@ import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import { Workflow } from 'src/common/types/Workflow';
 import api from 'src/common/api';
-import WorkflowStepSettings from './WorkflowStepSettings.vue';
+import WorkflowStepForm from './WorkflowStepForm.vue';
 
 export default defineComponent({
   name: 'WorkflowSteps',
   components: {
     Draggable,
-    WorkflowStepSettings,
+    WorkflowStepForm,
   },
   props: {
     workflow: {
