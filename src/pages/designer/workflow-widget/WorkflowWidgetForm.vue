@@ -80,7 +80,7 @@ import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
 import FileUploader from 'src/components/FileUploader.vue';
 import { required, arrayRequired } from 'src/common/utils/validations';
-import { widgetTypeOptions } from './constants';
+import { widgetTypeOptions } from '../constants';
 
 export default defineComponent({
   components: { FileUploader },

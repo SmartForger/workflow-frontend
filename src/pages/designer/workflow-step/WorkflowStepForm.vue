@@ -78,9 +78,9 @@ import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import FileUploader from 'src/components/FileUploader.vue';
 import { required, arrayRequired } from 'src/common/utils/validations';
-import WorkflowWidgets from './WorkflowWidgets.vue';
-import WorkflowEvents from './WorkflowEvents.vue';
-import WorkflowLayouts from './WorkflowLayouts.vue';
+import WorkflowWidgets from '../workflow-widget/WorkflowWidgets.vue';
+import WorkflowEvents from '../workflow-event/WorkflowEvents.vue';
+import WorkflowLayouts from '../workflow-layout/WorkflowLayouts.vue';
 
 export default defineComponent({
   components: {

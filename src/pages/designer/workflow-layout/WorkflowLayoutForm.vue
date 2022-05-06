@@ -73,7 +73,7 @@ import { WorkflowLayout } from 'src/common/types/WorkflowLayout';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import FileUploader from 'src/components/FileUploader.vue';
 import { required, arrayRequired } from 'src/common/utils/validations';
-import WorkflowWidgets from './WorkflowWidgets.vue';
+import WorkflowWidgets from '../workflow-widget/WorkflowWidgets.vue';
 
 export default defineComponent({
   components: { WorkflowWidgets, FileUploader },

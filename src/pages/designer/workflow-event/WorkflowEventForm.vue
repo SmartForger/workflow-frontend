@@ -91,7 +91,7 @@ import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import { WorkflowEvent } from 'src/common/types/WorkflowEvent';
 import { required } from 'src/common/utils/validations';
-import { eventActions } from './constants';
+import { eventActions } from '../constants';
 
 export default defineComponent({
   props: {
@@ -115,22 +115,11 @@ export default defineComponent({
 
     const name = getFieldModel('name', '');
     const description = getFieldModel('description', '');
-    const step = getFieldModel('step', '');
-    const action = getFieldModel('action', '');
-    const condition = getFieldModel('condition', '');
-    const stepName = computed(() => {
-      const stepObj = props.steps.find((s) => s.id === step.value);
-      return stepObj?.displayName || '';
-    });
 
     return {
       eventActions,
       name,
       description,
-      step,
-      action,
-      condition,
-      stepName,
       save,
       cancel,
       required,

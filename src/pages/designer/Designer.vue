@@ -69,7 +69,7 @@
 import { defineComponent, ref } from 'vue';
 import { useDrawer } from 'src/common/composables/useDrawer';
 import IconToggle from 'src/components/IconToggle.vue';
-import WorkflowExplorer from './WorkflowExplorer.vue';
+import WorkflowExplorer from './workflow/WorkflowExplorer.vue';
 
 const screenWidthOptions = [
   { value: 'mobile', tooltip: 'Mobile', icon: 'smartphone' },
