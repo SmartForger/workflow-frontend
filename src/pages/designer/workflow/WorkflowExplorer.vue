@@ -62,7 +62,7 @@
     </div>
   </div>
   <workflow-form
-    :details="state.context.current"
+    :details="currentItem"
     :editing="state.matches('edit')"
     @save="save"
     @cancel="cancel"
@@ -74,6 +74,7 @@
 <script lang="ts">
 import { computed, defineComponent, provide } from 'vue';
 import { groupBy, forIn } from 'lodash';
+import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import api from 'src/common/api';
 import { Workflow } from 'src/common/types/Workflow';
@@ -87,8 +88,9 @@ export default defineComponent({
     SearchInput,
     WorkflowForm,
   },
-  setup() {
-    const { state, addItem, editItem, deleteItem, save, cancel, update, setSearch } =
+  emits: ['update', 'setCurrent'],
+  setup(props, { emit }) {
+    const { state, currentItem, addItem, editItem, deleteItem, save, cancel, update, setSearch, setList } =
       useListMachine<Workflow>({
         id: 'workflows',
         createItemRequest: api.createWorkflow,
@@ -96,6 +98,7 @@ export default defineComponent({
         updateItemRequest: api.updateWorkflow,
         deleteItemRequest: api.deleteWorkflow,
       });
+    useContextListSync<Workflow>(state, setList, emit);
 
     const { state: actionsState } = useListMachine<WorkflowAction>({
       id: 'workflowActions',
@@ -126,6 +129,7 @@ export default defineComponent({
 
     return {
       state,
+      currentItem,
       addItem,
       editItem,
       deleteItem,

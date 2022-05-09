@@ -47,7 +47,7 @@
     </div>
 
     <workflow-event-form
-      :details="state.context.current"
+      :details="currentItem"
       :steps="steps"
       :currentStepId="stepId"
       @save="save"
@@ -93,7 +93,7 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { state, addItem, editItem, save, cancel, update, setList } =
+    const { state, currentItem, addItem, editItem, save, cancel, update, setList } =
       useListMachine<WorkflowEvent>({
         id: 'worflowEvents',
         getListRequest: async () => props.events || [],
@@ -116,6 +116,7 @@ export default defineComponent({
 
     return {
       state,
+      currentItem,
       list,
       add,
       editItem,

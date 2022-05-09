@@ -1,11 +1,7 @@
 <template>
   <q-card-section class="q-px-none">
     <template
-      v-if="
-        state.matches('list') ||
-        state.matches('listRequest') ||
-        state.matches('deleteRequest')
-      "
+      v-if="state.matches('list') || state.matches('listRequest') || state.matches('deleteRequest')"
     >
       <q-toolbar class="q-pb-none">
         <q-toolbar-title> Workflow Steps </q-toolbar-title>
@@ -33,20 +29,8 @@
 
             <q-item-section side>
               <div class="row">
-                <q-btn
-                  icon="edit"
-                  flat
-                  round
-                  size="sm"
-                  @click.prevent="editItem(step)"
-                ></q-btn>
-                <q-btn
-                  icon="delete"
-                  flat
-                  round
-                  size="sm"
-                  @click.prevent="deleteItem(step)"
-                ></q-btn>
+                <q-btn icon="edit" flat round size="sm" @click.prevent="editItem(step)"></q-btn>
+                <q-btn icon="delete" flat round size="sm" @click.prevent="deleteItem(step)"></q-btn>
               </div>
             </q-item-section>
           </q-item>
@@ -59,7 +43,7 @@
 
     <workflow-step-form
       :editing="state.matches('editing')"
-      :details="state.context.current"
+      :details="currentItem"
       :steps="steps"
       @save="save"
       @cancel="cancel"
@@ -93,29 +77,22 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const {
-      state,
-      addItem,
-      editItem,
-      deleteItem,
-      save,
-      cancel,
-      update,
-      setList,
-    } = useListMachine<WorkflowStep>({
-      id: 'worflowSteps',
-      getListRequest: async () => props.workflow.steps || [],
-      createItemRequest: (data) =>
-        api.createWorkflowStep({ ...data, workflowId: props.workflow.id }),
-      updateItemRequest: (data) =>
-        api.updateWorkflowStep({ ...data, workflowId: props.workflow.id }),
-      deleteItemRequest: api.deleteWorkflowStep,
-    });
+    const { state, currentItem, addItem, editItem, deleteItem, save, cancel, update, setList } =
+      useListMachine<WorkflowStep>({
+        id: 'worflowSteps',
+        getListRequest: async () => props.workflow.steps || [],
+        createItemRequest: (data) =>
+          api.createWorkflowStep({ ...data, workflowId: props.workflow.id }),
+        updateItemRequest: (data) =>
+          api.updateWorkflowStep({ ...data, workflowId: props.workflow.id }),
+        deleteItemRequest: api.deleteWorkflowStep,
+      });
     const steps = useContextListSync<WorkflowStep>(state, setList, emit);
 
     return {
       state,
       steps,
+      currentItem,
       addItem,
       editItem,
       deleteItem,

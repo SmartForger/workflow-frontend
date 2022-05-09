@@ -5,7 +5,8 @@ import { ParentRequiredError } from '../utils/api-utils';
 
 export interface ListViewContext<TItem extends BaseItem> {
   list: TItem[];
-  current: TItem | null;
+  original: TItem | null;
+  selectedId: string;
   search: string;
   err: unknown;
 }
@@ -27,7 +28,8 @@ export const createListViewMachine = <TItem extends BaseItem>({
 }: CreateListViewMachineParams<TItem>) => {
   const initialContext: ListViewContext<TItem> = {
     list: [],
-    current: null,
+    original: null,
+    selectedId: '',
     search: '',
     err: null,
   };
@@ -83,7 +85,7 @@ export const createListViewMachine = <TItem extends BaseItem>({
         deleteRequest: {
           invoke: {
             id: 'deleteItemService',
-            src: async (context, ev) => {
+            src: async (_context, ev) => {
               if (!deleteItemRequest) {
                 return ev.id;
               }
@@ -110,7 +112,10 @@ export const createListViewMachine = <TItem extends BaseItem>({
         },
         add: {
           on: {
-            BACK: 'list',
+            BACK: {
+              target: 'list',
+              actions: ['deleteSelectedItem'],
+            },
             SAVE: 'addRequest',
             UPDATE: {
               actions: ['updateCurrentItem'],
@@ -121,15 +126,16 @@ export const createListViewMachine = <TItem extends BaseItem>({
           invoke: {
             id: 'addItemService',
             src: async (context) => {
-              if (!createItemRequest || !context.current) {
-                return context.current;
+              const currentItem = context.list.find((item) => (item.id = context.selectedId));
+              if (!createItemRequest || !currentItem) {
+                return currentItem;
               }
 
               try {
-                return await createItemRequest(context.current);
+                return await createItemRequest(currentItem);
               } catch (err: unknown) {
                 if (err instanceof ParentRequiredError) {
-                  return context.current;
+                  return currentItem;
                 }
 
                 throw err;
@@ -137,7 +143,7 @@ export const createListViewMachine = <TItem extends BaseItem>({
             },
             onDone: {
               target: 'list',
-              actions: ['addItem'],
+              actions: ['updateSelectedItem'],
             },
             onError: {
               target: 'list',
@@ -147,7 +153,10 @@ export const createListViewMachine = <TItem extends BaseItem>({
         },
         edit: {
           on: {
-            BACK: 'list',
+            BACK: {
+              target: 'list',
+              actions: ['restoreOriginalItem'],
+            },
             SAVE: 'editRequest',
             UPDATE: {
               actions: ['updateCurrentItem'],
@@ -158,15 +167,16 @@ export const createListViewMachine = <TItem extends BaseItem>({
           invoke: {
             id: 'updateItemService',
             src: async (context) => {
-              if (!updateItemRequest || !context.current) {
-                return context.current;
+              const currentItem = context.list.find((item) => (item.id = context.selectedId));
+              if (!updateItemRequest || !currentItem) {
+                return currentItem;
               }
 
               try {
-                return await updateItemRequest(context.current);
+                return await updateItemRequest(currentItem);
               } catch (err: unknown) {
                 if (err instanceof ParentRequiredError) {
-                  return context.current;
+                  return currentItem;
                 }
 
                 throw err;
@@ -174,7 +184,7 @@ export const createListViewMachine = <TItem extends BaseItem>({
             },
             onDone: {
               target: 'list',
-              actions: 'updateItem',
+              actions: 'updateSelectedItem',
             },
             onError: {
               target: 'list',
@@ -190,39 +200,51 @@ export const createListViewMachine = <TItem extends BaseItem>({
           list: (_context, ev) => ev.data,
         }),
         selectItem: assign({
-          current: (_context, ev) => ({ ...ev.item }),
+          original: (_context, ev) => ({ ...ev.item }),
+          selectedId: (_context, ev) => ev.item.id,
         }),
-        setNewCurrentItem: assign<ListViewContext<TItem>, AnyEventObject>({
-          current: () =>
-            ({
-              id: `new_${uuid()}`,
-            } as TItem),
-        }),
+        setNewCurrentItem: (context) => {
+          const newId = `new_${uuid()}`;
+          context.list.push({
+            id: newId,
+          } as TItem);
+          context.original = null;
+          context.selectedId = newId;
+        },
         setSearch: assign({
           search: (_context, ev) => ev.search,
         }),
-        addItem: assign<ListViewContext<TItem>, AnyEventObject>({
-          list: (context, event) => context.list.concat(event.data as TItem),
-          current: null,
-        }),
-        updateItem: assign<ListViewContext<TItem>, AnyEventObject>({
-          list: (context, event) =>
-            context.list.map((item) =>
-              item.id === event.data.id ? event.data : item
-            ),
-          current: null,
-        }),
+        updateSelectedItem: (context, ev) => {
+          const index = context.list.findIndex((item) => item.id === context.selectedId);
+          if (index >= 0) {
+            context.list[index] = ev.data;
+          }
+          context.original = null;
+          context.selectedId = '';
+        },
         deleteItem: assign({
-          list: (context, ev) =>
-            context.list.filter((item) => item.id !== ev.data),
+          list: (context, ev) => context.list.filter((item) => item.id !== ev.data),
         }),
-        updateCurrentItem: assign({
-          current: ({ current }, ev) => ({ ...current, ...ev.payload }),
-        }),
-        updateItemInList: (
-          context: ListViewContext<TItem>,
-          ev: AnyEventObject
-        ) => {
+        deleteSelectedItem: (context) => {
+          context.list = context.list.filter((item) => item.id !== context.selectedId);
+          context.selectedId = '';
+        },
+        restoreOriginalItem: (context) => {
+          const index = context.list.findIndex((item) => item.id === context.selectedId);
+          if (index >= 0 && context.original) {
+            context.list[index] = context.original;
+          }
+        },
+        updateCurrentItem: (context, ev) => {
+          const index = context.list.findIndex((item) => item.id === context.selectedId);
+          if (index >= 0) {
+            context.list[index] = {
+              ...context.list[index],
+              ...ev.payload,
+            };
+          }
+        },
+        updateItemInList: (context: ListViewContext<TItem>, ev: AnyEventObject) => {
           const { id, ...data } = ev.payload;
           const index = context.list.findIndex((item) => item.id === id);
           context.list[index] = {

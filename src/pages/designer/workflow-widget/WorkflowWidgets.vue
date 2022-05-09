@@ -50,7 +50,7 @@
     </div>
 
     <workflow-widget-form
-      :details="state.context.current"
+      :details="currentItem"
       @save="save"
       @cancel="cancel"
       @update="update"
@@ -87,7 +87,7 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { state, addItem, editItem, save, cancel, update, setList } =
+    const { state, currentItem, addItem, editItem, save, cancel, update, setList } =
       useListMachine<WorkflowWidget>({
         id: 'worflowWidgets',
         getListRequest: async () => props.widgets || [],
@@ -121,6 +121,7 @@ export default defineComponent({
     return {
       state,
       list,
+      currentItem,
       add,
       editItem,
       save,

@@ -1,8 +1,6 @@
 import { useMachine } from '@xstate/vue';
-import {
-  createListViewMachine,
-  CreateListViewMachineParams,
-} from '../machines/list-view.machine';
+import { computed } from 'vue';
+import { createListViewMachine, CreateListViewMachineParams } from '../machines/list-view.machine';
 import { BaseItem } from '../types/BaseItem';
 
 export const useListMachine = <TItem extends BaseItem>(
@@ -51,8 +49,14 @@ export const useListMachine = <TItem extends BaseItem>(
     send({ type: 'SET_SEARCH', search });
   };
 
+  const currentItem = computed(() => {
+    const { list, selectedId } = state.value.context;
+    return list.find((item) => item.id === selectedId);
+  });
+
   return {
     state,
+    currentItem,
     send,
     addItem,
     editItem,

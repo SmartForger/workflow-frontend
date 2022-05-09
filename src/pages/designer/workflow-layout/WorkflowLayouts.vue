@@ -65,7 +65,7 @@
     </div>
 
     <workflow-layout-form
-      :details="state.context.current"
+      :details="currentItem"
       @save="save"
       @cancel="cancel"
       @update="update"
@@ -104,7 +104,7 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { state, addItem, editItem, deleteItem, save, cancel, update, setList } =
+    const { state, currentItem, addItem, editItem, deleteItem, save, cancel, update, setList } =
       useListMachine<WorkflowLayout>({
         id: 'worflowLayouts',
         getListRequest: async () => props.layouts || [],
@@ -130,6 +130,7 @@ export default defineComponent({
     return {
       state,
       list,
+      currentItem,
       add,
       editItem,
       deleteItem,
