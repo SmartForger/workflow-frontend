@@ -3,9 +3,11 @@ import { computed } from 'vue';
 import { createListViewMachine, CreateListViewMachineParams } from '../machines/list-view.machine';
 import { BaseItem } from '../types/BaseItem';
 
-export const useListMachine = <TItem extends BaseItem>(
-  params: CreateListViewMachineParams<TItem>
-) => {
+interface UseListMachineParams<TItem> extends CreateListViewMachineParams<TItem> {
+  onUpdate?: () => void;
+}
+
+export const useListMachine = <TItem extends BaseItem>(params: UseListMachineParams<TItem>) => {
   const machine = createListViewMachine<TItem>(params);
   const { state, send } = useMachine(machine, { devTools: true });
 
@@ -19,10 +21,12 @@ export const useListMachine = <TItem extends BaseItem>(
 
   const deleteItem = (item: TItem) => {
     send({ type: 'DELETE', id: item.id });
+    params.onUpdate && params.onUpdate();
   };
 
   const save = () => {
     send({ type: 'SAVE' });
+    params.onUpdate && params.onUpdate();
   };
 
   const cancel = () => {
@@ -35,6 +39,7 @@ export const useListMachine = <TItem extends BaseItem>(
     }
 
     send({ type: 'UPDATE', payload: data });
+    params.onUpdate && params.onUpdate();
   };
 
   const setList = (data: TItem[]) => {

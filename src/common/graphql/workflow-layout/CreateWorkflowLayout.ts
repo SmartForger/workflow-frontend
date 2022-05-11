@@ -4,6 +4,7 @@ import workflowLayoutFields from '../fragments/workflowLayoutFields';
 export default gql`
   mutation CreateWorkflowLayout(
     $title: String!
+    $type: String!
     $icon: String!
     $iconFileName: String!
     $backgroundColor: String!
@@ -14,6 +15,7 @@ export default gql`
     layout: createWorkflowLayout(
       layoutInput: {
         title: $title
+        type: $type
         icon: $icon
         iconFileName: $iconFileName
         backgroundColor: $backgroundColor

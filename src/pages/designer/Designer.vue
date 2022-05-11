@@ -5,33 +5,21 @@
         <q-btn flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          <q-icon
-            size="35px"
-            name="img:src/assets/images/flowchart.svg"
-          ></q-icon>
+          <q-icon size="35px" name="img:src/assets/images/flowchart.svg"></q-icon>
           Workflow Designer
         </q-toolbar-title>
 
         <q-space></q-space>
 
-        <icon-toggle
-          v-model="screenWidth"
-          :options="screenWidthOptions"
-        ></icon-toggle>
+        <icon-toggle v-model="screenWidth" :options="screenWidthOptions"></icon-toggle>
 
         <q-space></q-space>
 
-        <icon-toggle v-model="formLayout" :options="formLayoutOptions">
-        </icon-toggle>
+        <icon-toggle v-model="formLayout" :options="formLayoutOptions"> </icon-toggle>
 
         <q-space></q-space>
 
-        <q-btn
-          class="bg-green text-white"
-          label="Preview"
-          outlined
-          icon="smart_display"
-        />
+        <q-btn class="bg-green text-white" label="Preview" outlined icon="smart_display" />
 
         <q-space></q-space>
         <q-btn flat round icon="menu" @click="toggleRightDrawer" />
@@ -46,7 +34,7 @@
       side="left"
       bordered
     >
-      <workflow-explorer></workflow-explorer>
+      <workflow-explorer @update:current="handleWorkflowUpdates"></workflow-explorer>
     </q-drawer>
 
     <q-drawer
@@ -60,16 +48,28 @@
     </q-drawer>
 
     <q-page-container>
-      <q-page class="q-ma-sm"> </q-page>
+      <q-page class="column">
+        <workflow-renderer :workflow="workflow" v-if="workflowVisible"></workflow-renderer>
+        <q-circular-progress class="loading" indeterminate size="50px" color="primary" v-else />
+      </q-page>
     </q-page-container>
   </q-layout>
 </template>
 
+<style lang="scss" scoped>
+.loading {
+  margin: auto;
+}
+</style>
+
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { debounce } from 'lodash';
 import { useDrawer } from 'src/common/composables/useDrawer';
 import IconToggle from 'src/components/IconToggle.vue';
+import WorkflowRenderer from 'src/components/WorkflowRenderer.vue';
 import WorkflowExplorer from './workflow/WorkflowExplorer.vue';
+import { Workflow } from 'src/common/types/Workflow';
 
 const screenWidthOptions = [
   { value: 'mobile', tooltip: 'Mobile', icon: 'smartphone' },
@@ -95,15 +95,28 @@ export default defineComponent({
   components: {
     IconToggle,
     WorkflowExplorer,
+    WorkflowRenderer,
   },
 
   setup() {
     const { open: leftDrawerOpen, toggleOpen: toggleLeftDrawer } = useDrawer();
-    const { open: rightDrawerOpen, toggleOpen: toggleRightDrawer } =
-      useDrawer();
+    const { open: rightDrawerOpen, toggleOpen: toggleRightDrawer } = useDrawer();
+
+    const workflow = ref<Workflow>();
+    const workflowVisible = ref(false);
 
     const screenWidth = ref('desktop');
     const formLayout = ref('stepper');
+
+    const showWorkflow = debounce((w: Workflow) => {
+      workflow.value = w;
+      workflowVisible.value = true;
+    }, 600);
+
+    const handleWorkflowUpdates = (w: Workflow) => {
+      workflowVisible.value = false;
+      showWorkflow(w);
+    };
 
     return {
       leftDrawerOpen,
@@ -114,6 +127,9 @@ export default defineComponent({
       screenWidth,
       formLayoutOptions,
       formLayout,
+      handleWorkflowUpdates,
+      workflow,
+      workflowVisible,
     };
   },
 });

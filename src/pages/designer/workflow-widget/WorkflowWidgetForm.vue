@@ -54,7 +54,7 @@
         </template>
       </q-input>
 
-      <q-input class="pvn-field" dense outlined v-model="updateEvent" label="On Update Event">
+      <q-input class="pvn-field" dense outlined v-model="updateEvent" label="Trigger Event">
         <template v-slot:prepend>
           <q-icon name="img:src/assets/images/update_event.svg" />
         </template>

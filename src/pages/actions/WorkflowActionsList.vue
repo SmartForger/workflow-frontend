@@ -36,7 +36,7 @@
   <q-dialog :model-value="state.matches('add') || state.matches('edit')" persistent>
     <div class="bg-white q-pa-md">
       <workflow-actions-form
-        :details="state.context.current"
+        :details="currentItem"
         :editing="state.matches('edit')"
         @save="save"
         @cancel="cancel"
@@ -91,7 +91,7 @@ export default defineComponent({
   name: 'WorkflowActionsList',
   components: { PageHeader, WorkflowActionsForm },
   setup() {
-    const { state, addItem, editItem, deleteItem, save, cancel, update } =
+    const { state, currentItem, addItem, editItem, deleteItem, save, cancel, update } =
       useListMachine<WorkflowAction>({
         id: 'actionsMachine',
         getListRequest: api.getWorkflowActions,
@@ -111,6 +111,7 @@ export default defineComponent({
 
     return {
       state,
+      currentItem,
       tableColumns,
       addItem,
       editItem,

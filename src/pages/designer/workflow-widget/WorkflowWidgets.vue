@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue';
+import { defineComponent, inject, PropType, ref } from 'vue';
 import Draggable from 'vuedraggable';
 import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
@@ -104,6 +104,7 @@ export default defineComponent({
             layoutId: props.layoutId,
           }),
         deleteItemRequest: api.deleteWorkflowWidget,
+        onUpdate: inject('emitWorkflowUpdate'),
       });
     const list = useContextListSync<WorkflowWidget>(state, setList, emit);
 

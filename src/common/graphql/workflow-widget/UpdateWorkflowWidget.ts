@@ -8,6 +8,7 @@ export default gql`
     $name: String
     $description: String
     $icon: String
+    $iconFileName: String
     $field: String
     $updateEvent: String
     $stepId: String
@@ -20,6 +21,7 @@ export default gql`
         name: $name
         description: $description
         icon: $icon
+        iconFileName: $iconFileName
         field: $field
         updateEvent: $updateEvent
         stepId: $stepId

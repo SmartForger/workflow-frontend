@@ -7,6 +7,14 @@
         </template>
       </q-input>
 
+      <select-component
+        :options="layoutTypes"
+        icon="category"
+        :require="true"
+        label="Type"
+        v-model="layoutType"
+      ></select-component>
+
       <file-uploader
         label="Icon"
         field-icon="image"
@@ -73,6 +81,7 @@ import { WorkflowLayout } from 'src/common/types/WorkflowLayout';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import FileUploader from 'src/components/FileUploader.vue';
 import { required, arrayRequired } from 'src/common/utils/validations';
+import { layoutTypes } from 'src/common/constants/layoutTypes';
 import WorkflowWidgets from '../workflow-widget/WorkflowWidgets.vue';
 
 export default defineComponent({
@@ -95,6 +104,7 @@ export default defineComponent({
     const backgroundColor = getFieldModel('backgroundColor', '');
     const textColor = getFieldModel('textColor', '');
     const visible = getFieldModel('visible', false);
+    const layoutType = getFieldModel('type', '');
 
     return {
       title,
@@ -102,11 +112,13 @@ export default defineComponent({
       backgroundColor,
       textColor,
       visible,
+      layoutType,
       required,
       arrayRequired,
       save,
       cancel,
       update,
+      layoutTypes,
     };
   },
 });

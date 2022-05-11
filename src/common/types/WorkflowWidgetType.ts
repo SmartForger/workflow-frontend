@@ -5,4 +5,5 @@ export enum WorkflowWidgetType {
   TABLE = 'QTable',
   SIGNATURE = 'SignaturePad',
   VIDEO = 'VideoRecorder',
+  BUTTON = 'QBtn',
 }

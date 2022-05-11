@@ -55,6 +55,7 @@ export const useDetailsForm = <T>(
           : [];
       },
       set: (val) => {
+        console.log(555, val);
         if (!val || !val[0]) {
           emit('update', {
             icon: '',

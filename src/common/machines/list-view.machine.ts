@@ -126,7 +126,7 @@ export const createListViewMachine = <TItem extends BaseItem>({
           invoke: {
             id: 'addItemService',
             src: async (context) => {
-              const currentItem = context.list.find((item) => (item.id = context.selectedId));
+              const currentItem = context.list.find((item) => item.id === context.selectedId);
               if (!createItemRequest || !currentItem) {
                 return currentItem;
               }
@@ -167,7 +167,7 @@ export const createListViewMachine = <TItem extends BaseItem>({
           invoke: {
             id: 'updateItemService',
             src: async (context) => {
-              const currentItem = context.list.find((item) => (item.id = context.selectedId));
+              const currentItem = context.list.find((item) => item.id === context.selectedId);
               if (!updateItemRequest || !currentItem) {
                 return currentItem;
               }

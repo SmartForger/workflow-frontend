@@ -74,7 +74,6 @@
 <script lang="ts">
 import { computed, defineComponent, provide } from 'vue';
 import { groupBy, forIn } from 'lodash';
-import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import api from 'src/common/api';
 import { Workflow } from 'src/common/types/Workflow';
@@ -88,17 +87,30 @@ export default defineComponent({
     SearchInput,
     WorkflowForm,
   },
-  emits: ['update', 'setCurrent'],
+  emits: ['update:current'],
   setup(props, { emit }) {
-    const { state, currentItem, addItem, editItem, deleteItem, save, cancel, update, setSearch, setList } =
-      useListMachine<Workflow>({
-        id: 'workflows',
-        createItemRequest: api.createWorkflow,
-        getListRequest: api.getWorkflows,
-        updateItemRequest: api.updateWorkflow,
-        deleteItemRequest: api.deleteWorkflow,
-      });
-    useContextListSync<Workflow>(state, setList, emit);
+    const emitWorkflowUpdate = () => {
+      emit('update:current', currentItem);
+    };
+
+    const {
+      state,
+      currentItem,
+      addItem,
+      editItem,
+      deleteItem,
+      save,
+      cancel,
+      update,
+      setSearch,
+    } = useListMachine<Workflow>({
+      id: 'workflows',
+      createItemRequest: api.createWorkflow,
+      getListRequest: api.getWorkflows,
+      updateItemRequest: api.updateWorkflow,
+      deleteItemRequest: api.deleteWorkflow,
+      onUpdate: emitWorkflowUpdate
+    });
 
     const { state: actionsState } = useListMachine<WorkflowAction>({
       id: 'workflowActions',
@@ -106,6 +118,7 @@ export default defineComponent({
     });
 
     provide('workflowActions', actionsState);
+    provide('emitWorkflowUpdate', emitWorkflowUpdate);
 
     const groupedWorkflows = computed(() => {
       const searchVal = state.value.context.search.toLowerCase();

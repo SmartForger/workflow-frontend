@@ -8,6 +8,8 @@ export function useModelWrapper(
 ) {
   return computed({
     get: () => props.modelValue || defaultValue,
-    set: (value) => emit('update:modelValue', value),
+    set: (value) => {
+      emit('update:modelValue', value);
+    },
   });
 }

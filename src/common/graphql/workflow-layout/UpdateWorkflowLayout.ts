@@ -5,6 +5,7 @@ export default gql`
   mutation UpdateWorkflowLayout(
     $id: String!
     $title: String
+    $type: String
     $icon: String
     $iconFileName: String
     $backgroundColor: String
@@ -16,6 +17,7 @@ export default gql`
       layoutInput: {
         id: $id
         title: $title
+        type: $type
         icon: $icon
         iconFileName: $iconFileName
         backgroundColor: $backgroundColor
