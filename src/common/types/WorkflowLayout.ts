@@ -2,7 +2,7 @@ import { WorkflowWidget } from './WorkflowWidget';
 
 export interface WorkflowLayout {
   id: string;
-  title: string;
+  name: string;
   type: string;
   icon: string | null;
   iconFileName: string | null;

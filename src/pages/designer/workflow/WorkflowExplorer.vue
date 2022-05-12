@@ -35,12 +35,16 @@
               clickable
               v-ripple
             >
-              <q-item-section avatar>
-                <q-img :src="workflow.icon" width="46px" height="46px" v-if="workflow.icon" />
+              <q-item-section avatar v-if="workflow.icon">
+                <icon-renderer
+                  :icon="workflow.icon"
+                  :iconFileName="workflow.iconFileName"
+                  size="46px"
+                ></icon-renderer>
               </q-item-section>
 
               <q-item-section>
-                <q-item-label>{{ workflow.name }}</q-item-label>
+                <q-item-label class="text-bold text-grey-9">{{ workflow.name }}</q-item-label>
                 <q-item-label caption lines="1">
                   <q-badge :key="mode" color="green" class="q-mr-xs" v-for="mode in workflow.mode">
                     {{ mode }}
@@ -93,24 +97,18 @@ export default defineComponent({
       emit('update:current', currentItem);
     };
 
-    const {
-      state,
-      currentItem,
-      addItem,
-      editItem,
-      deleteItem,
-      save,
-      cancel,
-      update,
-      setSearch,
-    } = useListMachine<Workflow>({
-      id: 'workflows',
-      createItemRequest: api.createWorkflow,
-      getListRequest: api.getWorkflows,
-      updateItemRequest: api.updateWorkflow,
-      deleteItemRequest: api.deleteWorkflow,
-      onUpdate: emitWorkflowUpdate
-    });
+    const { state, currentItem, addItem, editItem, deleteItem, save, cancel, update, setSearch } =
+      useListMachine<Workflow>({
+        id: 'workflows',
+        createItemRequest: api.createWorkflow,
+        getListRequest: api.getWorkflows,
+        updateItemRequest: api.updateWorkflow,
+        deleteItemRequest: api.deleteWorkflow,
+        onUpdate: emitWorkflowUpdate,
+        updateWhen: {
+          detailsView: true,
+        },
+      });
 
     const { state: actionsState } = useListMachine<WorkflowAction>({
       id: 'workflowActions',

@@ -22,7 +22,7 @@
       size="24px"
       v-if="details.icon || details.iconFileName"
     ></icon-renderer>
-    <span class="q-ml-sm">{{ details.name }}</span>
+    <span class="q-mx-sm">{{ details.name }}</span>
   </q-btn>
 </template>
 
@@ -49,7 +49,7 @@ export default defineComponent({
     const model = useModelWrapper(props, emit, '');
 
     const triggerEvent = () => {
-      emit('trigger', props.details.updateEvent);
+      emit('trigger', props.details.event);
     };
 
     return { model, triggerEvent };

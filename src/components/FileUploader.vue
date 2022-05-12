@@ -10,7 +10,7 @@
         flat
         round
         icon="file_upload"
-        color="primary"
+        color="grey"
         @click="uploadFile"
         v-if="assetsInProgress.length === 0"
       ></q-btn>

@@ -31,12 +31,15 @@
               <q-item-section side>
                 <q-icon class="handle" name="drag_indicator"></q-icon>
               </q-item-section>
-              <q-item-section avatar>
-                <q-img :src="layout.icon" width="40px" height="40px" />
+              <q-item-section side v-if="layout.icon">
+                <icon-renderer
+                  :icon="layout.icon"
+                  :iconFileName="layout.iconFileName"
+                ></icon-renderer>
               </q-item-section>
 
               <q-item-section>
-                <q-item-label>{{ layout.title }}</q-item-label>
+                <q-item-label>{{ layout.name }}</q-item-label>
               </q-item-section>
 
               <q-item-section side>

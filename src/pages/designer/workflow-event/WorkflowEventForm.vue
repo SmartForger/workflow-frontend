@@ -14,14 +14,7 @@
         </template>
       </q-input>
 
-      <q-input
-        class="pvn-field"
-        dense
-        outlined
-        v-model="description"
-        label="Description"
-        :rules="[required()]"
-      >
+      <q-input class="pvn-field" dense outlined v-model="description" label="Description">
         <template v-slot:prepend>
           <q-icon name="text_fields" />
         </template>

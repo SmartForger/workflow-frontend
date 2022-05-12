@@ -28,33 +28,21 @@
         </template>
       </q-input>
 
-      <q-input
-        class="pvn-field"
-        dense
-        outlined
-        v-model="description"
-        label="Description"
-        :rules="[required()]"
-      >
+      <q-input class="pvn-field" dense outlined v-model="description" label="Description">
         <template v-slot:prepend>
           <q-icon name="text_fields" />
         </template>
       </q-input>
 
-      <file-uploader
-        label="Icon"
-        field-icon="image"
-        v-model="icon"
-        :rules="[arrayRequired()]"
-      ></file-uploader>
+      <file-uploader label="Icon" field-icon="image" v-model="icon"></file-uploader>
 
-      <q-input class="pvn-field" dense outlined v-model="field" label="Field" :rules="[required()]">
+      <q-input class="pvn-field" dense outlined v-model="field" label="Field">
         <template v-slot:prepend>
           <q-icon name="img:src/assets/images/field.svg" />
         </template>
       </q-input>
 
-      <q-input class="pvn-field" dense outlined v-model="updateEvent" label="Trigger Event">
+      <q-input class="pvn-field" dense outlined v-model="triggerEvent" label="Trigger Event">
         <template v-slot:prepend>
           <q-icon name="img:src/assets/images/update_event.svg" />
         </template>
@@ -102,7 +90,7 @@ export default defineComponent({
     const description = getFieldModel('description', '');
     const icon = getIconModel();
     const field = getFieldModel('field', '');
-    const updateEvent = getFieldModel('updateEvent', '');
+    const triggerEvent = getFieldModel('event', '');
 
     return {
       widgetTypeOptions,
@@ -111,7 +99,7 @@ export default defineComponent({
       description,
       icon,
       field,
-      updateEvent,
+      triggerEvent,
       save,
       cancel,
       required,

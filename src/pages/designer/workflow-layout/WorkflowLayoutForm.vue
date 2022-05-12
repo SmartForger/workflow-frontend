@@ -15,12 +15,7 @@
         v-model="layoutType"
       ></select-component>
 
-      <file-uploader
-        label="Icon"
-        field-icon="image"
-        v-model="icon"
-        :rules="[arrayRequired()]"
-      ></file-uploader>
+      <file-uploader label="Icon" field-icon="image" v-model="icon"></file-uploader>
 
       <q-input outlined dense class="q-pb-xs" v-model="backgroundColor" label="Background Color">
         <template v-slot:prepend>
@@ -99,7 +94,7 @@ export default defineComponent({
       emit
     );
 
-    const title = getFieldModel('title', '');
+    const title = getFieldModel('name', '');
     const icon = getIconModel();
     const backgroundColor = getFieldModel('backgroundColor', '');
     const textColor = getFieldModel('textColor', '');

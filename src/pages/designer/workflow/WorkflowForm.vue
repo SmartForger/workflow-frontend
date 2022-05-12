@@ -58,7 +58,6 @@
         v-model="description"
         label="Description"
         placeholder="Description"
-        :rules="[required()]"
       >
         <template v-slot:prepend>
           <q-icon name="text_fields" />
@@ -74,19 +73,13 @@
         v-model="mode"
         :options="workflowModes"
         label="Mode"
-        :rules="[arrayRequired()]"
       >
         <template v-slot:prepend>
           <q-icon name="img:src/assets/images/mode.svg" />
         </template>
       </q-select>
 
-      <file-uploader
-        label="Icon"
-        field-icon="image"
-        v-model="icon"
-        :rules="[arrayRequired()]"
-      ></file-uploader>
+      <file-uploader label="Icon" field-icon="image" v-model="icon"></file-uploader>
     </q-form>
 
     <workflow-steps :workflow="details" @update="update('steps', $event)"></workflow-steps>

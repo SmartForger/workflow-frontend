@@ -21,11 +21,11 @@
               <q-icon class="handle" name="drag_indicator"></q-icon>
             </q-item-section>
 
-            <q-item-section side>
-              <q-img :src="step.icon" width="40px" height="40px" />
+            <q-item-section side v-if="step.icon">
+              <icon-renderer :icon="step.icon" :iconFileName="step.iconFileName"></icon-renderer>
             </q-item-section>
 
-            <q-item-section> {{ step.name }} </q-item-section>
+            <q-item-section class="text-bold text-grey-9"> {{ step.name }} </q-item-section>
 
             <q-item-section side>
               <div class="row">

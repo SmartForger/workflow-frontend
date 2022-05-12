@@ -29,19 +29,13 @@
       v-model="description"
       label="Step Description"
       placeholder="Enter step description"
-      :rules="[required()]"
     >
       <template v-slot:prepend>
         <q-icon name="img:src/assets/images/input_text.svg" />
       </template>
     </q-input>
 
-    <file-uploader
-      label="Icon"
-      field-icon="image"
-      v-model="icon"
-      :rules="[arrayRequired()]"
-    ></file-uploader>
+    <file-uploader label="Icon" field-icon="image" v-model="icon"></file-uploader>
 
     <q-list bordered>
       <workflow-widgets
@@ -102,8 +96,10 @@ export default defineComponent({
   },
   emits: ['save', 'cancel', 'update'],
   setup(props, { emit }) {
-    const { save, cancel, update, getFieldModel, getIconModel } =
-      useDetailsForm<WorkflowStep>(props, emit);
+    const { save, cancel, update, getFieldModel, getIconModel } = useDetailsForm<WorkflowStep>(
+      props,
+      emit
+    );
 
     const name = getFieldModel('name', '');
     const description = getFieldModel('description', '');

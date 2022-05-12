@@ -24,10 +24,11 @@
               <q-item-section side>
                 <q-icon class="handle" name="drag_indicator"></q-icon>
               </q-item-section>
-              <q-item-section avatar>
-                <q-avatar square>
-                  <q-icon name="img:src/assets/images/event_blue.svg" />
-                </q-avatar>
+              <q-item-section side>
+                <icon-renderer
+                  icon="src/assets/images/event_blue.svg"
+                  iconFileName="event_blue.svg"
+                ></icon-renderer>
               </q-item-section>
 
               <q-item-section>

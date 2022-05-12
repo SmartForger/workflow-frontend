@@ -24,8 +24,8 @@
               <q-item-section side>
                 <q-icon class="handle" name="drag_indicator"></q-icon>
               </q-item-section>
-              <q-item-section avatar>
-                <q-img :src="widget.icon" width="40px" height="40px" />
+              <q-item-section side v-if="widget.icon">
+                <icon-renderer :icon="widget.icon" :iconFileName="widget.iconFileName"></icon-renderer>
               </q-item-section>
 
               <q-item-section>
@@ -87,7 +87,7 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { state, currentItem, addItem, editItem, save, cancel, update, setList } =
+    const { state, currentItem, addItem, editItem, deleteItem, save, cancel, update, setList } =
       useListMachine<WorkflowWidget>({
         id: 'worflowWidgets',
         getListRequest: async () => props.widgets || [],
@@ -125,6 +125,7 @@ export default defineComponent({
       currentItem,
       add,
       editItem,
+      deleteItem,
       save,
       cancel,
       update,

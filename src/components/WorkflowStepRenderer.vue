@@ -22,8 +22,8 @@
       </workflow-widget-component>
     </div>
     <div class="footer" v-if="footerVisible">
-      <q-toolbar class="shadow-3 row" :style="footerStyle">
-        <div class="col" :key="widget.id" v-for="widget in footerWidgets">
+      <q-toolbar class="shadow-3 justify-between" :style="footerStyle">
+        <div class="col-auto" :key="widget.id" v-for="widget in footerWidgets">
           <workflow-widget-component @trigger="sendEvent($event)" :details="widget">
           </workflow-widget-component>
         </div>
@@ -44,6 +44,9 @@
   height: 50px;
   flex: none;
 }
+.footer > div {
+  flex-direction: row-reverse;
+}
 .body {
   flex: 1;
   overflow-x: hidden;
@@ -52,7 +55,7 @@
 </style>
 
 <script lang="ts">
-import { computed, defineComponent, inject } from 'vue';
+import { defineComponent, inject } from 'vue';
 import { WorkflowMachine } from 'src/common/types/WorkflowMachine';
 import { useLayout } from 'src/common/composables/useLayout';
 import WorkflowWidgetComponent from './WorkflowWidget.vue';
