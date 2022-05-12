@@ -4,7 +4,7 @@ import workflowLayoutFields from '../fragments/workflowLayoutFields';
 export default gql`
   mutation UpdateWorkflowLayout(
     $id: String!
-    $title: String
+    $name: String
     $type: String
     $icon: String
     $iconFileName: String
@@ -16,7 +16,7 @@ export default gql`
     layout: updateWorkflowLayout(
       layoutInput: {
         id: $id
-        title: $title
+        name: $name
         type: $type
         icon: $icon
         iconFileName: $iconFileName

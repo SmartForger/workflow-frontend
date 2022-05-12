@@ -10,7 +10,7 @@ export default gql`
     $icon: String
     $iconFileName: String
     $field: String
-    $updateEvent: String
+    $event: String
     $stepId: String
     $layoutId: String
   ) {
@@ -23,7 +23,7 @@ export default gql`
         icon: $icon
         iconFileName: $iconFileName
         field: $field
-        updateEvent: $updateEvent
+        event: $event
         stepId: $stepId
         layoutId: $layoutId
       }

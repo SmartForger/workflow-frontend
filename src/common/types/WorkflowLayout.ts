@@ -4,11 +4,11 @@ export interface WorkflowLayout {
   id: string;
   title: string;
   type: string;
-  icon: string;
-  iconFileName: string;
-  backgroundColor: string;
-  textColor: string;
-  visible: boolean;
+  icon: string | null;
+  iconFileName: string | null;
+  backgroundColor: string | null;
+  textColor: string | null;
+  visible: boolean | null;
   stepId?: string;
   widgets: WorkflowWidget[];
 }

@@ -9,6 +9,6 @@ export default gql`
     icon
     iconFileName
     field
-    updateEvent
+    event
   }
 `;

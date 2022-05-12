@@ -4,11 +4,11 @@ export interface WorkflowWidget {
   id: string;
   type: WorkflowWidgetType;
   name: string;
-  description: string;
-  icon: string;
-  iconFileName: string;
-  field: string;
-  updateEvent: string;
+  description: string | null;
+  icon: string | null;
+  iconFileName: string | null;
+  field: string | null;
+  event: string | null;
   stepId?: string;
   layoutId?: string;
 }

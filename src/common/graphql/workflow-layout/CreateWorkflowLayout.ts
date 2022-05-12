@@ -3,18 +3,18 @@ import workflowLayoutFields from '../fragments/workflowLayoutFields';
 
 export default gql`
   mutation CreateWorkflowLayout(
-    $title: String!
+    $name: String!
     $type: String!
-    $icon: String!
-    $iconFileName: String!
-    $backgroundColor: String!
-    $textColor: String!
-    $visible: Boolean!
+    $icon: String
+    $iconFileName: String
+    $backgroundColor: String
+    $textColor: String
+    $visible: Boolean
     $stepId: String!
   ) {
     layout: createWorkflowLayout(
       layoutInput: {
-        title: $title
+        name: $name
         type: $type
         icon: $icon
         iconFileName: $iconFileName

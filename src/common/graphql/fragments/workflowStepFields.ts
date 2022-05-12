@@ -4,7 +4,7 @@ export default gql`
   fragment workflowStepFields on WorkflowStep {
     id
     name
-    description 
+    description
     icon
     iconFileName
   }

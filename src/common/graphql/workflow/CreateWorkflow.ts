@@ -6,10 +6,10 @@ export default gql`
     $category: String!
     $subCategory: String!
     $name: String!
-    $description: String!
-    $icon: String!
-    $iconFileName: String!
-    $mode: [String!]!
+    $description: String
+    $icon: String
+    $iconFileName: String
+    $mode: [String!]
   ) {
     workflow: createWorkflow(
       workflowInput: {

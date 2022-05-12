@@ -5,9 +5,9 @@ import { WorkflowWidget } from './WorkflowWidget';
 export interface WorkflowStep {
   id: string;
   name: string;
-  description: string;
-  icon: string;
-  iconFileName: string;
+  description: string | null;
+  icon: string | null;
+  iconFileName: string | null;
   workflowId?: string;
   widgets: WorkflowWidget[];
   events: WorkflowEvent[];

@@ -4,7 +4,7 @@ import workflowEventFields from '../fragments/workflowEventFields';
 export default gql`
   mutation CreateWorkflowEvent(
     $name: String!
-    $description: String!
+    $description: String
     $targetId: String
     $stepId: String!
   ) {

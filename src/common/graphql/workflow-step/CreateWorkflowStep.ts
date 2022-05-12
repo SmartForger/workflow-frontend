@@ -4,9 +4,9 @@ import workflowStepFields from '../fragments/workflowStepFields';
 export default gql`
   mutation CreateWorkflowStep(
     $name: String!
-    $description: String!
-    $icon: String!
-    $iconFileName: String!
+    $description: String
+    $icon: String
+    $iconFileName: String
     $workflowId: String!
   ) {
     step: createWorkflowStep(
