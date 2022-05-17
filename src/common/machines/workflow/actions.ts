@@ -12,7 +12,6 @@ const handleTransaction = (context: any, action: WorkflowEventAction) => {
 };
 
 const handleAction = (context: any, ev: any, actionMeta: any) => {
-  console.log(111, actionMeta);
   const events: WorkflowEvent[] = (Object.values(actionMeta.state.meta)[0] as WorkflowStepMeta)
     .events;
   const event = events.find((e) => e.name === ev.type);

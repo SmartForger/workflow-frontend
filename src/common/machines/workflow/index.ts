@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { sortBy } from 'lodash';
 import { AnyEventObject, createMachine } from 'xstate';
 import { Workflow } from '../../types/Workflow';
 import { WorkflowEvent } from '../../types/WorkflowEvent';
@@ -28,7 +29,7 @@ const createStepJson = (step: WorkflowStep) => {
     name: step.name,
     icon: step.icon,
     iconFileName: step.iconFileName,
-    widgets: step.widgets,
+    widgets: sortBy(step.widgets, 'order'),
     layouts: step.layouts,
     events: step.events,
   };
