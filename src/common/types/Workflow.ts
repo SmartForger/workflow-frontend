@@ -10,4 +10,5 @@ export interface Workflow {
   icon: string;
   iconFileName: string;
   steps: WorkflowStep[];
+  order?: number | null;
 }

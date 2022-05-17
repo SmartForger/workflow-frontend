@@ -7,9 +7,16 @@ export default gql`
     $description: String
     $targetId: String
     $stepId: String!
+    $order: Int
   ) {
     event: createWorkflowEvent(
-      eventInput: { name: $name, description: $description, targetId: $targetId, stepId: $stepId }
+      eventInput: {
+        name: $name
+        description: $description
+        targetId: $targetId
+        stepId: $stepId
+        order: $order
+      }
     ) {
       ...workflowEventFields
     }

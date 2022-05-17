@@ -3,7 +3,7 @@ import { WorkflowEvent } from '../../types/WorkflowEvent';
 import { isNewID, rejectParentRequired } from '../../utils/api-utils';
 import client from '../client';
 import { createWorkflowEventAction } from '../workflow-event-action/createWorkflowEventAction';
-import { createWorkflowEventCondition } from '../workflow-event-condition/createWorkflowEventAction';
+import { createWorkflowEventCondition } from '../workflow-event-condition/createWorkflowEventCondition';
 
 export const createWorkflowEventObject = (event: WorkflowEvent): Promise<WorkflowEvent> =>
   isNewID(event.stepId)

@@ -1,15 +1,13 @@
 <template>
   <q-card-section class="q-px-none">
-    <template
-      v-if="state.matches('list') || state.matches('listRequest') || state.matches('deleteRequest')"
-    >
+    <template v-if="isListView">
       <q-toolbar class="q-pb-none">
         <q-toolbar-title> Workflow Steps </q-toolbar-title>
         <q-space></q-space>
         <q-btn flat round icon="add" @click="addItem()" />
       </q-toolbar>
       <draggable
-        v-model="steps"
+        v-model="draggableList"
         class="pvn-draggable-list"
         handle=".handle"
         item-key="id"
@@ -44,7 +42,7 @@
     <workflow-step-form
       :editing="state.matches('editing')"
       :details="currentItem"
-      :steps="steps"
+      :steps="draggableList"
       @save="save"
       @cancel="cancel"
       @update="update"
@@ -77,23 +75,37 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { state, currentItem, addItem, editItem, deleteItem, save, cancel, update, setList } =
-      useListMachine<WorkflowStep>({
-        id: 'worflowSteps',
-        getListRequest: async () => props.workflow.steps || [],
-        createItemRequest: (data) =>
-          api.createWorkflowStep({ ...data, workflowId: props.workflow.id }),
-        updateItemRequest: (data) =>
-          api.updateWorkflowStep({ ...data, workflowId: props.workflow.id }),
-        deleteItemRequest: api.deleteWorkflowStep,
-        onUpdate: inject('emitWorkflowUpdate'),
-      });
-    const steps = useContextListSync<WorkflowStep>(state, setList, emit);
+    const {
+      state,
+      currentItem,
+      isListView,
+      addItem,
+      editItem,
+      deleteItem,
+      orderItems,
+      save,
+      cancel,
+      update,
+    } = useListMachine<WorkflowStep>({
+      id: 'worflowSteps',
+      getListRequest: async () => props.workflow.steps || [],
+      createItemRequest: (data) =>
+        api.createWorkflowStep({ ...data, workflowId: props.workflow.id }),
+      updateItemRequest: (data) =>
+        api.updateWorkflowStep({ ...data, workflowId: props.workflow.id }),
+      deleteItemRequest: api.deleteWorkflowStep,
+      orderItemsRequest: (orders) => api.updateWorkflowStepsOrder(orders, props.workflow.id),
+      onUpdate: inject('emitWorkflowUpdate'),
+    });
+    const { draggableList } = useContextListSync<WorkflowStep>(state, emit, {
+      onReorder: orderItems,
+    });
 
     return {
       state,
-      steps,
+      draggableList,
       currentItem,
+      isListView,
       addItem,
       editItem,
       deleteItem,

@@ -12,4 +12,5 @@ export interface WorkflowStep {
   widgets: WorkflowWidget[];
   events: WorkflowEvent[];
   layouts: WorkflowLayout[];
+  order?: number | null;
 }

@@ -2,6 +2,7 @@ import { AnyEventObject, assign, createMachine } from 'xstate';
 import { v4 as uuid } from 'uuid';
 import { BaseItem } from '../types/BaseItem';
 import { ParentRequiredError } from '../utils/api-utils';
+import { ItemOrder } from '../types/ItemOrder';
 
 export interface ListViewContext<TItem extends BaseItem> {
   list: TItem[];
@@ -17,6 +18,7 @@ export interface CreateListViewMachineParams<TItem> {
   createItemRequest?: (data: TItem) => Promise<TItem>;
   updateItemRequest?: (data: TItem) => Promise<TItem>;
   deleteItemRequest?: (id: string) => Promise<string>;
+  orderItemsRequest?: (orders: ItemOrder[]) => Promise<{ updated: boolean }>;
 }
 
 export const createListViewMachine = <TItem extends BaseItem>({
@@ -25,6 +27,7 @@ export const createListViewMachine = <TItem extends BaseItem>({
   createItemRequest,
   updateItemRequest,
   deleteItemRequest,
+  orderItemsRequest,
 }: CreateListViewMachineParams<TItem>) => {
   const initialContext: ListViewContext<TItem> = {
     list: [],
@@ -70,6 +73,7 @@ export const createListViewMachine = <TItem extends BaseItem>({
               target: 'edit',
               actions: ['selectItem'],
             },
+            REORDER: 'reorderRequest',
             DELETE: 'deleteRequest',
             SET_LIST: {
               actions: ['setList'],
@@ -79,6 +83,42 @@ export const createListViewMachine = <TItem extends BaseItem>({
             },
             UPDATE: {
               actions: ['updateItemInList'],
+            },
+          },
+        },
+        reorderRequest: {
+          invoke: {
+            id: 'reorderItemService',
+            src: async (context, ev) => {
+              context.list = context.list.map((item) => {
+                const order = ev.orders.find((order: ItemOrder) => order.id === item.id);
+                if (order) {
+                  return { ...item, order: order.order };
+                }
+
+                return item;
+              });
+
+              if (!orderItemsRequest) {
+                return { updated: true };
+              }
+
+              try {
+                return await orderItemsRequest(ev.orders);
+              } catch (err: unknown) {
+                if (err instanceof ParentRequiredError) {
+                  return { updated: true };
+                }
+
+                throw err;
+              }
+            },
+            onDone: {
+              target: 'list',
+            },
+            onError: {
+              target: 'list',
+              actions: ['setError'],
             },
           },
         },

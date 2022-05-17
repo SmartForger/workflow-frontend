@@ -12,20 +12,20 @@
       </q-item-section>
     </template>
 
-    <div
-      class="q-pa-sm"
-      v-if="state.matches('list') || state.matches('listRequest') || state.matches('deleteRequest')"
-    >
+    <div class="q-pa-sm" v-if="isListView">
       <div class="q-px-sm" v-if="!state.context.list.length">No widgets</div>
       <q-list bordered v-else>
-        <draggable v-model="list" handle=".handle" item-key="id">
+        <draggable v-model="draggableList" handle=".handle" item-key="id">
           <template #item="{ element: widget }">
             <q-item clickable v-ripple>
               <q-item-section side>
                 <q-icon class="handle" name="drag_indicator"></q-icon>
               </q-item-section>
               <q-item-section side v-if="widget.icon">
-                <icon-renderer :icon="widget.icon" :iconFileName="widget.iconFileName"></icon-renderer>
+                <icon-renderer
+                  :icon="widget.icon"
+                  :iconFileName="widget.iconFileName"
+                ></icon-renderer>
               </q-item-section>
 
               <q-item-section>
@@ -87,26 +87,40 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { state, currentItem, addItem, editItem, deleteItem, save, cancel, update, setList } =
-      useListMachine<WorkflowWidget>({
-        id: 'worflowWidgets',
-        getListRequest: async () => props.widgets || [],
-        createItemRequest: (widget) =>
-          api.createWorkflowWidget({
-            ...widget,
-            stepId: props.stepId,
-            layoutId: props.layoutId,
-          }),
-        updateItemRequest: (widget) =>
-          api.updateWorkflowWidget({
-            ...widget,
-            stepId: props.stepId,
-            layoutId: props.layoutId,
-          }),
-        deleteItemRequest: api.deleteWorkflowWidget,
-        onUpdate: inject('emitWorkflowUpdate'),
-      });
-    const list = useContextListSync<WorkflowWidget>(state, setList, emit);
+    const {
+      state,
+      currentItem,
+      isListView,
+      addItem,
+      editItem,
+      deleteItem,
+      orderItems,
+      save,
+      cancel,
+      update,
+    } = useListMachine<WorkflowWidget>({
+      id: 'worflowWidgets',
+      getListRequest: async () => props.widgets || [],
+      createItemRequest: (widget) =>
+        api.createWorkflowWidget({
+          ...widget,
+          stepId: props.stepId,
+          layoutId: props.layoutId,
+        }),
+      updateItemRequest: (widget) =>
+        api.updateWorkflowWidget({
+          ...widget,
+          stepId: props.stepId,
+          layoutId: props.layoutId,
+        }),
+      deleteItemRequest: api.deleteWorkflowWidget,
+      orderItemsRequest: (orders) =>
+        api.updateWorkflowWidgetsOrder(orders, props.stepId || props.layoutId || ''),
+      onUpdate: inject('emitWorkflowUpdate'),
+    });
+    const { draggableList } = useContextListSync<WorkflowWidget>(state, emit, {
+      onReorder: orderItems,
+    });
 
     const open = ref(false);
 
@@ -121,15 +135,15 @@ export default defineComponent({
 
     return {
       state,
-      list,
+      isListView,
       currentItem,
+      draggableList,
       add,
       editItem,
       deleteItem,
       save,
       cancel,
       update,
-      setList,
       open,
     };
   },

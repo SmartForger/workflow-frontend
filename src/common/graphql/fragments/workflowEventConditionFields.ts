@@ -5,5 +5,6 @@ export default gql`
     id
     name
     filterJson
+    order
   }
 `;

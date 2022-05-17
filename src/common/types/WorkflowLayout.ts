@@ -11,4 +11,5 @@ export interface WorkflowLayout {
   visible: boolean | null;
   stepId?: string;
   widgets: WorkflowWidget[];
+  order?: number | null;
 }

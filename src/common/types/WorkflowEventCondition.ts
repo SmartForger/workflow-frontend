@@ -3,4 +3,5 @@ export interface WorkflowEventCondition {
   name: string;
   filterJson: string;
   eventId?: string;
+  order?: number | null;
 }

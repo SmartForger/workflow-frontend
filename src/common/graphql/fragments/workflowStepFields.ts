@@ -7,5 +7,6 @@ export default gql`
     description
     icon
     iconFileName
+    order
   }
 `;

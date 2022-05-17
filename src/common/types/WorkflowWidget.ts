@@ -11,4 +11,5 @@ export interface WorkflowWidget {
   event: string | null;
   stepId?: string;
   layoutId?: string;
+  order?: number | null;
 }

@@ -8,6 +8,7 @@ export default gql`
     $description: String
     $targetId: String
     $stepId: String
+    $order: Int
   ) {
     event: updateWorkflowEvent(
       eventInput: {
@@ -16,6 +17,7 @@ export default gql`
         description: $description
         targetId: $targetId
         stepId: $stepId
+        order: $order
       }
     ) {
       ...workflowEventFields

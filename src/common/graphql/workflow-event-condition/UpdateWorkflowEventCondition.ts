@@ -7,9 +7,10 @@ export default gql`
     $name: String
     $filterJson: String
     $eventId: String
+    $order: Int
   ) {
     condition: updateWorkflowEventCondition(
-      input: { id: $id, name: $name, filterJson: $filterJson, eventId: $eventId }
+      input: { id: $id, name: $name, filterJson: $filterJson, eventId: $eventId, order: $order }
     ) {
       ...workflowEventConditionFields
     }

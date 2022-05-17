@@ -12,13 +12,10 @@
       </q-item-section>
     </template>
 
-    <div
-      class="q-pa-sm"
-      v-if="state.matches('list') || state.matches('listRequest') || state.matches('deleteRequest')"
-    >
+    <div class="q-pa-sm" v-if="isListView">
       <div class="q-px-sm" v-if="!state.context.list.length">No events</div>
       <q-list bordered v-else>
-        <draggable v-model="list" handle=".handle" item-key="id">
+        <draggable v-model="draggableList" handle=".handle" item-key="id">
           <template #item="{ element: ev }">
             <q-item clickable v-ripple>
               <q-item-section side>
@@ -94,16 +91,19 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { state, currentItem, addItem, editItem, save, cancel, update, setList } =
+    const { state, currentItem, isListView, addItem, editItem, orderItems, save, cancel, update } =
       useListMachine<WorkflowEvent>({
         id: 'worflowEvents',
         getListRequest: async () => props.events || [],
         createItemRequest: (event) => api.createWorkflowEvent({ ...event, stepId: props.stepId }),
         updateItemRequest: (event) => api.updateWorkflowEvent({ ...event, stepId: props.stepId }),
+        orderItemsRequest: (orders) => api.updateWorkflowEventsOrder(orders, props.stepId),
         deleteItemRequest: api.deleteWorkflowEvent,
         onUpdate: inject('emitWorkflowUpdate'),
       });
-    const list = useContextListSync<WorkflowEvent>(state, setList, emit);
+    const { draggableList } = useContextListSync<WorkflowEvent>(state, emit, {
+      onReorder: orderItems,
+    });
 
     const open = ref(false);
 
@@ -119,13 +119,13 @@ export default defineComponent({
     return {
       state,
       currentItem,
-      list,
+      isListView,
+      draggableList,
       add,
       editItem,
       save,
       cancel,
       update,
-      setList,
       open,
     };
   },

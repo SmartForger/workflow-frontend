@@ -1,8 +1,9 @@
 import { useMachine } from '@xstate/vue';
-import { intersection, defaultsDeep, keys, partialRight } from 'lodash';
+import { intersection, defaultsDeep, keys } from 'lodash';
 import { computed } from 'vue';
 import { createListViewMachine, CreateListViewMachineParams } from '../machines/list-view.machine';
 import { BaseItem } from '../types/BaseItem';
+import { ItemOrder } from '../types/ItemOrder';
 
 interface UseListMachineParams<TItem> extends CreateListViewMachineParams<TItem> {
   onUpdate?: () => void;
@@ -12,6 +13,7 @@ interface UseListMachineParams<TItem> extends CreateListViewMachineParams<TItem>
     save?: boolean;
     cancel?: boolean;
     delete?: boolean;
+    reorder?: boolean;
   };
 }
 
@@ -19,8 +21,8 @@ export const useListMachine = <TItem extends BaseItem>(params: UseListMachinePar
   params = defaultsDeep(params, {
     updateWhen: {
       save: true,
-      cancel: true,
       delete: true,
+      reorder: true,
       fieldsToUpdate: [],
     },
   });
@@ -74,6 +76,13 @@ export const useListMachine = <TItem extends BaseItem>(params: UseListMachinePar
     }
   };
 
+  const orderItems = (orders: ItemOrder[]) => {
+    send({ type: 'REORDER', orders });
+    if (params.onUpdate && params?.updateWhen?.reorder) {
+      params.onUpdate();
+    }
+  };
+
   const setList = (data: TItem[]) => {
     if (!data) {
       return;
@@ -91,13 +100,23 @@ export const useListMachine = <TItem extends BaseItem>(params: UseListMachinePar
     return list.find((item) => item.id === selectedId);
   });
 
+  const isListView = computed(
+    () =>
+      state.value.matches('list') ||
+      state.value.matches('listRequest') ||
+      state.value.matches('deleteRequest') ||
+      state.value.matches('reorderRequest')
+  );
+
   return {
     state,
     currentItem,
+    isListView,
     send,
     addItem,
     editItem,
     deleteItem,
+    orderItems,
     save,
     cancel,
     update,

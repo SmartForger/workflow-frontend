@@ -10,4 +10,5 @@ export interface WorkflowEvent {
   actions: WorkflowEventAction[];
   conditions: WorkflowEventCondition[];
   stepId?: string;
+  order?: number | null;
 }

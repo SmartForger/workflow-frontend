@@ -10,5 +10,6 @@ export default gql`
     backgroundColor
     textColor
     visible
+    order
   }
 `;

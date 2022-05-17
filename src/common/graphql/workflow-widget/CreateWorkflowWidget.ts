@@ -12,6 +12,7 @@ export default gql`
     $event: String
     $stepId: String
     $layoutId: String
+    $order: Int
   ) {
     widget: createWorkflowWidget(
       widgetInput: {
@@ -24,6 +25,7 @@ export default gql`
         event: $event
         stepId: $stepId
         layoutId: $layoutId
+        order: $order
       }
     ) {
       ...workflowWidgetFields

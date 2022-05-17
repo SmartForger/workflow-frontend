@@ -9,6 +9,7 @@ export default gql`
     $icon: String
     $iconFileName: String
     $workflowId: String
+    $order: Int
   ) {
     step: updateWorkflowStep(
       stepInput: {
@@ -18,6 +19,7 @@ export default gql`
         icon: $icon
         iconFileName: $iconFileName
         workflowId: $workflowId
+        order: $order
       }
     ) {
       ...workflowStepFields

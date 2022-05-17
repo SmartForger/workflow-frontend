@@ -19,13 +19,10 @@
       </q-item-section>
     </template>
 
-    <div
-      class="q-pa-sm"
-      v-if="state.matches('list') || state.matches('listRequest') || state.matches('deleteRequest')"
-    >
+    <div class="q-pa-sm" v-if="isListView">
       <div class="q-px-sm" v-if="!state.context.list.length">No layouts</div>
       <q-list bordered v-else>
-        <draggable v-model="list" handle=".handle" item-key="id">
+        <draggable v-model="draggableList" handle=".handle" item-key="id">
           <template #item="{ element: layout }">
             <q-item clickable v-ripple>
               <q-item-section side>
@@ -107,19 +104,30 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { state, currentItem, addItem, editItem, deleteItem, save, cancel, update, setList } =
-      useListMachine<WorkflowLayout>({
-        id: 'worflowLayouts',
-        getListRequest: async () => props.layouts || [],
-        createItemRequest: (layout) =>
-          api.createWorkflowLayout({ ...layout, stepId: props.stepId }),
-        updateItemRequest: (layout) =>
-          api.updateWorkflowLayout({ ...layout, stepId: props.stepId }),
-        deleteItemRequest: api.deleteWorkflowLayout,
-        onUpdate: inject('emitWorkflowUpdate'),
-      });
+    const {
+      state,
+      currentItem,
+      isListView,
+      addItem,
+      editItem,
+      deleteItem,
+      orderItems,
+      save,
+      cancel,
+      update,
+    } = useListMachine<WorkflowLayout>({
+      id: 'worflowLayouts',
+      getListRequest: async () => props.layouts || [],
+      createItemRequest: (layout) => api.createWorkflowLayout({ ...layout, stepId: props.stepId }),
+      updateItemRequest: (layout) => api.updateWorkflowLayout({ ...layout, stepId: props.stepId }),
+      deleteItemRequest: api.deleteWorkflowLayout,
+      orderItemsRequest: (orders) => api.updateWorkflowLayoutsOrder(orders, props.stepId),
+      onUpdate: inject('emitWorkflowUpdate'),
+    });
 
-    const list = useContextListSync<WorkflowLayout>(state, setList, emit);
+    const { draggableList } = useContextListSync<WorkflowLayout>(state, emit, {
+      onReorder: orderItems,
+    });
     const open = ref(false);
 
     const add = () => {
@@ -133,15 +141,15 @@ export default defineComponent({
 
     return {
       state,
-      list,
+      isListView,
       currentItem,
+      draggableList,
       add,
       editItem,
       deleteItem,
       save,
       cancel,
       update,
-      setList,
       open,
     };
   },

@@ -12,6 +12,7 @@ export default gql`
     $textColor: String
     $visible: Boolean
     $stepId: String
+    $order: Int
   ) {
     layout: updateWorkflowLayout(
       layoutInput: {
@@ -24,6 +25,7 @@ export default gql`
         textColor: $textColor
         visible: $visible
         stepId: $stepId
+        order: $order
       }
     ) {
       ...workflowLayoutFields

@@ -1,7 +1,5 @@
 <template>
-  <div
-    v-if="state.matches('list') || state.matches('listRequest') || state.matches('deleteRequest')"
-  >
+  <div v-if="isListView">
     <q-toolbar class="bg-secondary text-white">
       <q-toolbar-title>
         <q-icon size="35px" name="img:src/assets/images/workflow.svg"></q-icon>
@@ -97,18 +95,28 @@ export default defineComponent({
       emit('update:current', currentItem);
     };
 
-    const { state, currentItem, addItem, editItem, deleteItem, save, cancel, update, setSearch } =
-      useListMachine<Workflow>({
-        id: 'workflows',
-        createItemRequest: api.createWorkflow,
-        getListRequest: api.getWorkflows,
-        updateItemRequest: api.updateWorkflow,
-        deleteItemRequest: api.deleteWorkflow,
-        onUpdate: emitWorkflowUpdate,
-        updateWhen: {
-          detailsView: true,
-        },
-      });
+    const {
+      state,
+      currentItem,
+      isListView,
+      addItem,
+      editItem,
+      deleteItem,
+      save,
+      cancel,
+      update,
+      setSearch,
+    } = useListMachine<Workflow>({
+      id: 'workflows',
+      createItemRequest: api.createWorkflow,
+      getListRequest: api.getWorkflows,
+      updateItemRequest: api.updateWorkflow,
+      deleteItemRequest: api.deleteWorkflow,
+      onUpdate: emitWorkflowUpdate,
+      updateWhen: {
+        detailsView: true,
+      },
+    });
 
     const { state: actionsState } = useListMachine<WorkflowAction>({
       id: 'workflowActions',
@@ -141,6 +149,7 @@ export default defineComponent({
     return {
       state,
       currentItem,
+      isListView,
       addItem,
       editItem,
       deleteItem,

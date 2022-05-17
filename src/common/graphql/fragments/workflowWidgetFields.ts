@@ -10,5 +10,6 @@ export default gql`
     iconFileName
     field
     event
+    order
   }
 `;

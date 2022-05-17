@@ -12,13 +12,10 @@
       </q-item-section>
     </template>
 
-    <div
-      class="q-pa-sm"
-      v-if="state.matches('list') || state.matches('listRequest') || state.matches('deleteRequest')"
-    >
+    <div class="q-pa-sm" v-if="isListView">
       <div class="q-px-sm" v-if="!state.context.list.length">No actions</div>
       <q-list bordered v-else>
-        <draggable v-model="list" handle=".handle-condition" item-key="id">
+        <draggable v-model="draggableList" handle=".handle-condition" item-key="id">
           <template #item="{ element: action }">
             <q-item clickable v-ripple>
               <q-item-section side>
@@ -89,18 +86,31 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { state, currentItem, addItem, editItem, save, cancel, update, setList } =
-      useListMachine<WorkflowEventAction>({
-        id: 'worflowEventActions',
-        getListRequest: async () => props.actions || [],
-        createItemRequest: (action) =>
-          api.createWorkflowEventAction({ ...action, eventId: props.eventId }),
-        updateItemRequest: (action) =>
-          api.updateWorkflowEventAction({ ...action, eventId: props.eventId }),
-        deleteItemRequest: api.deleteWorkflowEventAction,
-        onUpdate: inject('emitWorkflowUpdate'),
-      });
-    const list = useContextListSync<WorkflowEventAction>(state, setList, emit);
+    const {
+      state,
+      currentItem,
+      isListView,
+      addItem,
+      editItem,
+      deleteItem,
+      orderItems,
+      save,
+      cancel,
+      update,
+    } = useListMachine<WorkflowEventAction>({
+      id: 'worflowEventActions',
+      getListRequest: async () => props.actions || [],
+      createItemRequest: (action) =>
+        api.createWorkflowEventAction({ ...action, eventId: props.eventId }),
+      updateItemRequest: (action) =>
+        api.updateWorkflowEventAction({ ...action, eventId: props.eventId }),
+      deleteItemRequest: api.deleteWorkflowEventAction,
+      orderItemsRequest: (orders) => api.updateWorkflowEventActionsOrder(orders, props.eventId),
+      onUpdate: inject('emitWorkflowUpdate'),
+    });
+    const { draggableList } = useContextListSync<WorkflowEventAction>(state, emit, {
+      onReorder: orderItems,
+    });
 
     const open = ref(false);
 
@@ -115,14 +125,15 @@ export default defineComponent({
 
     return {
       state,
-      list,
+      isListView,
       currentItem,
+      draggableList,
       add,
       editItem,
       save,
       cancel,
       update,
-      setList,
+      deleteItem,
       open,
     };
   },
