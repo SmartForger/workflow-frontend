@@ -39,6 +39,13 @@
 
               <q-item-section side>
                 <div class="row">
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="content_copy"
+                    @click="duplicateItem(widget)"
+                  ></q-btn>
                   <q-btn flat round size="sm" icon="edit" @click="editItem(widget)"></q-btn>
                   <q-btn flat round size="sm" icon="delete" @click="deleteItem(widget)"></q-btn>
                 </div>
@@ -67,6 +74,7 @@ import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
 import api from 'src/common/api';
 import WorkflowWidgetForm from './WorkflowWidgetForm.vue';
+import { cloneEntity } from 'src/common/utils/clone';
 
 export default defineComponent({
   components: {
@@ -93,6 +101,7 @@ export default defineComponent({
       isListView,
       addItem,
       editItem,
+      duplicateItem,
       deleteItem,
       orderItems,
       save,
@@ -116,7 +125,11 @@ export default defineComponent({
       deleteItemRequest: api.deleteWorkflowWidget,
       orderItemsRequest: (orders) =>
         api.updateWorkflowWidgetsOrder(orders, props.stepId || props.layoutId || ''),
+      cloneItem: cloneEntity,
       onUpdate: inject('emitWorkflowUpdate'),
+      updateWhen: {
+        reorder: true,
+      },
     });
     const { draggableList } = useContextListSync<WorkflowWidget>(state, emit, {
       onReorder: orderItems,
@@ -140,6 +153,7 @@ export default defineComponent({
       draggableList,
       add,
       editItem,
+      duplicateItem,
       deleteItem,
       save,
       cancel,

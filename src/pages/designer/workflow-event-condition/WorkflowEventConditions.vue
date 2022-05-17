@@ -16,20 +16,27 @@
       <div class="q-px-sm" v-if="!state.context.list.length">No conditions</div>
       <q-list bordered v-else>
         <draggable v-model="draggableList" handle=".handle-condition" item-key="id">
-          <template #item="{ element: ev }">
+          <template #item="{ element: condition }">
             <q-item clickable v-ripple>
               <q-item-section side>
                 <q-icon class="handle-condition" name="drag_indicator"></q-icon>
               </q-item-section>
 
               <q-item-section>
-                <q-item-label>{{ ev.name }}</q-item-label>
+                <q-item-label>{{ condition.name }}</q-item-label>
               </q-item-section>
 
               <q-item-section side>
                 <div class="row">
-                  <q-btn flat round size="sm" icon="edit" @click="editItem(ev)"></q-btn>
-                  <q-btn flat round size="sm" icon="delete" @click="deleteItem(ev)"></q-btn>
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="content_copy"
+                    @click="duplicateItem(condition)"
+                  ></q-btn>
+                  <q-btn flat round size="sm" icon="edit" @click="editItem(condition)"></q-btn>
+                  <q-btn flat round size="sm" icon="delete" @click="deleteItem(condition)"></q-btn>
                 </div>
               </q-item-section>
             </q-item>
@@ -85,6 +92,7 @@ export default defineComponent({
       isListView,
       addItem,
       editItem,
+      duplicateItem,
       orderItems,
       deleteItem,
       save,
@@ -123,6 +131,7 @@ export default defineComponent({
       draggableList,
       add,
       editItem,
+      duplicateItem,
       deleteItem,
       save,
       cancel,

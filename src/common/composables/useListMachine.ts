@@ -22,7 +22,6 @@ export const useListMachine = <TItem extends BaseItem>(params: UseListMachinePar
     updateWhen: {
       save: true,
       delete: true,
-      reorder: true,
       fieldsToUpdate: [],
     },
   });
@@ -32,6 +31,13 @@ export const useListMachine = <TItem extends BaseItem>(params: UseListMachinePar
 
   const addItem = () => {
     send({ type: 'ADD' });
+    if (params.onUpdate && params.updateWhen?.detailsView) {
+      params.onUpdate();
+    }
+  };
+
+  const duplicateItem = (item: TItem) => {
+    send({ type: 'DUPLICATE', item });
     if (params.onUpdate && params.updateWhen?.detailsView) {
       params.onUpdate();
     }
@@ -115,6 +121,7 @@ export const useListMachine = <TItem extends BaseItem>(params: UseListMachinePar
     send,
     addItem,
     editItem,
+    duplicateItem,
     deleteItem,
     orderItems,
     save,

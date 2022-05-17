@@ -1,4 +1,3 @@
-import { omit } from 'lodash';
 import UpdateWorkflowEventGQL from 'src/common/graphql/workflow-event/UpdateWorkflowEvent';
 import { WorkflowEvent } from '../../types/WorkflowEvent';
 import { isNewID, rejectParentRequired } from '../../utils/api-utils';
@@ -18,4 +17,8 @@ export const updateWorkflowEvent = (event: WorkflowEvent): Promise<WorkflowEvent
             stepId: event.stepId,
           },
         })
-        .then((response) => response.data.event);
+        .then((response) => ({
+          ...response.data.event,
+          actions: [],
+          conditions: [],
+        }));

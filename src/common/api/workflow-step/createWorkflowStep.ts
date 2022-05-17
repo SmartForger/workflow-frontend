@@ -7,7 +7,7 @@ import { createWorkflowEvent } from '../workflow-event/createWorkflowEvent';
 import { createWorkflowLayout } from '../workflow-layout/createWorkflowLayout';
 import { createWorkflowWidget } from '../workflow-widget/createWorkflowWidget';
 
-const createWorkflowStepObject = (step: WorkflowStep): Promise<WorkflowStep> =>
+export const createWorkflowStepObject = (step: WorkflowStep): Promise<WorkflowStep> =>
   isNewID(step.workflowId)
     ? rejectParentRequired('workflowId is required')
     : client
@@ -22,27 +22,31 @@ const createWorkflowStepObject = (step: WorkflowStep): Promise<WorkflowStep> =>
           layouts: [],
         }));
 
-export const createWorkflowStep = async (step: WorkflowStep): Promise<WorkflowStep> => {
-  const newStep = await createWorkflowStepObject(step);
-
+export const createWorkflowStepChildren = async (newStep: WorkflowStep): Promise<WorkflowStep> => {
   newStep.widgets = await Promise.all(
-    (step.widgets || []).map((widget) => {
+    (newStep.widgets || []).map((widget) => {
       widget.stepId = newStep.id;
       return createWorkflowWidget(widget);
     })
   );
   newStep.events = await Promise.all(
-    (step.events || []).map((event) => {
+    (newStep.events || []).map((event) => {
       event.stepId = newStep.id;
       return createWorkflowEvent(event);
     })
   );
   newStep.layouts = await Promise.all(
-    (step.layouts || []).map((layout) => {
+    (newStep.layouts || []).map((layout) => {
       layout.stepId = newStep.id;
       return createWorkflowLayout(layout);
     })
   );
 
   return newStep;
+};
+
+export const createWorkflowStep = async (step: WorkflowStep) => {
+  const newStep = await createWorkflowStepObject(step);
+  step.id = newStep.id;
+  return await createWorkflowStepChildren(step);
 };

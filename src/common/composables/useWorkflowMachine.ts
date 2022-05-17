@@ -4,8 +4,8 @@ import { computed } from 'vue';
 import { createWorkflowMachine } from '../machines/workflow';
 import { Workflow } from '../types/Workflow';
 
-export const useWorkflowMachine = (workflow: Workflow) => {
-  const machine = createWorkflowMachine(workflow);
+export const useWorkflowMachine = (workflow: Workflow, currentStep?: string) => {
+  const machine = createWorkflowMachine(workflow, currentStep);
   const { state, send } = useMachine(machine, { devTools: true });
 
   const sendAction = (step: string) => {

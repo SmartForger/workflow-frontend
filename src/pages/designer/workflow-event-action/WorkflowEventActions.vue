@@ -35,6 +35,13 @@
 
               <q-item-section side>
                 <div class="row">
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="content_copy"
+                    @click="duplicateItem(action)"
+                  ></q-btn>
                   <q-btn flat round size="sm" icon="edit" @click="editItem(action)"></q-btn>
                   <q-btn flat round size="sm" icon="delete" @click="deleteItem(action)"></q-btn>
                 </div>
@@ -64,6 +71,7 @@ import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowEventAction } from 'src/common/types/WorkflowEventAction';
 import api from 'src/common/api';
 import WorkflowEventActionForm from './WorkflowEventActionForm.vue';
+import { cloneEntity } from 'src/common/utils/clone';
 
 export default defineComponent({
   components: {
@@ -92,6 +100,7 @@ export default defineComponent({
       isListView,
       addItem,
       editItem,
+      duplicateItem,
       deleteItem,
       orderItems,
       save,
@@ -105,6 +114,7 @@ export default defineComponent({
       updateItemRequest: (action) =>
         api.updateWorkflowEventAction({ ...action, eventId: props.eventId }),
       deleteItemRequest: api.deleteWorkflowEventAction,
+      cloneItem: cloneEntity,
       orderItemsRequest: (orders) => api.updateWorkflowEventActionsOrder(orders, props.eventId),
       onUpdate: inject('emitWorkflowUpdate'),
     });
@@ -130,6 +140,7 @@ export default defineComponent({
       draggableList,
       add,
       editItem,
+      duplicateItem,
       save,
       cancel,
       update,

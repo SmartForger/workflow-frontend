@@ -19,6 +19,7 @@ export interface CreateListViewMachineParams<TItem> {
   updateItemRequest?: (data: TItem) => Promise<TItem>;
   deleteItemRequest?: (id: string) => Promise<string>;
   orderItemsRequest?: (orders: ItemOrder[]) => Promise<{ updated: boolean }>;
+  cloneItem?: (item: TItem, idMap: Map<string, string>) => TItem;
 }
 
 export const createListViewMachine = <TItem extends BaseItem>({
@@ -28,6 +29,7 @@ export const createListViewMachine = <TItem extends BaseItem>({
   updateItemRequest,
   deleteItemRequest,
   orderItemsRequest,
+  cloneItem,
 }: CreateListViewMachineParams<TItem>) => {
   const initialContext: ListViewContext<TItem> = {
     list: [],
@@ -72,6 +74,10 @@ export const createListViewMachine = <TItem extends BaseItem>({
             EDIT: {
               target: 'edit',
               actions: ['selectItem'],
+            },
+            DUPLICATE: {
+              target: 'add',
+              actions: ['duplicateItem'],
             },
             REORDER: 'reorderRequest',
             DELETE: 'deleteRequest',
@@ -243,6 +249,18 @@ export const createListViewMachine = <TItem extends BaseItem>({
           original: (_context, ev) => ({ ...ev.item }),
           selectedId: (_context, ev) => ev.item.id,
         }),
+        duplicateItem: (context, ev) => {
+          if (!cloneItem) {
+            console.error('Cloning is not support for this item');
+            return;
+          }
+
+          const idMap = new Map<string, string>();
+          const cloned = cloneItem(ev.item, idMap) as TItem;
+          context.list.push(cloned);
+          context.original = null;
+          context.selectedId = cloned.id;
+        },
         setNewCurrentItem: (context) => {
           const newId = `new_${uuid()}`;
           context.list.push({

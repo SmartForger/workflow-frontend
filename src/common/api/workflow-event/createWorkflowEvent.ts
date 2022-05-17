@@ -18,7 +18,11 @@ export const createWorkflowEventObject = (event: WorkflowEvent): Promise<Workflo
             stepId: event.stepId,
           },
         })
-        .then((response) => ({ ...response.data.event, actions: [], conditions: [] }));
+        .then((response) => ({
+          ...response.data.event,
+          actions: [],
+          conditions: [],
+        }));
 
 export const createWorkflowEvent = async (event: WorkflowEvent): Promise<WorkflowEvent> => {
   const newEvent = await createWorkflowEventObject(event);

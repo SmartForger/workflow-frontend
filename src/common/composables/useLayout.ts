@@ -1,3 +1,4 @@
+import { sortBy } from 'lodash';
 import { computed } from 'vue';
 import { WorkflowMachine } from '../types/WorkflowMachine';
 
@@ -20,7 +21,8 @@ export const useLayout = (layoutType: string, machine: WorkflowMachine) => {
 
   const widgets = computed(() => {
     const layout = getLayout();
-    return layout?.widgets || [];
+    const layoutWidgets = layout?.widgets || [];
+    return sortBy(layoutWidgets, 'order');
   });
 
   return { visible, style, widgets };

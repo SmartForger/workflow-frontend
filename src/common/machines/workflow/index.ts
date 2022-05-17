@@ -8,14 +8,14 @@ import { WorkflowStep } from '../../types/WorkflowStep';
 import actions from './actions';
 import guards from './guards';
 
-const createStepJson = (step: WorkflowStep) => {
+const createStepJson = (step: WorkflowStep, stepNames: Record<string, string>) => {
   const result: Record<string, any> = {};
 
   if (step.events.length > 0) {
     result.on = step.events.reduce(
       (events, ev) => ({
         ...events,
-        [ev.name]: createEventJson(ev),
+        [ev.name]: createEventJson(ev, stepNames),
       }),
       {
         update: {
@@ -37,10 +37,12 @@ const createStepJson = (step: WorkflowStep) => {
   return result;
 };
 
-const createEventJson = (ev: WorkflowEvent) => {
-  const result: Record<string, any> = {
-    target: ev.target?.name,
-  };
+const createEventJson = (ev: WorkflowEvent, stepNames: Record<string, string>) => {
+  const result: Record<string, any> = {};
+
+  if (ev.target) {
+    result.target = stepNames[ev.target.id];
+  }
 
   if (ev.actions.length > 0) {
     result.actions = ['handleAction'];
@@ -65,18 +67,21 @@ const getFilter = (cond: WorkflowEventCondition) => {
   return filter;
 };
 
-export const createWorkflowMachine = (workflow: Workflow) => {
-  const initialStep = workflow.steps[0];
+export const createWorkflowMachine = (workflow: Workflow, currentStep?: string) => {
+  const steps = sortBy(workflow.steps, 'order');
+  const initialStep = currentStep || steps[0]?.name || '';
+
+  const stepNames = steps.reduce((names, step) => ({ ...names, [step.id]: step.name }), {});
 
   return createMachine<any, AnyEventObject>(
     {
       id: workflow.id,
       context: {},
-      initial: initialStep?.name || '',
-      states: workflow.steps.reduce(
+      initial: initialStep,
+      states: steps.reduce(
         (states, step) => ({
           ...states,
-          [step.name]: createStepJson(step),
+          [step.name]: createStepJson(step, stepNames),
         }),
         {}
       ),

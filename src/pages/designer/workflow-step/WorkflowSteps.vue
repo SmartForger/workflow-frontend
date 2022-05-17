@@ -27,6 +27,13 @@
 
             <q-item-section side>
               <div class="row">
+                <q-btn
+                  flat
+                  round
+                  size="sm"
+                  icon="content_copy"
+                  @click="duplicateItem(step)"
+                ></q-btn>
                 <q-btn icon="edit" flat round size="sm" @click.prevent="editItem(step)"></q-btn>
                 <q-btn icon="delete" flat round size="sm" @click.prevent="deleteItem(step)"></q-btn>
               </div>
@@ -60,6 +67,7 @@ import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import { Workflow } from 'src/common/types/Workflow';
 import api from 'src/common/api';
 import WorkflowStepForm from './WorkflowStepForm.vue';
+import { cloneWorkflowStep } from 'src/common/utils/clone';
 
 export default defineComponent({
   name: 'WorkflowSteps',
@@ -81,6 +89,7 @@ export default defineComponent({
       isListView,
       addItem,
       editItem,
+      duplicateItem,
       deleteItem,
       orderItems,
       save,
@@ -95,7 +104,11 @@ export default defineComponent({
         api.updateWorkflowStep({ ...data, workflowId: props.workflow.id }),
       deleteItemRequest: api.deleteWorkflowStep,
       orderItemsRequest: (orders) => api.updateWorkflowStepsOrder(orders, props.workflow.id),
+      cloneItem: cloneWorkflowStep,
       onUpdate: inject('emitWorkflowUpdate'),
+      updateWhen: {
+        reorder: true,
+      },
     });
     const { draggableList } = useContextListSync<WorkflowStep>(state, emit, {
       onReorder: orderItems,
@@ -108,6 +121,7 @@ export default defineComponent({
       isListView,
       addItem,
       editItem,
+      duplicateItem,
       deleteItem,
       save,
       cancel,

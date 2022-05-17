@@ -49,7 +49,10 @@
 
     <q-page-container>
       <q-page class="column">
-        <workflow-renderer :workflow="workflow" v-if="workflowVisible"></workflow-renderer>
+        <workflow-renderer
+          :workflow="workflow"
+          v-if="workflowVisible && workflow"
+        ></workflow-renderer>
         <q-circular-progress class="loading" indeterminate size="50px" color="primary" v-else />
       </q-page>
     </q-page-container>

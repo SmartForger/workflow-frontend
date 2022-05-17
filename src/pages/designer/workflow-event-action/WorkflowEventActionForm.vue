@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, inject, computed } from 'vue';
+import { defineComponent, PropType, inject } from 'vue';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { WorkflowAction } from 'src/common/types/WorkflowAction';
 import { WorkflowEventAction } from 'src/common/types/WorkflowEventAction';

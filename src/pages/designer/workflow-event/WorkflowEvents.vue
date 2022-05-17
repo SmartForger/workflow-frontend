@@ -34,6 +34,13 @@
 
               <q-item-section side>
                 <div class="row">
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="content_copy"
+                    @click="duplicateItem(ev)"
+                  ></q-btn>
                   <q-btn flat round size="sm" icon="edit" @click="editItem(ev)"></q-btn>
                   <q-btn flat round size="sm" icon="delete" @click="deleteItem(ev)"></q-btn>
                 </div>
@@ -64,6 +71,7 @@ import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowEvent } from 'src/common/types/WorkflowEvent';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import api from 'src/common/api';
+import { cloneWorkflowEvent } from 'src/common/utils/clone';
 import WorkflowEventForm from './WorkflowEventForm.vue';
 
 export default defineComponent({
@@ -91,16 +99,27 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { state, currentItem, isListView, addItem, editItem, orderItems, save, cancel, update } =
-      useListMachine<WorkflowEvent>({
-        id: 'worflowEvents',
-        getListRequest: async () => props.events || [],
-        createItemRequest: (event) => api.createWorkflowEvent({ ...event, stepId: props.stepId }),
-        updateItemRequest: (event) => api.updateWorkflowEvent({ ...event, stepId: props.stepId }),
-        orderItemsRequest: (orders) => api.updateWorkflowEventsOrder(orders, props.stepId),
-        deleteItemRequest: api.deleteWorkflowEvent,
-        onUpdate: inject('emitWorkflowUpdate'),
-      });
+    const {
+      state,
+      currentItem,
+      isListView,
+      addItem,
+      editItem,
+      duplicateItem,
+      orderItems,
+      save,
+      cancel,
+      update,
+    } = useListMachine<WorkflowEvent>({
+      id: 'worflowEvents',
+      getListRequest: async () => props.events || [],
+      createItemRequest: (event) => api.createWorkflowEvent({ ...event, stepId: props.stepId }),
+      updateItemRequest: (event) => api.updateWorkflowEvent({ ...event, stepId: props.stepId }),
+      orderItemsRequest: (orders) => api.updateWorkflowEventsOrder(orders, props.stepId),
+      deleteItemRequest: api.deleteWorkflowEvent,
+      cloneItem: cloneWorkflowEvent,
+      onUpdate: inject('emitWorkflowUpdate'),
+    });
     const { draggableList } = useContextListSync<WorkflowEvent>(state, emit, {
       onReorder: orderItems,
     });
@@ -123,6 +142,7 @@ export default defineComponent({
       draggableList,
       add,
       editItem,
+      duplicateItem,
       save,
       cancel,
       update,

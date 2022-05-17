@@ -52,6 +52,13 @@
 
               <q-item-section side>
                 <div class="row">
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="content_copy"
+                    @click="duplicateItem(workflow)"
+                  ></q-btn>
                   <q-btn flat round dense icon="edit" @click.prevent="editItem(workflow)" />
                   <q-btn flat round dense icon="delete" @click.prevent="deleteItem(workflow)" />
                 </div>
@@ -79,9 +86,10 @@ import { groupBy, forIn } from 'lodash';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import api from 'src/common/api';
 import { Workflow } from 'src/common/types/Workflow';
+import { WorkflowAction } from 'src/common/types/WorkflowAction';
+import { cloneWorkflow } from 'src/common/utils/clone';
 import SearchInput from 'src/components/SearchInput.vue';
 import WorkflowForm from './WorkflowForm.vue';
-import { WorkflowAction } from 'src/common/types/WorkflowAction';
 
 export default defineComponent({
   name: 'WorkflowExplorer',
@@ -92,7 +100,7 @@ export default defineComponent({
   emits: ['update:current'],
   setup(props, { emit }) {
     const emitWorkflowUpdate = () => {
-      emit('update:current', currentItem);
+      emit('update:current', currentItem.value);
     };
 
     const {
@@ -101,6 +109,7 @@ export default defineComponent({
       isListView,
       addItem,
       editItem,
+      duplicateItem,
       deleteItem,
       save,
       cancel,
@@ -112,6 +121,7 @@ export default defineComponent({
       getListRequest: api.getWorkflows,
       updateItemRequest: api.updateWorkflow,
       deleteItemRequest: api.deleteWorkflow,
+      cloneItem: cloneWorkflow,
       onUpdate: emitWorkflowUpdate,
       updateWhen: {
         detailsView: true,
@@ -152,6 +162,7 @@ export default defineComponent({
       isListView,
       addItem,
       editItem,
+      duplicateItem,
       deleteItem,
       save,
       cancel,

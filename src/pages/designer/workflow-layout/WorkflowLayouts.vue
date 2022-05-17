@@ -48,6 +48,13 @@
                     :icon="layout.visible ? 'visibility' : 'visibility_off'"
                     @click.stop="update({ id: layout.id, visible: !layout.visible })"
                   ></q-btn>
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="content_copy"
+                    @click="duplicateItem(layout)"
+                  ></q-btn>
                   <q-btn flat round size="sm" icon="edit" @click.stop="editItem(layout)"></q-btn>
                   <q-btn
                     flat
@@ -82,6 +89,7 @@ import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowLayout } from 'src/common/types/WorkflowLayout';
 import api from 'src/common/api';
 import WorkflowLayoutForm from './WorkflowLayoutForm.vue';
+import { cloneWorkflowLayout } from 'src/common/utils/clone';
 
 export default defineComponent({
   components: {
@@ -110,6 +118,7 @@ export default defineComponent({
       isListView,
       addItem,
       editItem,
+      duplicateItem,
       deleteItem,
       orderItems,
       save,
@@ -122,6 +131,7 @@ export default defineComponent({
       updateItemRequest: (layout) => api.updateWorkflowLayout({ ...layout, stepId: props.stepId }),
       deleteItemRequest: api.deleteWorkflowLayout,
       orderItemsRequest: (orders) => api.updateWorkflowLayoutsOrder(orders, props.stepId),
+      cloneItem: cloneWorkflowLayout,
       onUpdate: inject('emitWorkflowUpdate'),
     });
 
@@ -146,6 +156,7 @@ export default defineComponent({
       draggableList,
       add,
       editItem,
+      duplicateItem,
       deleteItem,
       save,
       cancel,

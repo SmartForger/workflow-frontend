@@ -14,7 +14,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, PropType, provide, Ref } from 'vue';
+import { defineComponent, PropType, provide } from 'vue';
 
 import { Workflow } from 'src/common/types/Workflow';
 import { useWorkflowMachine } from 'src/common/composables/useWorkflowMachine';
@@ -24,12 +24,13 @@ export default defineComponent({
   components: { WorkflowStepRenderer },
   props: {
     workflow: {
-      type: Object as PropType<Ref<Workflow>>,
+      type: Object as PropType<Workflow>,
       required: true,
     },
+    currentStep: String,
   },
   setup(props) {
-    const machine = useWorkflowMachine(props.workflow.value);
+    const machine = useWorkflowMachine(props.workflow, props.currentStep);
     provide('machine', machine);
   },
 });
