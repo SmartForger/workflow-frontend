@@ -60,18 +60,18 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { getFieldModel, getExtraFieldModel } = useDetailsForm<WorkflowWidget>(props, emit);
+    const { getFieldModel, getChildFieldModel } = useDetailsForm<WorkflowWidget>(props, emit);
     const triggerEvent = getFieldModel('event', '');
-    const outline = getExtraFieldModel('outline', false);
-    const flat = getExtraFieldModel('flat', false);
-    const unelevated = getExtraFieldModel('unelevated', false);
-    const rounded = getExtraFieldModel('rounded', false);
-    const glossy = getExtraFieldModel('glossy', false);
-    const fab = getExtraFieldModel('fab', false);
-    const fabMini = getExtraFieldModel('fabMini', false);
-    const dense = getExtraFieldModel('dense', false);
-    const ripple = getExtraFieldModel('ripple', false);
-    const round = getExtraFieldModel('round', false);
+    const outline = getChildFieldModel('extra', 'outline', false);
+    const flat = getChildFieldModel('extra', 'flat', false);
+    const unelevated = getChildFieldModel('extra', 'unelevated', false);
+    const rounded = getChildFieldModel('extra', 'rounded', false);
+    const glossy = getChildFieldModel('extra', 'glossy', false);
+    const fab = getChildFieldModel('extra', 'fab', false);
+    const fabMini = getChildFieldModel('extra', 'fabMini', false);
+    const dense = getChildFieldModel('extra', 'dense', false);
+    const ripple = getChildFieldModel('extra', 'ripple', false);
+    const round = getChildFieldModel('extra', 'round', false);
 
     return {
       triggerEvent,

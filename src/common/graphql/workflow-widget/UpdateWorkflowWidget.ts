@@ -12,6 +12,7 @@ export default gql`
     $field: String
     $event: String
     $extra: String
+    $rules: String
     $stepId: String
     $layoutId: String
   ) {
@@ -26,6 +27,7 @@ export default gql`
         field: $field
         event: $event
         extra: $extra
+        rules: $rules
         stepId: $stepId
         layoutId: $layoutId
       }

@@ -1,5 +1,5 @@
 <template>
-  <q-expansion-item :group="expansionGroup" dense @after-hide="cancel()">
+  <q-expansion-item :group="expansionGroup" dense>
     <template v-slot:header>
       <q-item-section avatar>
         <q-avatar icon="img:src/assets/images/widgets.svg" />

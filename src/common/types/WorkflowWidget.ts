@@ -10,6 +10,10 @@ export interface WorkflowWidget {
   field: string | null;
   event: string | null;
   extra?: Record<string, any> | null;
+  rules?: {
+    required?: boolean;
+    filter?: string;
+  } | null;
   stepId?: string;
   layoutId?: string;
   order?: number | null;

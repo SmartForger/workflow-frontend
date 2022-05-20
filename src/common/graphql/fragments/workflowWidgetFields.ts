@@ -12,5 +12,6 @@ export default gql`
     event
     order
     extra
+    rules
   }
 `;

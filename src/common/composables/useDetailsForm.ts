@@ -2,7 +2,7 @@
 
 import { computed, ref } from 'vue';
 
-export const useDetailsForm = <T extends { extra?: Record<string, any> | null }>(
+export const useDetailsForm = <T>(
   props: {
     details: T;
   },
@@ -11,7 +11,7 @@ export const useDetailsForm = <T extends { extra?: Record<string, any> | null }>
 ) => {
   const formRef = ref();
 
-  const update = (field: keyof T, value: any) => {
+  const update = (field: string, value: any) => {
     emit('update', {
       [field]: value,
     });
@@ -35,14 +35,20 @@ export const useDetailsForm = <T extends { extra?: Record<string, any> | null }>
   const getFieldModel = (field: keyof T, initialValue: any) => {
     return computed({
       get: () => props.details[field] ?? initialValue,
-      set: (val) => update(field, val),
+      set: (val) => update(field as string, val),
     });
   };
 
-  const getExtraFieldModel = (field: string, initialValue: any) => {
+  const getChildFieldModel = (parentField: string, field: string, initialValue: any) => {
     return computed({
-      get: () => (props.details.extra && props.details.extra[field]) ?? initialValue,
-      set: (val) => update('extra', { ...props.details.extra, [field]: val }),
+      get: () => {
+        const details = props.details as any;
+        return (details[parentField] && details[parentField][field]) ?? initialValue;
+      },
+      set: (val) => {
+        const details = props.details as any;
+        update(parentField, { ...details[parentField], [field]: val });
+      },
     });
   };
 
@@ -87,7 +93,7 @@ export const useDetailsForm = <T extends { extra?: Record<string, any> | null }>
     cancel,
     update,
     getFieldModel,
-    getExtraFieldModel,
+    getChildFieldModel,
     getIconModel,
   };
 };

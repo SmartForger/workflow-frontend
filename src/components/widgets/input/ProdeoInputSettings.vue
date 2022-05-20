@@ -44,13 +44,13 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
-    const { getExtraFieldModel, getFieldModel } = useDetailsForm<WorkflowWidget>(props, emit);
+    const { getChildFieldModel, getFieldModel } = useDetailsForm<WorkflowWidget>(props, emit);
     const field = getFieldModel('field', '');
-    const dense = getExtraFieldModel('dense', false);
-    const filled = getExtraFieldModel('filled', false);
-    const outlined = getExtraFieldModel('outlined', false);
-    const rounded = getExtraFieldModel('rounded', false);
-    const square = getExtraFieldModel('square', false);
+    const dense = getChildFieldModel('extra', 'dense', false);
+    const filled = getChildFieldModel('extra', 'filled', false);
+    const outlined = getChildFieldModel('extra', 'outlined', false);
+    const rounded = getChildFieldModel('extra', 'rounded', false);
+    const square = getChildFieldModel('extra', 'square', false);
 
     return { field, dense, filled, outlined, rounded, square, required };
   },

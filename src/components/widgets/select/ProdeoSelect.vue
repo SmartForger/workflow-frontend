@@ -9,6 +9,7 @@
     :dense="details.extra.dense"
     :filled="details.extra.filled"
     :multiple="details.extra.multiple"
+    :rules="rules"
   >
     <template v-slot:prepend v-if="details.iconFileName || details.icon">
       <icon-renderer
@@ -37,6 +38,9 @@ export default defineComponent({
     details: {
       type: Object as PropType<WorkflowWidget>,
       required: true,
+    },
+    rules: {
+      type: Array,
     },
   },
   setup(props, { emit }) {

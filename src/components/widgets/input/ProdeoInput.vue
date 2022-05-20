@@ -7,6 +7,7 @@
     :filled="details.extra.filled"
     :rounded="details.extra.rounded"
     :square="details.extra.square"
+    :rules="rules"
     v-model="model"
   >
     <template v-slot:prepend v-if="details.iconFileName || details.icon">
@@ -32,6 +33,9 @@ export default defineComponent({
     details: {
       type: Object as PropType<WorkflowWidget>,
       required: true,
+    },
+    rules: {
+      type: Array,
     },
   },
   emits: ['update:modelValue'],

@@ -12,8 +12,9 @@ export const createWorkflowWidget = (widget: WorkflowWidget): Promise<WorkflowWi
         .mutate({
           mutation: CreateWorkflowWidgetSQL,
           variables: {
-            ...omit(widget, ['id', 'extra']),
+            ...omit(widget, ['id']),
             extra: isEmpty(widget.extra) ? null : JSON.stringify(widget.extra),
+            rules: isEmpty(widget.rules) ? null : JSON.stringify(widget.rules),
           },
         })
         .then((response) => response.data.widget)

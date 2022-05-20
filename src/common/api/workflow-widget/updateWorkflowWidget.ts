@@ -14,6 +14,7 @@ export const updateWorkflowWidget = (widget: WorkflowWidget): Promise<WorkflowWi
           variables: {
             ...widget,
             extra: isEmpty(widget.extra) ? null : JSON.stringify(widget.extra),
+            rules: isEmpty(widget.rules) ? null : JSON.stringify(widget.rules),
           },
         })
         .then((response) => response.data.widget)
