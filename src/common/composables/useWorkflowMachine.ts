@@ -3,14 +3,11 @@ import { useMachine } from '@xstate/vue';
 import { computed } from 'vue';
 import { createWorkflowMachine } from '../machines/workflow';
 import { Workflow } from '../types/Workflow';
+import { WorkflowMachine } from '../types/WorkflowMachine';
 
-export const useWorkflowMachine = (workflow: Workflow, currentStep?: string) => {
+export const useWorkflowMachine = (workflow: Workflow, currentStep?: string): WorkflowMachine => {
   const machine = createWorkflowMachine(workflow, currentStep);
   const { state, send } = useMachine(machine, { devTools: true });
-
-  const sendAction = (step: string) => {
-    send({ type: step });
-  };
 
   const updateData = (field: any, value: any) => {
     send({ type: 'update', field, value });
@@ -21,13 +18,11 @@ export const useWorkflowMachine = (workflow: Workflow, currentStep?: string) => 
   };
 
   return {
-    state,
     stepInfo: computed(() => {
       const id = `${machine.id}.${state.value.value}`;
       return state.value.meta[id];
     }),
     data: computed(() => state.value.context),
-    sendAction,
     updateData,
     sendEvent,
   };

@@ -12,20 +12,19 @@
       </q-toolbar>
     </div>
     <div class="body q-pa-md">
-      <workflow-widget-component
+      <prodeo-widget
         v-for="widget in stepInfo.widgets"
         :key="widget.id"
         :modelValue="data[widget.field]"
         @update:modelValue="updateData(widget.field, $event)"
         :details="widget"
       >
-      </workflow-widget-component>
+      </prodeo-widget>
     </div>
     <div class="footer" v-if="footerVisible">
       <q-toolbar class="shadow-3 justify-between" :style="footerStyle">
         <div class="col-auto" :key="widget.id" v-for="widget in footerWidgets">
-          <workflow-widget-component @trigger="sendEvent($event)" :details="widget">
-          </workflow-widget-component>
+          <prodeo-widget @trigger="sendEvent($event)" :details="widget"> </prodeo-widget>
         </div>
       </q-toolbar>
     </div>
@@ -55,26 +54,28 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { WorkflowMachine } from 'src/common/types/WorkflowMachine';
 import { useLayout } from 'src/common/composables/useLayout';
-import WorkflowWidgetComponent from './WorkflowWidget.vue';
 
 export default defineComponent({
   name: 'WorkflowStepRenderer',
-  components: { WorkflowWidgetComponent },
-  setup() {
-    const machine = inject('machine') as WorkflowMachine;
-
-    const { visible: headerVisible, style: headerStyle } = useLayout('header', machine);
+  props: {
+    machine: {
+      type: Object as PropType<WorkflowMachine>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const { visible: headerVisible, style: headerStyle } = useLayout('header', props.machine);
     const {
       visible: footerVisible,
       style: footerStyle,
       widgets: footerWidgets,
-    } = useLayout('footer', machine);
+    } = useLayout('footer', props.machine);
 
     return {
-      ...machine,
+      ...props.machine,
       headerVisible,
       headerStyle,
       footerVisible,

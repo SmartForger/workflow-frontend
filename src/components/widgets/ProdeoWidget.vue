@@ -30,11 +30,9 @@
 import { useModelWrapper } from 'src/common/composables/useModelWrapper';
 import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
 import { defineComponent, PropType } from 'vue';
-import IconRenderer from './IconRenderer.vue';
 
 export default defineComponent({
-  components: { IconRenderer },
-  name: 'WorkflowWidgetComponent',
+  name: 'ProdeoWidget',
   props: {
     modelValue: {
       required: false,

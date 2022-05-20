@@ -8,9 +8,8 @@ import PageHeader from '../components/PageHeader.vue';
 import SearchInput from '../components/SearchInput.vue';
 import SelectComponent from '../components/Select.vue';
 import SidebarLink from '../components/SidebarLink.vue';
-import WorkflowRenderer from '../components/WorkflowRenderer.vue';
-import WorkflowStepRenderer from '../components/WorkflowStepRenderer.vue';
-import WorkflowWidget from '../components/WorkflowWidget.vue';
+import WorkflowRenderer from '../components/renderer/WorkflowRenderer.vue';
+import ProdeoWidget from '../components/widgets/ProdeoWidget.vue';
 
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
@@ -25,6 +24,5 @@ export default boot(async ({ app }) => {
   app.component('select-component', SelectComponent);
   app.component('sidebar-link', SidebarLink);
   app.component('workflow-renderer', WorkflowRenderer);
-  app.component('workflow-step-renderer', WorkflowStepRenderer);
-  app.component('workflow-widget', WorkflowWidget);
+  app.component('prodeo-widget', ProdeoWidget);
 });

@@ -1,6 +1,6 @@
 <template>
   <div class="workflow-renderer">
-    <workflow-step-renderer></workflow-step-renderer>
+    <workflow-step-renderer :machine="machine"></workflow-step-renderer>
   </div>
 </template>
 
@@ -18,7 +18,7 @@ import { defineComponent, PropType, provide } from 'vue';
 
 import { Workflow } from 'src/common/types/Workflow';
 import { useWorkflowMachine } from 'src/common/composables/useWorkflowMachine';
-import WorkflowStepRenderer from './WorkflowStepRenderer.vue';
+import WorkflowStepRenderer from '../renderer/WorkflowStepRenderer.vue';
 
 export default defineComponent({
   components: { WorkflowStepRenderer },
@@ -31,7 +31,7 @@ export default defineComponent({
   },
   setup(props) {
     const machine = useWorkflowMachine(props.workflow, props.currentStep);
-    provide('machine', machine);
+    return { machine };
   },
 });
 </script>
