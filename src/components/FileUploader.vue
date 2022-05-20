@@ -1,5 +1,5 @@
 <template>
-  <q-card flat bordered class="q-py-sm q-px-sm q-mb-xs bg-grey-1">
+  <q-card flat bordered class="q-py-xs q-px-sm q-mb-xs bg-grey-1">
     <div class="header row justify-between items-center">
       <div>
         <q-icon :name="fieldIcon" size="sm" />

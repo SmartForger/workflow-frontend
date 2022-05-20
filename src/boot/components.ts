@@ -10,6 +10,7 @@ import SelectComponent from '../components/Select.vue';
 import SidebarLink from '../components/SidebarLink.vue';
 import WorkflowRenderer from '../components/renderer/WorkflowRenderer.vue';
 import ProdeoWidget from '../components/widgets/ProdeoWidget.vue';
+import ProdeoWidgetSettings from '../components/widgets/ProdeoWidgetSettings.vue';
 
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
@@ -25,4 +26,5 @@ export default boot(async ({ app }) => {
   app.component('sidebar-link', SidebarLink);
   app.component('workflow-renderer', WorkflowRenderer);
   app.component('prodeo-widget', ProdeoWidget);
+  app.component('prodeo-widget-settings', ProdeoWidgetSettings);
 });

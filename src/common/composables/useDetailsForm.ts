@@ -2,7 +2,7 @@
 
 import { computed, ref } from 'vue';
 
-export const useDetailsForm = <T>(
+export const useDetailsForm = <T extends { extra?: Record<string, any> | null }>(
   props: {
     details: T;
   },
@@ -36,6 +36,13 @@ export const useDetailsForm = <T>(
     return computed({
       get: () => props.details[field] ?? initialValue,
       set: (val) => update(field, val),
+    });
+  };
+
+  const getExtraFieldModel = (field: string, initialValue: any) => {
+    return computed({
+      get: () => (props.details.extra && props.details.extra[field]) ?? initialValue,
+      set: (val) => update('extra', { ...props.details.extra, [field]: val }),
     });
   };
 
@@ -80,6 +87,7 @@ export const useDetailsForm = <T>(
     cancel,
     update,
     getFieldModel,
+    getExtraFieldModel,
     getIconModel,
   };
 };

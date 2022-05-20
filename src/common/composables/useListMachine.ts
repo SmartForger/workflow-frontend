@@ -1,6 +1,6 @@
 import { useMachine } from '@xstate/vue';
 import { intersection, defaultsDeep, keys } from 'lodash';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { createListViewMachine, CreateListViewMachineParams } from '../machines/list-view.machine';
 import { BaseItem } from '../types/BaseItem';
 import { ItemOrder } from '../types/ItemOrder';
@@ -28,6 +28,7 @@ export const useListMachine = <TItem extends BaseItem>(params: UseListMachinePar
 
   const machine = createListViewMachine<TItem>(params);
   const { state, send } = useMachine(machine, { devTools: true });
+  const modalOpen = ref(false);
 
   const addItem = () => {
     send({ type: 'ADD' });
@@ -101,6 +102,22 @@ export const useListMachine = <TItem extends BaseItem>(params: UseListMachinePar
     send({ type: 'SET_SEARCH', search });
   };
 
+  const openAddModal = (ev: Event) => {
+    ev.stopPropagation();
+    addItem();
+    modalOpen.value = true;
+  };
+
+  const openEditModal = (item: TItem) => {
+    editItem(item);
+    modalOpen.value = true;
+  };
+
+  const closeModal = () => {
+    cancel();
+    modalOpen.value = false;
+  };
+
   const currentItem = computed(() => {
     const { list, selectedId } = state.value.context;
     return list.find((item) => item.id === selectedId);
@@ -118,6 +135,7 @@ export const useListMachine = <TItem extends BaseItem>(params: UseListMachinePar
     state,
     currentItem,
     isListView,
+    modalOpen,
     send,
     addItem,
     editItem,
@@ -129,5 +147,8 @@ export const useListMachine = <TItem extends BaseItem>(params: UseListMachinePar
     update,
     setList,
     setSearch,
+    openAddModal,
+    openEditModal,
+    closeModal,
   };
 };

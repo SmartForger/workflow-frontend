@@ -1,5 +1,5 @@
 <template>
-  <q-expansion-item :group="expansionGroup" dense v-model="open" @after-hide="cancel()">
+  <q-expansion-item :group="expansionGroup" dense @after-hide="cancel()">
     <template v-slot:header>
       <q-item-section avatar>
         <q-avatar icon="img:src/assets/images/widgets.svg" />
@@ -8,11 +8,11 @@
       <q-item-section> Widgets ({{ state.context.list.length }}) </q-item-section>
 
       <q-item-section side>
-        <q-btn flat round icon="add" @click.stop="add()"></q-btn>
+        <q-btn flat round icon="add" @click.stop="openAddModal($event)"></q-btn>
       </q-item-section>
     </template>
 
-    <div class="q-pa-sm" v-if="isListView">
+    <div class="q-pa-sm">
       <div class="q-px-sm" v-if="!state.context.list.length">No widgets</div>
       <q-list bordered v-else>
         <draggable v-model="draggableList" handle=".handle" item-key="id">
@@ -46,7 +46,7 @@
                     icon="content_copy"
                     @click="duplicateItem(widget)"
                   ></q-btn>
-                  <q-btn flat round size="sm" icon="edit" @click="editItem(widget)"></q-btn>
+                  <q-btn flat round size="sm" icon="edit" @click="openEditModal(widget)"></q-btn>
                   <q-btn flat round size="sm" icon="delete" @click="deleteItem(widget)"></q-btn>
                 </div>
               </q-item-section>
@@ -56,15 +56,24 @@
       </q-list>
     </div>
 
-    <workflow-widget-form
-      :details="currentItem"
-      @save="save"
-      @cancel="cancel"
-      @update="update"
-      v-else
-    ></workflow-widget-form>
+    <q-dialog :model-value="currentItem && modalOpen">
+      <div class="bg-white dialog">
+        <prodeo-widget-settings
+          :details="currentItem"
+          @save="save"
+          @cancel="closeModal"
+          @update="update"
+        />
+      </div>
+    </q-dialog>
   </q-expansion-item>
 </template>
+
+<style scoped>
+.dialog {
+  min-width: 640px;
+}
+</style>
 
 <script lang="ts">
 import { defineComponent, inject, PropType, ref } from 'vue';
@@ -73,13 +82,13 @@ import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
 import api from 'src/common/api';
-import WorkflowWidgetForm from './WorkflowWidgetForm.vue';
+// import WorkflowWidgetForm from './WorkflowWidgetForm.vue';
 import { cloneEntity } from 'src/common/utils/clone';
 
 export default defineComponent({
   components: {
     Draggable,
-    WorkflowWidgetForm,
+    // WorkflowWidgetForm,
   },
   props: {
     expansionGroup: {
@@ -107,6 +116,10 @@ export default defineComponent({
       save,
       cancel,
       update,
+      modalOpen,
+      openAddModal,
+      openEditModal,
+      closeModal,
     } = useListMachine<WorkflowWidget>({
       id: 'worflowWidgets',
       getListRequest: async () => props.widgets || [],
@@ -135,30 +148,19 @@ export default defineComponent({
       onReorder: orderItems,
     });
 
-    const open = ref(false);
-
-    const add = () => {
-      addItem();
-      if (!open.value) {
-        setTimeout(() => {
-          open.value = true;
-        }, 50);
-      }
-    };
-
     return {
       state,
       isListView,
       currentItem,
       draggableList,
-      add,
-      editItem,
+      modalOpen,
+      openAddModal,
+      openEditModal,
+      closeModal,
       duplicateItem,
       deleteItem,
       save,
-      cancel,
       update,
-      open,
     };
   },
 });
