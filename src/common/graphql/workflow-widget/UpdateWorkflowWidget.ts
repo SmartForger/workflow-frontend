@@ -11,6 +11,7 @@ export default gql`
     $iconFileName: String
     $field: String
     $event: String
+    $extra: String
     $stepId: String
     $layoutId: String
   ) {
@@ -24,6 +25,7 @@ export default gql`
         iconFileName: $iconFileName
         field: $field
         event: $event
+        extra: $extra
         stepId: $stepId
         layoutId: $layoutId
       }

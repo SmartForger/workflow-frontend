@@ -1,5 +1,18 @@
 <template>
-  <q-btn dense color="primary" @click="triggerEvent">
+  <q-btn
+    :dense="details.extra.dense"
+    :outline="details.extra.outline"
+    :flat="details.extra.flat"
+    :unelevated="details.extra.unelevated"
+    :rounded="details.extra.rounded"
+    :round="details.extra.round"
+    :glossy="details.extra.glossy"
+    :fab="details.extra.fab"
+    :fabMini="details.extra.fabMini"
+    :ripple="details.extra.ripple"
+    color="primary"
+    @click="triggerEvent"
+  >
     <icon-renderer
       :icon="details.icon"
       :iconFileName="details.iconFileName"

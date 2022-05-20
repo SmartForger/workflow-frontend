@@ -76,7 +76,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, inject, PropType, ref } from 'vue';
+import { defineComponent, inject, PropType } from 'vue';
 import Draggable from 'vuedraggable';
 import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
@@ -108,13 +108,10 @@ export default defineComponent({
       state,
       currentItem,
       isListView,
-      addItem,
-      editItem,
       duplicateItem,
       deleteItem,
       orderItems,
       save,
-      cancel,
       update,
       modalOpen,
       openAddModal,

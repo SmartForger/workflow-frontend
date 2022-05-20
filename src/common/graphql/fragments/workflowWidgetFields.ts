@@ -11,5 +11,6 @@ export default gql`
     field
     event
     order
+    extra
   }
 `;

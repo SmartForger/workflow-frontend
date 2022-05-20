@@ -1,5 +1,14 @@
 <template>
-  <q-input class="pvn-field" dense outlined v-model="model" :label="details.name">
+  <q-input
+    class="pvn-field"
+    :label="details.name"
+    :dense="details.extra.dense"
+    :outlined="details.extra.outlined"
+    :filled="details.extra.filled"
+    :rounded="details.extra.rounded"
+    :square="details.extra.square"
+    v-model="model"
+  >
     <template v-slot:prepend v-if="details.iconFileName || details.icon">
       <icon-renderer
         :icon="details.icon"

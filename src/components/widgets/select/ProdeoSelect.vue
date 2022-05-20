@@ -1,12 +1,14 @@
 <template>
   <q-select
     class="pvn-field"
-    outlined
     emit-value
     v-model="model"
     :options="options"
     :label="details.name"
-    dense
+    :outlined="details.extra.outlined"
+    :dense="details.extra.dense"
+    :filled="details.extra.filled"
+    :multiple="details.extra.multiple"
   >
     <template v-slot:prepend v-if="details.iconFileName || details.icon">
       <icon-renderer
