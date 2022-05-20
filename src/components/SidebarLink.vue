@@ -15,7 +15,7 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'EssentialLink',
+  name: 'SidebarLink',
   props: {
     title: {
       type: String,

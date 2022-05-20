@@ -69,8 +69,6 @@
 import { defineComponent, ref } from 'vue';
 import { debounce } from 'lodash';
 import { useDrawer } from 'src/common/composables/useDrawer';
-import IconToggle from 'src/components/IconToggle.vue';
-import WorkflowRenderer from 'src/components/WorkflowRenderer.vue';
 import WorkflowExplorer from './workflow/WorkflowExplorer.vue';
 import { Workflow } from 'src/common/types/Workflow';
 
@@ -96,9 +94,7 @@ export default defineComponent({
   name: 'DesignerComponent',
 
   components: {
-    IconToggle,
     WorkflowExplorer,
-    WorkflowRenderer,
   },
 
   setup() {

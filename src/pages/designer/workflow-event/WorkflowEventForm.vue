@@ -55,13 +55,12 @@ import { computed, defineComponent, PropType } from 'vue';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
 import { WorkflowEvent } from 'src/common/types/WorkflowEvent';
-import SelectComponent from 'src/components/Select.vue';
 import { required } from 'src/common/utils/validations';
 import WorkflowEventConditions from '../workflow-event-condition/WorkflowEventConditions.vue';
 import WorkflowEventActions from '../workflow-event-action/WorkflowEventActions.vue';
 
 export default defineComponent({
-  components: { SelectComponent, WorkflowEventConditions, WorkflowEventActions },
+  components: { WorkflowEventConditions, WorkflowEventActions },
   props: {
     details: {
       type: Object as PropType<WorkflowEvent>,

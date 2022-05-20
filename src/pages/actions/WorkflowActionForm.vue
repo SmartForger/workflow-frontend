@@ -55,12 +55,9 @@ import { WorkflowAction } from 'src/common/types/WorkflowAction';
 import { required, arrayRequired } from 'src/common/utils/validations';
 import { actionTypes } from 'src/common/constants/actionTypes';
 import { componentTypes } from 'src/common/constants/componentTypes';
-import ChipSelect from 'src/components/ChipSelect.vue';
-import SelectComponent from 'src/components/Select.vue';
 
 export default defineComponent({
   name: 'WorkflowActionForm',
-  components: { ChipSelect, SelectComponent },
   props: {
     editing: Boolean,
     details: {

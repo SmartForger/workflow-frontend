@@ -74,13 +74,12 @@
 import { defineComponent, PropType } from 'vue';
 import { WorkflowLayout } from 'src/common/types/WorkflowLayout';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
-import FileUploader from 'src/components/FileUploader.vue';
 import { required, arrayRequired } from 'src/common/utils/validations';
 import { layoutTypes } from 'src/common/constants/layoutTypes';
 import WorkflowWidgets from '../workflow-widget/WorkflowWidgets.vue';
 
 export default defineComponent({
-  components: { WorkflowWidgets, FileUploader },
+  components: { WorkflowWidgets },
   props: {
     details: {
       type: Object as PropType<WorkflowLayout>,

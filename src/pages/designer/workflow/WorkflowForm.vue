@@ -90,14 +90,13 @@
 import { defineComponent, PropType } from 'vue';
 import { useDetailsForm } from 'src/common/composables/useDetailsForm';
 import { Workflow } from 'src/common/types/Workflow';
-import FileUploader from 'src/components/FileUploader.vue';
 import { required, arrayRequired } from 'src/common/utils/validations';
 import WorkflowSteps from '../workflow-step/WorkflowSteps.vue';
 import { workflowCategories, workflowVerticals, workflowModes } from '../constants';
 
 export default defineComponent({
   name: 'WorkflowDetails',
-  components: { WorkflowSteps, FileUploader },
+  components: { WorkflowSteps },
   props: {
     editing: Boolean,
     details: {

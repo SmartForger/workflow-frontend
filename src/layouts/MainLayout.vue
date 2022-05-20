@@ -14,7 +14,7 @@
       <q-list>
         <q-item-label header> Prodeo </q-item-label>
 
-        <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
+        <sidebar-link v-for="link in essentialLinks" :key="link.title" v-bind="link" />
       </q-list>
     </q-drawer>
 
@@ -26,7 +26,6 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import EssentialLink from 'components/EssentialLink.vue';
 
 const linksList = [
   {
@@ -45,10 +44,6 @@ const linksList = [
 
 export default defineComponent({
   name: 'MainLayout',
-
-  components: {
-    EssentialLink,
-  },
 
   setup() {
     const leftDrawerOpen = ref(false);

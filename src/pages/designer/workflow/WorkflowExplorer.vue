@@ -88,15 +88,11 @@ import api from 'src/common/api';
 import { Workflow } from 'src/common/types/Workflow';
 import { WorkflowAction } from 'src/common/types/WorkflowAction';
 import { cloneWorkflow } from 'src/common/utils/clone';
-import SearchInput from 'src/components/SearchInput.vue';
 import WorkflowForm from './WorkflowForm.vue';
 
 export default defineComponent({
   name: 'WorkflowExplorer',
-  components: {
-    SearchInput,
-    WorkflowForm,
-  },
+  components: { WorkflowForm },
   emits: ['update:current'],
   setup(props, { emit }) {
     const emitWorkflowUpdate = () => {

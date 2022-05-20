@@ -52,8 +52,6 @@ import { WorkflowAction } from 'src/common/types/WorkflowAction';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import { componentTypesByValue } from 'src/common/constants/componentTypes';
 import api from 'src/common/api';
-import PageHeader from 'src/components/PageHeader.vue';
-import WorkflowActionsForm from './WorkflowActionForm.vue';
 
 const tableColumns = [
   {
@@ -89,7 +87,6 @@ const tableColumns = [
 
 export default defineComponent({
   name: 'WorkflowActionsList',
-  components: { PageHeader, WorkflowActionsForm },
   setup() {
     const { state, currentItem, addItem, editItem, deleteItem, save, cancel, update } =
       useListMachine<WorkflowAction>({
