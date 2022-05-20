@@ -1,38 +1,28 @@
 <template>
-  <q-input
-    class="pvn-field"
-    dense
-    outlined
-    v-model="model"
-    :label="details.name"
-    v-if="details.type === 'QInput'"
-  >
-    <template v-slot:prepend v-if="details.iconFileName || details.icon">
-      <icon-renderer
-        :icon="details.icon"
-        :iconFileName="details.iconFileName"
-        size="32px"
-      ></icon-renderer>
-    </template>
-  </q-input>
-  <q-btn dense color="primary" @click="triggerEvent" v-if="details.type === 'QBtn'">
-    <icon-renderer
-      :icon="details.icon"
-      :iconFileName="details.iconFileName"
-      size="24px"
-      v-if="details.icon || details.iconFileName"
-    ></icon-renderer>
-    <span class="q-mx-sm">{{ details.name }}</span>
-  </q-btn>
+  <prodeo-input v-model="model" :details="details" v-if="details.type === 'QInput'"></prodeo-input>
+  <prodeo-select v-model="model" :details="details" v-if="details.type === 'QSelect'"></prodeo-select>
+  <prodeo-button
+    :details="details"
+    @trigger="triggerEvent"
+    v-if="details.type === 'QBtn'"
+  ></prodeo-button>
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from 'vue';
 import { useModelWrapper } from 'src/common/composables/useModelWrapper';
 import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
-import { defineComponent, PropType } from 'vue';
+import ProdeoButton from './button/ProdeoButton.vue';
+import ProdeoInput from './input/ProdeoInput.vue';
+import ProdeoSelect from './select/ProdeoSelect.vue';
 
 export default defineComponent({
   name: 'ProdeoWidget',
+  components: {
+    ProdeoButton,
+    ProdeoInput,
+    ProdeoSelect,
+  },
   props: {
     modelValue: {
       required: false,
