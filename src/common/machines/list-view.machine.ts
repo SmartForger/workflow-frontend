@@ -71,6 +71,9 @@ export const createListViewMachine = <TItem extends BaseItem>({
               target: 'add',
               actions: 'setNewCurrentItem',
             },
+            ADD_IN_LIST: {
+              actions: 'addNewItem',
+            },
             EDIT: {
               target: 'edit',
               actions: ['selectItem'],
@@ -248,6 +251,9 @@ export const createListViewMachine = <TItem extends BaseItem>({
         selectItem: assign({
           original: (_context, ev) => ({ ...ev.item }),
           selectedId: (_context, ev) => ev.item.id,
+        }),
+        addNewItem: assign({
+          list: (_context) => [..._context.list, { id: `new_${uuid()}` } as TItem],
         }),
         duplicateItem: (context, ev) => {
           if (!cloneItem) {

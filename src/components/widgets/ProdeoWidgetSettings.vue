@@ -40,25 +40,10 @@
 
       <q-tab-panel class="panel" name="validation">
         <div class="scrollable">
-          <div class="row">
-            <div class="col-6">
-              <q-toggle
-                color="primary"
-                label="Required"
-                name="ruleRequired"
-                v-model="ruleRequired"
-              />
-            </div>
-          </div>
-          <q-input
-            class="pvn-field"
-            dense
-            outlined
-            type="textarea"
-            name="ruleFilter"
-            v-model="ruleFilter"
-            label="Filter"
-          ></q-input>
+          <validation-settings
+            :rules="details.rules"
+            @update="update('rules', $event)"
+          ></validation-settings>
         </div>
       </q-tab-panel>
     </q-tab-panels>
@@ -96,6 +81,7 @@ import ProdeoWidgetGeneralSettings from './ProdeoWidgetGeneralSettings.vue';
 import ProdeoButtonSettings from './button/ProdeoButtonSettings.vue';
 import ProdeoInputSettings from './input/ProdeoInputSettings.vue';
 import ProdeoSelectSettings from './select/ProdeoSelectSettings.vue';
+import ValidationSettings from './validations/ValidationSettings.vue';
 
 export default defineComponent({
   components: {
@@ -103,6 +89,7 @@ export default defineComponent({
     ProdeoButtonSettings,
     ProdeoInputSettings,
     ProdeoSelectSettings,
+    ValidationSettings,
   },
   props: {
     details: {
@@ -112,15 +99,10 @@ export default defineComponent({
   },
   emits: ['update', 'save', 'cancel'],
   setup(props, { emit }) {
-    const { update, cancel, save, getChildFieldModel } = useDetailsForm<WorkflowWidget>(
-      props,
-      emit
-    );
+    const { update, cancel, save, getFieldModel } = useDetailsForm<WorkflowWidget>(props, emit);
     const tab = ref('settings');
-    const ruleRequired = getChildFieldModel('rules', 'required', false);
-    const ruleFilter = getChildFieldModel('rules', 'filter', '');
 
-    return { update, cancel, save, emit, tab, ruleRequired, ruleFilter };
+    return { update, cancel, save, emit, tab };
   },
 });
 </script>

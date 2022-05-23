@@ -14,7 +14,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, PropType, provide } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
 import { Workflow } from 'src/common/types/Workflow';
 import { useWorkflowMachine } from 'src/common/composables/useWorkflowMachine';

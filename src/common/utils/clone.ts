@@ -5,19 +5,21 @@ import { WorkflowEvent } from '../types/WorkflowEvent';
 import { WorkflowLayout } from '../types/WorkflowLayout';
 import { WorkflowStep } from '../types/WorkflowStep';
 
-export const cloneWorkflow = (w: Workflow, idMap: Map<string, string>) => {
+export const cloneWorkflow = (w: Workflow, idMap?: Map<string, string>) => {
   const newWorkflow = cloneEntity(w, idMap);
 
-  w.steps.forEach((s) => {
-    idMap.set(s.id, `new_${uuid()}`);
-  });
+  if (idMap) {
+    w.steps.forEach((s) => {
+      idMap.set(s.id, `new_${uuid()}`);
+    });
+  }
 
   newWorkflow.steps = w.steps.map((step) => cloneWorkflowStep(step, idMap));
 
   return newWorkflow;
 };
 
-export const cloneWorkflowStep = (s: WorkflowStep, idMap: Map<string, string>) => {
+export const cloneWorkflowStep = (s: WorkflowStep, idMap?: Map<string, string>) => {
   const newStep = cloneEntity(s, idMap);
 
   newStep.events = s.events.map((e) => cloneWorkflowEvent(e, idMap));
@@ -27,11 +29,11 @@ export const cloneWorkflowStep = (s: WorkflowStep, idMap: Map<string, string>) =
   return newStep;
 };
 
-export const cloneWorkflowEvent = (e: WorkflowEvent, idMap: Map<string, string>) => {
+export const cloneWorkflowEvent = (e: WorkflowEvent, idMap?: Map<string, string>) => {
   const newEvent = cloneDeepEntity(e, idMap);
 
   if (newEvent.target) {
-    newEvent.target.id = idMap.get(newEvent.target.id) || '';
+    newEvent.target.id = idMap?.get(newEvent.target.id) || '';
   }
 
   newEvent.conditions = e.conditions.map((c) => cloneEntity(c, idMap));
@@ -40,15 +42,15 @@ export const cloneWorkflowEvent = (e: WorkflowEvent, idMap: Map<string, string>)
   return newEvent;
 };
 
-export const cloneWorkflowLayout = (l: WorkflowLayout, idMap: Map<string, string>) => {
+export const cloneWorkflowLayout = (l: WorkflowLayout, idMap?: Map<string, string>) => {
   const newLayout = cloneEntity(l, idMap);
   newLayout.widgets = l.widgets.map((w) => cloneEntity(w, idMap));
   return newLayout;
 };
 
-export const cloneEntity = <T extends { id: string }>(e: T, idMap: Map<string, string>) => {
-  const newId = idMap.get(e.id) || `new_${uuid()}`;
-  idMap.set(e.id, newId);
+export const cloneEntity = <T extends { id: string }>(e: T, idMap?: Map<string, string>) => {
+  const newId = idMap?.get(e.id) || `new_${uuid()}`;
+  idMap?.set(e.id, newId);
 
   return {
     ...e,
@@ -56,9 +58,9 @@ export const cloneEntity = <T extends { id: string }>(e: T, idMap: Map<string, s
   };
 };
 
-export const cloneDeepEntity = <T extends { id: string }>(e: T, idMap: Map<string, string>) => {
+export const cloneDeepEntity = <T extends { id: string }>(e: T, idMap?: Map<string, string>) => {
   const cloned = cloneDeep(e);
-  cloned.id = idMap.get(e.id) || `new_${uuid()}`;
-  idMap.set(e.id, cloned.id);
+  cloned.id = idMap?.get(e.id) || `new_${uuid()}`;
+  idMap?.set(e.id, cloned.id);
   return cloned;
 };

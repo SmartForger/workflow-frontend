@@ -1,4 +1,5 @@
 import { boot } from 'quasar/wrappers';
+import Draggable from 'vuedraggable';
 
 import ChipSelect from '../components/ChipSelect.vue';
 import FileUploader from '../components/FileUploader.vue';
@@ -27,4 +28,5 @@ export default boot(async ({ app }) => {
   app.component('workflow-renderer', WorkflowRenderer);
   app.component('prodeo-widget', ProdeoWidget);
   app.component('prodeo-widget-settings', ProdeoWidgetSettings);
+  app.component('draggable-list', Draggable);
 });

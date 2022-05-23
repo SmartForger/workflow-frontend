@@ -22,7 +22,7 @@
     <div class="q-pa-sm" v-if="isListView">
       <div class="q-px-sm" v-if="!state.context.list.length">No layouts</div>
       <q-list bordered v-else>
-        <draggable v-model="draggableList" handle=".handle" item-key="id">
+        <draggable-list v-model="draggableList" handle=".handle" item-key="id">
           <template #item="{ element: layout }">
             <q-item clickable v-ripple>
               <q-item-section side>
@@ -67,7 +67,7 @@
               </q-item-section>
             </q-item>
           </template>
-        </draggable>
+        </draggable-list>
       </q-list>
     </div>
 
@@ -83,7 +83,6 @@
 
 <script lang="ts">
 import { defineComponent, inject, PropType, ref } from 'vue';
-import Draggable from 'vuedraggable';
 import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowLayout } from 'src/common/types/WorkflowLayout';
@@ -93,7 +92,6 @@ import { cloneWorkflowLayout } from 'src/common/utils/clone';
 
 export default defineComponent({
   components: {
-    Draggable,
     WorkflowLayoutForm,
   },
   props: {

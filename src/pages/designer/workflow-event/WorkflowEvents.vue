@@ -15,7 +15,7 @@
     <div class="q-pa-sm" v-if="isListView">
       <div class="q-px-sm" v-if="!state.context.list.length">No events</div>
       <q-list bordered v-else>
-        <draggable v-model="draggableList" handle=".handle" item-key="id">
+        <draggable-list v-model="draggableList" handle=".handle" item-key="id">
           <template #item="{ element: ev }">
             <q-item clickable v-ripple>
               <q-item-section side>
@@ -47,7 +47,7 @@
               </q-item-section>
             </q-item>
           </template>
-        </draggable>
+        </draggable-list>
       </q-list>
     </div>
 
@@ -65,7 +65,6 @@
 
 <script lang="ts">
 import { defineComponent, inject, PropType, ref } from 'vue';
-import Draggable from 'vuedraggable';
 import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowEvent } from 'src/common/types/WorkflowEvent';
@@ -76,7 +75,6 @@ import WorkflowEventForm from './WorkflowEventForm.vue';
 
 export default defineComponent({
   components: {
-    Draggable,
     WorkflowEventForm,
   },
   props: {

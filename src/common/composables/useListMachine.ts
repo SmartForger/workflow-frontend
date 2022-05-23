@@ -30,28 +30,42 @@ export const useListMachine = <TItem extends BaseItem>(params: UseListMachinePar
   const { state, send } = useMachine(machine, { devTools: true });
   const modalOpen = ref(false);
 
-  const addItem = () => {
+  const addItem = (ev?: Event) => {
+    ev?.stopPropagation();
+
     send({ type: 'ADD' });
     if (params.onUpdate && params.updateWhen?.detailsView) {
       params.onUpdate();
     }
   };
 
-  const duplicateItem = (item: TItem) => {
+  const addItemInList = (ev?: Event) => {
+    ev?.stopPropagation();
+
+    send({ type: 'ADD_IN_LIST' });
+  }
+
+  const duplicateItem = (item: TItem, ev?: Event) => {
+    ev?.stopPropagation();
+
     send({ type: 'DUPLICATE', item });
     if (params.onUpdate && params.updateWhen?.detailsView) {
       params.onUpdate();
     }
   };
 
-  const editItem = (item: TItem) => {
+  const editItem = (item: TItem, ev?: Event) => {
+    ev?.stopPropagation();
+
     send({ type: 'EDIT', item });
     if (params.onUpdate && params.updateWhen?.detailsView) {
       params.onUpdate();
     }
   };
 
-  const deleteItem = (item: TItem) => {
+  const deleteItem = (item: TItem, ev?: Event) => {
+    ev?.stopPropagation();
+
     send({ type: 'DELETE', id: item.id });
     if (params.updateWhen?.delete && params.onUpdate) {
       params.onUpdate();
@@ -138,6 +152,7 @@ export const useListMachine = <TItem extends BaseItem>(params: UseListMachinePar
     modalOpen,
     send,
     addItem,
+    addItemInList,
     editItem,
     duplicateItem,
     deleteItem,

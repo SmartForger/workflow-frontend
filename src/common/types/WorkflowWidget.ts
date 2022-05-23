@@ -1,3 +1,4 @@
+import { ValidationRule } from './ValidationRule';
 import { WorkflowWidgetType } from './WorkflowWidgetType';
 
 export interface WorkflowWidget {
@@ -10,10 +11,7 @@ export interface WorkflowWidget {
   field: string | null;
   event: string | null;
   extra?: Record<string, any> | null;
-  rules?: {
-    required?: boolean;
-    filter?: string;
-  } | null;
+  rules?: ValidationRule[] | null;
   stepId?: string;
   layoutId?: string;
   order?: number | null;

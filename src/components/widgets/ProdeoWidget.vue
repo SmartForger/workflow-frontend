@@ -25,7 +25,11 @@ import { WorkflowWidget } from 'src/common/types/WorkflowWidget';
 import ProdeoButton from './button/ProdeoButton.vue';
 import ProdeoInput from './input/ProdeoInput.vue';
 import ProdeoSelect from './select/ProdeoSelect.vue';
-import { checkFilterValidation, required } from 'src/common/utils/validations';
+import {
+  checkFilterValidation,
+  getValidationsFromRules,
+  required,
+} from 'src/common/utils/validations';
 import { Filter } from 'src/common/types/Filter';
 
 export default defineComponent({
@@ -51,20 +55,7 @@ export default defineComponent({
     const triggerEvent = () => {
       emit('trigger', props.details.event);
     };
-
-    const rules: any[] = [];
-
-    if (props.details.rules) {
-      if (props.details.rules.required) {
-        rules.push(required());
-      }
-      if (props.details.rules.filter) {
-        try {
-          const filter = JSON.parse(props.details.rules.filter) as Filter;
-          rules.push(checkFilterValidation(filter));
-        } catch {}
-      }
-    }
+    const rules: any[] = getValidationsFromRules(props.details.rules);
 
     return { model, triggerEvent, rules };
   },

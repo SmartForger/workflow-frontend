@@ -2,6 +2,7 @@
   <q-select
     class="pvn-field"
     outlined
+    dense
     emit-value
     v-model="model"
     :options="options"

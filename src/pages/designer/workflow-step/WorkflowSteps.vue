@@ -6,7 +6,7 @@
         <q-space></q-space>
         <q-btn flat round icon="add" @click="addItem()" />
       </q-toolbar>
-      <draggable
+      <draggable-list
         v-model="draggableList"
         class="pvn-draggable-list"
         handle=".handle"
@@ -40,7 +40,7 @@
             </q-item-section>
           </q-item>
         </template>
-      </draggable>
+      </draggable-list>
       <q-banner class="bg-grey-3" dense v-if="!state.context.list.length">
         No steps added.
       </q-banner>
@@ -60,7 +60,6 @@
 
 <script lang="ts">
 import { defineComponent, inject, PropType } from 'vue';
-import Draggable from 'vuedraggable';
 import { useContextListSync } from 'src/common/composables/useContextListSync';
 import { useListMachine } from 'src/common/composables/useListMachine';
 import { WorkflowStep } from 'src/common/types/WorkflowStep';
@@ -72,7 +71,6 @@ import { cloneWorkflowStep } from 'src/common/utils/clone';
 export default defineComponent({
   name: 'WorkflowSteps',
   components: {
-    Draggable,
     WorkflowStepForm,
   },
   props: {

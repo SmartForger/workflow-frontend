@@ -9,12 +9,9 @@ export const transformWidget = (widget: WorkflowWidget) => {
   }
 
   try {
-    widget.rules = JSON.parse((widget.rules as any) || '{}');
+    widget.rules = JSON.parse((widget.rules as any) || '[]');
   } catch {
-    widget.rules = {
-      required: true,
-      filter: '{}',
-    };
+    widget.rules = [];
   }
 
   return widget;
